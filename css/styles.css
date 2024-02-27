@@ -1,0 +1,14 @@
+body {
+	font-size: 18px;
+	font-family: 'Lato', sans-serif;
+}
+
+.bg-dark {
+	background-color: #363636;
+	color: #FFFFFF;
+}
+
+.bg-blue {
+	background-color: #008fbe;
+	color: #FFFFFF;
+}

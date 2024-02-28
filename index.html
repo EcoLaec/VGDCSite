@@ -9,18 +9,30 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/jquery-3.7.1.js"></script>
 </head>
 <body>
-<div class="bg-blue top-bar">Test</div>
-<ul class="nav flex-column bg-dark col-lg-3 side-bar">
-	<li class="nav-item"><a data-bs-toggle="collapse" href="#playerMovement" role="button">Player Movement</a></li>
-	<li class="nav-item collapse" id="playerMovement">
-		<ul>
-			<li>Double Jump</li>
-		</ul>
-	</li>
-</ul>
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/script.js"></script>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 bg-blue">
+			Test
+		</div>
+	</div>
+	<div class="row vh-100">
+		<div class="col-lg-3 col-md-4 bg-dark test">
+		</div>
+		<div class="col-lg-9 col-md-8">
+			Test
+		</div>
+	</div>
+</div>
+<script>
+	$.get( "navigation/nav.html", function( data ) {
+	  $( ".test" ).html( data );
+	  alert( "Load was performed." );
+	});
+</script>
 </body>
 </html>

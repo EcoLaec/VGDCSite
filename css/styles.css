@@ -12,15 +12,3 @@ body {
 	background-color: #008fbe;
 	color: #FFFFFF;
 }
-
-.side-bar {
-	height: 100%;
-	position: fixed;
-	top: 100px;
-}
-
-.top-bar {
-	height: 100px;
-	position: fixed;
-	width: 100%;
-}

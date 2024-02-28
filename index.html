@@ -16,23 +16,41 @@
 <body>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-12 bg-blue">
-			Test
+		<div class="col-12 bg-blue d-flex align-items-center topbar">
+			<h1 class="align-middle">Videogame Development Course</h1>
 		</div>
 	</div>
 	<div class="row vh-100">
-		<div class="col-lg-3 col-md-4 bg-dark test">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="nav">
+				<div class="container-fluid">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<button class="btn home" onclick="change_module('modules/home.html',this)" id="home">Home</button>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link playerMovement" data-bs-toggle="collapse" href="#playerMovement">Player Movement</a>
+							<ul class="collapse" id="playerMovement">
+								<li><button class="btn" onclick="change_module('modules/double_jump.html',this)" id="pmDoubleJump">Double Jump</button></li>
+								<li><button class="btn" onclick="change_module('modules/wall_jump.html',this)" id="pmWallJump">Wall Jump</button></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
 		</div>
-		<div class="col-lg-9 col-md-8">
-			Test
+		<div class="col-lg-9 col-md-8" id="content">
 		</div>
 	</div>
 </div>
 <script>
-	$.get( "navigation/nav.html", function( data ) {
-	  $( ".test" ).html( data );
-	  alert( "Load was performed." );
-	});
+	change_module('modules/home.html',document.getElementById('home'))
+
+	function change_module(link,id) {
+		$.get(link, function( data ) {
+		  $("#content").html(data);
+		});
+    }
 </script>
 </body>
 </html>

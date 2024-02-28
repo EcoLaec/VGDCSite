@@ -12,3 +12,42 @@ body {
 	background-color: #008fbe;
 	color: #FFFFFF;
 }
+
+.nav-link, .btn{
+	color: #FFFFFF;
+	transition: none;
+}
+
+.nav-link:hover, .btn:hover {
+	color: #FFFFFF;
+	font-weight: 600;
+}
+
+.nav-link:focus, .btn:focus, .btn {
+	color: #FFFFFF;
+	border: none;
+}
+
+h1 {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	padding: 10px;
+}
+
+.topbar {
+	height: 85px;
+}
+
+#content {
+	padding: 25px;
+}
+
+.navbar ul {
+	list-style-type: none;
+}
+
+.home {
+	font-size: 18px;
+	padding: 8px 0px;
+}

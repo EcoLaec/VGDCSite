@@ -28,6 +28,10 @@ body {
 	border: none;
 }
 
+.highlight {
+	font-weight: 600;
+}
+
 h1 {
 	color: white;
 	text-decoration: none;
@@ -35,11 +39,11 @@ h1 {
 	padding: 10px;
 }
 
-.topbar {
+#topbar {
 	height: 85px;
 }
 
-#content {
+.content {
 	padding: 25px;
 }
 
@@ -50,4 +54,20 @@ h1 {
 .home {
 	font-size: 18px;
 	padding: 8px 0px;
+}
+
+.caret {
+	margin-left: 5px;
+	display: inline-block;
+}
+
+a[aria-expanded="true"] > .caret {
+	transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+}
+
+hr {
+	display: block;
 }

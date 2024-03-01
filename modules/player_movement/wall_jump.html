@@ -32,12 +32,7 @@
 	</div>
 </div>
 <script>
-	$.get('/navigation/sidebar.html', function( data ) {
-	  $("#sidebar").html(data);
-	});
-	$.get('/navigation/topbar.html', function( data ) {
-	  $("#topbar").html(data);
-	});
+	initPage()
 
 	function triggerExpand() {
 		expandAndHighlight('playerMovement','pmWallJump','playerMovementToggle')

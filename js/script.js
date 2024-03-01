@@ -13,3 +13,12 @@ function expandAndHighlight(category_id,subcategory_id,category_collapse_id) {
 	})
 	$('#' + category_collapse_id).attr("style","")
 }
+
+function initPage() {
+	$.get('https://ecolaec.github.io/VDGCSite/navigation/sidebar.html', function( data ) {
+	  $("#sidebar").html(data);
+	});
+	$.get('https://ecolaec.github.io/VDGCSite/navigation/topbar.html', function( data ) {
+	  $("#topbar").html(data);
+	});
+}

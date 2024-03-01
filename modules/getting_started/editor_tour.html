@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Editor Tour</title>
+	<link rel="shortcut icon" type="image/png" href="/favicon.png">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/script.js"></script>
+	<script src="/js/jquery-3.7.1.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 bg-blue d-flex align-items-center" id="topbar">
+		</div>
+	</div>
+	<div class="row vh-100">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Exploring the Editor</h3>
+			<p>This page will get you more aquainted the Godot's editor, the place where we will be spending most of our time, as well as explore some important concepts of Godot's engine.</p>
+			<h4>First Glance</h4>
+			<p>Upon creating a new project, you will be welcomed by Godot's editor.</p>
+			<img src="/images/getting_started/project_setup/editor_full_view.png" class="img-fluid" alt="Godot's Editor">
+			<p class="hint">Your editor may look slightly different depending on your monitor's dimensions.</p>
+			<p>Godot's editor is made up of several parts, so lets go through them one by one.</p>
+			<h4>Menus, Screens and Playtesting</h4>
+			<p>At the very top of the editor there is the aptly named Top Bar.</p>
+			<img src="/images/getting_started/project_setup/editor_topbar.png" class="img-fluid" alt="Godot's Editor">
+			<p>The top bar is made up of three components: Menus, Screens and Playtesting Buttons.</p>
+			<ol>
+				<li>
+					<h5>Menus</h5>
+					<p>The menus (the far left side of the top bar) are where we can find advanced options for our project (similar to most software used nowadays like google docs or word). In this course we will primarily be using the project tab to edit our project settings.</p>
+				</li>
+				<li>
+					<h5>Screens</h5>
+					<p>In the center of the top bar we can find our screens: 2D, 3D, Scripts and AssetLib. These change what you see in the viewport below. For this project we will be working with the 2D screen when we want to see the visuals of our project and the script screen while we program our scripts. For now select the 2D screen.</p>
+				</li>
+				<li>
+					<h5>Playtest</h5>
+					<p>This section on the far right of the top bar is where we will run our project when we wish to test our work. The only button we will be using for this course are the play button (and perhaps the stop button if things go very wrong).</p>
+				</li>
+			</ol>
+			<h4>Scene Tree</h4>
+			<p>Located on the left side of the editor, just below the menus, the scene tree is one of the most important parts of the editor.</p>
+			<img src="/images/getting_started/project_setup/scene_tree.png" class="img-fluid" alt="Godot's Scene Tree">
+			<p>The scene tree shows what nodes are part of the current scene and the relationships bewteen the nodes. If that confuses you that is alright, as these terms are specific to Godot. Let's break them down and put them into english.</p>
+			<ol>
+				<li>
+					<h5>Nodes</h5>
+					<p>Nodes are components that add functionality. You can think of them like ingredients for a recipe or parts of a car. Some example of nodes are CharacterBody (for adding physics and collisions to something), AudioStreamPlayers (for making sounds) and Cameras (for controlling what the player sees).</p>
+				</li>
+				<li>
+					<h5>Scenes</h5>
+					<p>Scenes are collections of nodes. They can be saved and are reusable. You can think of scenes as the actual objects of your game, like the player, enemies, the level and some more abstract things like the timer or pause menu.</p>
+				</li>
+				<li>
+					<h5>Relatedness</h5>
+					<p>Nodes are connected to eachother through relationships (also known as inheritance). A node can be a child of another node (this appears in the scene tree as the child node being indented slightly and having a line connecting it to it's parent), which means it inherits from it's parent node. Inheritance is an integral part of modern programming, but for our project, the most important part of it is that a child node will move with it's parent node (it inherits it's position).</p>
+				</li>
+			</ol>
+			<p class="hint">If you are interested in knowing more about Godot's structure, you can check out their documentation <a href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/nodes_and_scenes.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<h4>Viewport</h4>
+			<p>The largest section of the editor, located in the center, is called the viewport.</p>
+			<img src="/images/getting_started/project_setup/viewport.png" class="img-fluid" alt="Godot's Viewport">
+			<p class="hint">If your editor does not look right, make sure you have the 2D screen selected on the topbar</p>
+			<p>The viewport is one part level editor, one part code editor. In it we are able to preview the layout of our scenes and edit our scripts (depending on the screen selected on the top bar). We are also able to quickly switch between our active scenes using the tabs at the top of the viewport.</p>
+			<h4>File System</h4>
+			<p>Located beneath the scene tree, the file system is where all of your saved assets can be seen.</p>
+			<img src="/images/getting_started/project_setup/file_system.png" class="img-fluid" alt="Godot's File System">
+			<p>The file system is functionally a view into your project's folder. In it you can store sprites, sounds, scenes, scripts or any other asset you use in your game (they don't even need to start with s). It is very important to maintain organization in your files, especially as a project grows. You can right click in the file system dock to create a new folder.</p>
+			<h4>Inspector</h4>
+			<p>Located to the far right of the editor, the inspector allows you to see and edit the details of nodes.</p>
+			<img src="/images/getting_started/project_setup/inspector.png" class="img-fluid" alt="Godot's Inspector">
+			<p>The inspector provides a detailed view of the node you currently have selected in the scene tree. It can look very different depending on the node, but almost every node requires some work in the inspector to have functionality. You can think of the inspector as the options page for nodes.</p>
+			<h4>Bottom Panel</h4>
+			<p>Located beneath the viewport, the bottom panel is the default location for additonal functionality in the editor.</p>
+			<img src="/images/getting_started/project_setup/bottom_panel.png" class="img-fluid" alt="Godot's Bottom Panel">
+			<p>The bottom panel is the home of our debugging as well as any additional functionality specific assets need. For example, when we begin working with animations, a new tab will appear on the bottom panel to allow us edit our animations.</p>
+			<h4>Review</h4>
+			<p>There is definitely a lot happening in the editor, and there was a lot skimmed over, but for the scope of this project the most important thing is you know where each part can be found, as well as these basic ideas:</p>
+			<ul>
+				<li>
+					<h5>Top Bar</h5>
+					<p>The top bar is where you can find project settings, the 2D and Script screen buttons to switch between visual and script views and the run button to test you game.</p>
+				</li>
+				<li>
+					<h5>Scene Tree</h5>
+					<p>The scene tree is where we add and manage nodes to the selected scene.</p>
+				</li>
+				<li>
+					<h5>Viewport</h5>
+					<p>The viewport is our workspace where we preview our scenes and program our code.</p>
+				</li>
+				<li>
+					<h5>File System</h5>
+					<p>The file system is a view into our project's folder and where we save our assets.</p>
+				</li>
+				<li>
+					<h5>Inspector</h5>
+					<p>The inspector is where we edit the details of the selected node.</p>
+				</li>
+				<li>
+					<h5>Bottom Panel</h5>
+					<p>The bottom panel is home to the debugger and where we edit specific assets.</p>
+				</li>
+			</ul>
+			<p>Once you are comfortable with the editor's layout, go ahead and move on to our next step: creating the player scene.</p>
+			<div class="text-center">
+				<a href="#" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$.get('/navigation/sidebar.html', function( data ) {
+	  $("#sidebar").html(data);
+	});
+	$.get('/navigation/topbar.html', function( data ) {
+	  $("#topbar").html(data);
+	});
+
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','gsEditorTour','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

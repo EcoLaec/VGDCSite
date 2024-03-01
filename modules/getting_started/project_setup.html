@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Project Setup</title>
+	<link rel="shortcut icon" type="image/png" href="/favicon.png">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/script.js"></script>
+	<script src="/js/jquery-3.7.1.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 bg-blue d-flex align-items-center" id="topbar">
+		</div>
+	</div>
+	<div class="row vh-100">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Setting Up Your Project</h3>
+			<p>This page will get you started with a new project, as well as explore some core concepts of Godot's engine.</p>
+			<p class="hint">For a more in depth look of Godot. check out their official documentation <a href="https://docs.godotengine.org/en/stable/index.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<h4>Downloading and Installing Godot</h4>
+			<p class="hint">If you taking this course in person you likely already have Godot on the computer you will be working on and can skip this step.</p>
+			<p>The Godot engine can be downloaded from their site using this <a href="https://godotengine.org/download/">Link<i class="linkbox bi bi-box-arrow-up-right"></i></a>. The site will automatically detect your computer's operating system. Once on the page, press the download button that says Godot Engine</p>
+			<img src="/images/getting_started/project_setup/godot_download.png" class="img-fluid" alt="Godot's download page">
+			<p>Once the download has finished, move the file to your desktop and extract it's contents into a folder (I recommend making a new folder for this). You must make sure that both the application and the console within the file are in the same folder. After that, open up Godot and it will bring you to your project manager.</p>
+			<h4>Creating a New Project</h4>
+			<p>Once you have opened Godot it will bring you to the project manager. If this is your first time opening Godot, a popup will appear asking if you want to explore example projects. Press cancel on the popup and you will see your list of projects, which will likely be empty.</p>
+			<img src="/images/getting_started/project_setup/godot_blank_manager.png" class="img-fluid" alt="Godot's Project Manager">
+			<p>To create a new project press the New button at the top of the manager. A popup will appear with details for your new project.</p>
+			<img src="/images/getting_started/project_setup/new_project_screen.png" class="img-fluid" alt="New Project Popup">
+			<p>There is a lot happening here, so lets break it down.</p>
+			<ol>
+				<li>
+					<h5>Project Name</h5>
+					<p>The project name is the name of your project (this one is pretty simple). Most of the time when you start a new project you won't have an official name yet, but it is alright to simply use a working name until you come up with something better. (You can always change the project's name in the project settings later)</p>
+				</li>
+				<li>
+					<h5>Project Path</h5>
+					<p>This is the location that all of your project's files and assets will be stored. I usually store my active projects on my desktop for ease of access, but as long as you remember where it is, you can choose to put your project anywhere that makes sense to you. It is best practice to select an empty folder for your project, however, so the files don't get mixed up with something else.</p>
+				</li>
+				<li>
+					<h5>Renderer</h5>
+					<p>Your renderer choice decides how the engine processes the visuals of your project. The details of rendering is far beyond the scope of this course, but for our purposes Forward+ allows the most complex graphics but least number of compatable devices, whereas Compatibility has the simplest graphic options but can work on most devices. Mobile is between those two extremes. Since we are making a simple 2D game, any would work, but I recommend Mobile or Compatability for this course.</p>
+					<p class="hint">If you want to look deeper into what the actual differences the renderer's have (and possibly develop a headache), check out Godot's documentation on them <a href="https://docs.godotengine.org/en/stable/contributing/development/core_and_modules/internal_rendering_architecture.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+				</li>
+				<li>
+					<h5>Version Control Metadata</h5>
+					<p>This option sounds confusing, but all it does is setups a project to work with Git, a program that helps manage different versions of files and allow collaboration between different users. For this project we will not be using Git, but having the option to connect does not change the project in anyway and I consider it good practice to always leave this option on Git.</p>
+				</li>
+			</ol>
+			<p>Once you are happy with your project settings, go ahead and press Create and Edit at the bottom of the popup and the editor will open.</p>
+			<div class="text-center">
+				<a href="/modules/getting_started/editor_tour.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$.get('/navigation/sidebar.html', function( data ) {
+	  $("#sidebar").html(data);
+	});
+	$.get('/navigation/topbar.html', function( data ) {
+	  $("#topbar").html(data);
+	});
+
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','gsProjectSetup','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

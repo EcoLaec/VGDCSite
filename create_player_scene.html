@@ -27,12 +27,20 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Setting Up Your Project</h3>
-			<p>This page will get you started with a new project, as well as explore some core concepts of Godot's engine.</p>
-			<p class="hint">For a more in depth look of Godot. check out their official documentation <a href="https://docs.godotengine.org/en/stable/index.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-			<h4>Downloading and Installing Godot</h4>
-			<p class="hint">If you taking this course in person you likely already have Godot on the computer you will be working on and can skip this step.</p>
-			<img src="images/getting_started/project_setup/godot_download.png" class="img-fluid" alt="Godot's download page">
+			<h3>Creating the Player Scene</h3>
+			<p>This page will walk through setting up the player scene with physics, animations and a player camera!</p>
+			<h4>Choosing a Root Node</h4>
+			<p>Continuing from our last tutorial, we should have a blank scene. In our scene tree Godot will be requesting we choose a <strong>Root Node</strong>.</p>
+			<img src="images/getting_started/first_steps/blank_scene_other_node.png" class="img-fluid" alt="Empty Scene Tree">
+			<p> A root node is the node from which all other nodes in a scene are descendants of. To keep with the tree metaphor, the root node is the roots of the tree that all the other nodes 'branch' off from. The root node provides the most basic functionality of a scene. For our player we will need to select a CharacterBody2D node. You may notice that is not an option in the scene tree right now, so we must select the Other Node option. This will bring up a menu to select from any of Godot's node types.</p>
+			<p class="hint">You can use the serach bar at the top of the new node menu to quickly find nodes!</p>
+			<img src="images/getting_started/first_steps/character_body2d_new_node.png" class="img-fluid" alt="Selecting CharacterBody2D">
+			<p>The root node for a scene also provides the name the scene will have when it is put into another scene. Due to this is is generally a good idea to rename your root node. You can do this by right clicking the node and selecting Rename. Lets rename our CharacterBody2D to Player.</p>
+			<p class="hint">To check out more details on node types, you can always right click a node in the scene tree and select 'Open Documentation'. Or to see all your options check out Godot's official documentation <a href="https://docs.godotengine.org/en/stable/classes/index.html#nodes">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<h4>Adding Sprites and Animations</h4>
+			<p>You may notice that our scene in the viewport is still empty. This is because we haven't added any visuals to our player! In order to fix this we need to first add a new AnimatedSprite2D node as a child of our Player (CharacterBody2D) node by right clicking the Player node and selecting Add Child Node.</p>
+			<img src="images/getting_started/first_steps/add_child_node.png" class="img-fluid" alt="Adding Child Node">
+			<p>
 			<div class="text-center">
 				<a href="editor_tour.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
 			</div>
@@ -43,7 +51,7 @@
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('gettingStarted','gsProjectSetup','gettingStartedToggle')
+		expandAndHighlight('gettingStarted','gsPlayerScene','gettingStartedToggle')
 	}
 </script>
 </body>

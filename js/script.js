@@ -22,3 +22,7 @@ function initPage() {
 	  $("#topbar").html(data);
 	});
 }
+
+function toggleSideBar() {
+	$(".bg-dark:first-of-type").toggleClass("t-none");
+}

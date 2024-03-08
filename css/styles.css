@@ -9,48 +9,84 @@ body {
 	color: #FFFFFF;
 }
 
-h1 {
-	color: white;
-	text-decoration: none;
-	font-weight: bold;
+.bg-green {
+	background-color: #80bc00;
+	color: #FFFFFF;
+}
+
+.img-logo {
+	height: 100%;
+	width: auto;
 	padding: 10px;
 }
 
-#topbar {
-	height: 85px;
+#header {
+	height: 100px;
+}
+
+#footer {
+	height: 10px;
+}
+
+.seperator {
+	height: 10px;
+}
+
+h1 {
+	text-decoration: none;
+	font-weight: bold;
+	width: auto !important;
 }
 
 #topbar button {
-	border: solid;
-	border-color: white;
-	border-width: 1px;
-	padding: 5px;
 	font-size: 32px;
 	margin-right: 10px;
+	width: auto;
 }
 
 @media (min-width : 768px) {
 	#topbar button {
-		display: none;
+		visibility: hidden;
 	}
+}
+
+.bg-charc {
+	background-color: #363636 !important;
+	color: #FFFFFF;
+}
+
+.bg-hide {
+	padding-left: 22px;
 }
 
 /* Side Bar Styling */
 
 .bg-dark {
-	background-color: #363636;
+	background-color: #363636 !important;
 	color: #FFFFFF;
 	height: auto;
 }
 
-@media (min-width : 768px) {
+@media (min-width : 767px) {
 	.bg-dark {
 		min-height: 100vh;
+	}
+	.bg-hide {
+		display: none;
+	}
+	.sm-title {
+		display: none;
 	}
 }
 
 @media (max-width : 767px) {
 	.t-none {
+		display: none;
+	}
+	.sm-hide {
+		display: none;
+	}
+	.bg-title {
 		display: none;
 	}
 }
@@ -142,4 +178,51 @@ h5 {
 .content .btn:hover {
 	background-color: #008fbe;
 	color: #FFFFFF;
+}
+
+:root {
+    --code-background: #363636;
+    --default-font-color: #FFFFFF;
+    --keyword-color: #e07c00;
+    --title-color: #008fbe;
+    --function-color: #e07c00;
+    --string-color: #ffcd00;
+    --built_in-color: #FFFFFF;
+    --number-color: #80bc00;
+}
+
+pre, code, code.hljs {
+    background: var(--code-background);
+    color: var(--default-font-color);
+}
+
+code.hljs .hljs-function,
+code.hljs .hljs-function .hljs-keyword {
+    color: var(--function-color);
+}
+
+code.hljs .hljs-keyword {
+    color: var(--keyword-color);
+}
+
+code.hljs .hljs-built_in {
+    color: var(--built_in-color);
+}
+
+code.hljs .hljs-number {
+    color: var(--number-color);
+}
+
+code.hljs .hljs-title {
+    color: var(--title-color);
+}
+
+code.hljs .hljs-string {
+    color: var(--string-color);
+}
+
+code.hljs .hljs-name,
+code.hljs .hljs-tag,
+code.hljs .hljs-attr {
+    color: var(--html-color);
 }

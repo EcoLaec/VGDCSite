@@ -21,6 +21,9 @@ function initPage() {
 	$.get('navigation/topbar.html', function( data ) {
 	  $("#topbar").html(data);
 	});
+	$.get('navigation/bottombar.html', function( data ) {
+	  $("#bottombar").html(data);
+	});
 }
 
 function toggleSideBar() {

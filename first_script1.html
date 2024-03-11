@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>The First Script Part 1</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Creating the Player Script (Part 1)</h3>
+			<p>On this page we will finally get to try our hands at programming!</p>
+			<h4>Attaching the Script</h4>
+			<p>Before we can start programming we need to add a <strong>Script</strong> to our player! A script is a collection of code that can be attached to a node. In order to attach a script we must go to our player scene, select our player node and press the attach script button at the top of the scene tree. The icon looks like a piece of paper with a small plus sign.</p>
+			<img src="images/getting_started/first_steps/player_attach_script.png" class="img-fluid" alt="Adding a new Script.">
+			<p>Attaching a new script will open a menu for the details of the script. For now we can keep all of the default settings, but if you would like to change it's name or save location you can (they can also be changed later). After that, a new screen will appear in the viewport. This is our script screen. If you wish to change back to the 2D screen use the screen tabs on the top bar. The new script will have some default code in it. Go ahead and replace it or remove code blocks until you have the following:</p>
+			<div>
+			<button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">extends CharacterBody2D
+
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+func _physics_process(delta):
+	pass</code></pre></div>
+			<p>Even with the cut back code there is a lot to take in, so lets go section by section</p>
+			<ol>
+				<li>
+					<h5>extends CharacterBody2D</h5>
+					<p>Found at the top of the script, the extends keyword means that this script <strong>Inherits</strong> from the CharacterBody2D class, meaning it has access to all functions and variables of the extended class. If you wish to see all available variables and methods for the CharacterBody2D node, right click the player node and select Open Documentation.</p>
+				</li>
+				<li>
+					<h5>var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")</h5>
+					<p>This is an example of a <strong>Variable</strong> and calling a <strong>Method</strong>. A variable is a container that stores a value and a method is a bundle of code that can be called to do something. In this case, we are creating a new variable named gravity and then setting that variable to the default gravity setting in our project settings.</p>
+				</li>
+				<li>
+					<h5>func _physics_process(delta) -> pass</h5>
+					<p>These two lines make up a <strong>Method</strong> (also known as a function). Functions only run when called, but Godot automatically calls the _physics_process function every physics frame. The parantheses after the function name hold the function's <strong>Arguments</strong>. Arguments are like variables that can be set when you call a method. For now the only code inside of the function is the keyword pass, which tells Godot to skip this function (for now).</p>
+				</li>
+			</ol>
+			<h4>Working with Variables</h4>
+			<p>Variables are an incredibly important aspect of coding, as without them the computer would have no way to 'remember' anything between frames or even lines of code! Each variable has a <strong>Data Type</strong>, which shows what type of data it is storing. Godot generally can automatically assign data types, but it is important to know at least the most common types as mixing them up can quickly cause errors.</p>
+			<ol>
+				<li>
+					<h5>Integers</h5>
+					<p>Integers are whole numbers. They can be positive or negative, but do not have any decimal places.</p>
+				</li>
+				<li>
+					<h5>Floats</h5>
+					<p>Float values are numbers that can decimal places. Likely the most common variable type for most games.</p>
+				</li>
+				<li>
+					<h5>Strings</h5>
+					<p>Strings are lines of text. Strings in code must be surrounded by quotation marks "like this".</p>
+				</li>
+				<li>
+					<h5>Booleans</h5>
+					<p>Sometimes just called bools, booleans can be either true or false.</p>
+				</li>
+				<li>
+					<h5>Instances</h5>
+					<p>Instances are specific nodes or objects in the game. For example, we could save the player node in another script as an instance.</p>
+				</li>
+			</ol>
+			<p class="hint">These examples are in no way an exhaustive list. If you want to learn more about Godot's data types you can check them out <a href="https://en.wikibooks.org/wiki/Guide_to_the_Godot_game_engine/Programming/GDScript/Data_types">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>For our player, all we need for now are the player's attributes (like speed, jump velocity, acceleration etc.) and access to our AnimatedSprite2D node. To get started, go a line below the extends CharacterBody2D line and type the following:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var speed = 100.0</code></pre></div>
+			<p>Lets look at each part of this variable declaration.</p>
+			<ol>
+				<li>
+					<h5>@export</h5>
+					<p>The @export keyword allows us to change a variable's value from the inspector, meaning we can quickly test different values. This is not required for every variable, but it is nice to have on anything you want to easily change.</p>
+				</li>
+				<li>
+					<h5>var</h5>
+					<p>The var keyword simply tells Godot we are declaring a new variable, and is required to do so. Without this we would have an error.</p>
+				</li>
+				<li>
+					<h5>speed</h5>
+					<p>This is the name we are choosing for the variable. You can choose how you want to name your variables, but know they cannot have any spaces and should make sense (it will make your life easier in the long run).</p>
+				</li>
+				<li>
+					<h5>= 100.0</h5>
+					<p>And finally we have our initial value. For now this number will seem rather arbitrary, as I have pre selected values that feel good to me, you will have a chance to experiment and get a feel for them yourself soon.</p>
+				</li>
+			</ol>
+			<p>Lets continue on with our player stats. For our initial script we will need acceleration (set to 800.0), friction (1200.0), jump_velocity (-300), gravity_scale (1.0), and terminal_velocity(500.0). Your variables should then look like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity_scale = 1.0
+@export var terminal_velocity = 500.0</code></pre></div>
+			<p class="hint">Notice that jump_velocity is negative. This is because in Godot and most other game engines, up is negative and down is positive.</p>
+			<p>The final variable we need is the instance of our player's AnimatedSprite2D. We can get this by selecting the AnimatedSprite2D node in the scene tree and begin to drag it into the script. After you have clicked it but <strong>before</strong> letting go press and hold the control key. Drag the node into the script beneath the other variables and let go of the mouse button. Let's rename it to something easier like sprite. Your script should then look something like this.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">extends CharacterBody2D
+
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity_scale = 1.0
+@export var terminal_velocity = 500.0
+
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+
+func _physics_process(delta):
+	pass</code></pre></div>
+			<p>In the next section we will continue programming our player!</p>
+			<div class="text-center">
+				<a href="first_script2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','gsPlayerScript1','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

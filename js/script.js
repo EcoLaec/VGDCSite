@@ -29,3 +29,14 @@ function initPage() {
 function toggleSideBar() {
 	$(".bg-dark:first-of-type").toggleClass("t-none");
 }
+
+function copyCode(btn) {
+	var pre = $(btn).parent().children('pre')[0];
+	var code = $(pre).children('code')[0];
+	var text = $(code).text();
+	var tempArea = $('<textarea>')
+	$('body').append(tempArea);
+	tempArea.val(text).select();
+	document.execCommand("copy");
+	tempArea.remove();
+}

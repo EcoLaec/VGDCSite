@@ -71,6 +71,7 @@
 			<p>Next function! For jumping we want to check if the player is on the floor and pressed the jump key then set their vertical velocity to the jump_velocity variable. A function that does that could look like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
 	if is_on_floor() and Input.is_action_just_pressed("Jump"):
 		velocity.y = jump_velocity</code></pre></div>
 			<p class="hint">Note the Input.is_action_just_pressed function. This allows us to check if a button was pressed but ignores the input if it is held down.</p>
@@ -91,12 +92,14 @@
 			<p>While we have all of our movement down, the player definitely doesn't look that good. Let's use our sprite variable to call the play function from our AnimatedSprite2D to change our animations. The following function does this well:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Grounded Animations
 	if input_axis:
 		sprite.flip_h = input_axis < 0
 		sprite.play("walk")
 	else:
 		sprite.play("idle")
 	
+	# Aerial Animations
 	if not is_on_floor():
 		if velocity.y <= 0:
 			sprite.play("jump")
@@ -107,6 +110,7 @@
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">extends CharacterBody2D
 
+# Player Stats
 @export var speed = 100.0
 @export var acceleration = 800.0
 @export var friction = 1200.0
@@ -114,6 +118,7 @@
 @export var gravity_scale = 1.0
 @export var terminal_velocity = 500.0
 
+# Reference Variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = $AnimatedSprite2D
 
@@ -132,6 +137,7 @@ func apply_gravity(delta):
 		velocity.y = min(velocity.y,terminal_velocity)
 
 func handle_jump():
+	# Jumping
 	if is_on_floor() and Input.is_action_just_pressed("Jump"):
 		velocity.y = jump_velocity
 
@@ -144,12 +150,14 @@ func apply_friction(input_axis,delta):
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 func update_animations(input_axis):
+	# Grounded Animations
 	if input_axis:
 		sprite.flip_h = input_axis < 0
 		sprite.play("walk")
 	else:
 		sprite.play("idle")
 	
+	# Aerial Animations
 	if not is_on_floor():
 		if velocity.y <= 0:
 			sprite.play("jump")

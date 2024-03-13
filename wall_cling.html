@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Coyote Time</title>
+	<title>Wall Cling</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,56 +34,67 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Coyote Time</h3>
-			<p>Coyote time is a mechanic added to games that allows the player to jump for a brief window of time after leaving the edge of a platform. Adding this allows a lot more forgiving platforming, as well as making the game feel more fair to the player.</p>
-			<h4>Adding the Timer</h4>
-			<p>The first thing we want to do is add a timer node to our player. Navigate to the player scene tree and add a new node to our player node. Find the timer node, add it, and then rename it (I will name mine CoyoteTime).</p>
-			<img src="images/player_movement/coyote_time_scene_tree.png" class="img-fluid">
-			<p>Once you have the timer added, select it and look in the inspector. We want to set the Wait Time to a very small number (something between 0.1 and 0.15 works well), and check One Shot (which makes the timer stop when it's done instead of looping.)</p>
-			<img src="images/player_movement/coyote_time_inspector.png" class="img-fluid">
+			<h3>Wall Clinging</h3>
+			<p class="hint"><strong>IMPORTANT! While not required, it is strongly recommended to have done the <a href="wall_jump.html">Wall Jump</a> module before this one!</strong></p>
+			<p>Wall clinging is the ability to stick or slide down walls. Adding this can give more flexibility and freedom to the player by giving them more time to make decisions.</p>
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the functionality of wall clinging, we need the new sprites! Go ahead and open up the Wall Cling folder in your VGDC-2024 Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called cling and import the new file as a frame.</p>
+			<img src="images/player_movement/wall_cling_sprite_frames.png" class="img-fluid">
 			<h4>Editing the Player Script</h4>
-			<p>We will need access to our timer in our player script, so begin to drag the node into the script, hold control, then drop it into your script with the rest of your reference variables. It should look similar to this:</p>
+			<p>Next navigate to the player script. Wall clinging requires two variables: one to set the fall speed of the player while wall clinging and one boolean to store whether the player is currently clinging to a wall (important for animations.)</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">@onready var coyote_time = $CoyoteTime</code></pre></div>
-			<p>To know when we want to start the timer, we need to find a way to check when the player leaves the edge of the platform (without jumping). Fortunately, since we have the move_and_slide method in our _physics_process function, we are able to check both before and after moving the player to see if they just left a ledge. One way of doing this is as follows:</p>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity_scale = 1.0
+@export var terminal_velocity = 500.0
+@export var cling_speed = 75.0
+
+# Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+var clinging = false</code></pre></div>
+			<p>Next we need to check each frame if the player is clinging to a wall. To test this we will check if they are holding a movement direction and they are on a wall but not the floor. We will do this each frame in the _physics_process function like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _physics_process(delta):
 	var input_axis = Input.get_axis("Left","Right")
+	clinging = is_on_wall_only() and input_axis and velocity.y >= 0.0
 	apply_gravity(delta)
 	handle_jump()
 	apply_acceleration(input_axis,delta)
 	apply_friction(input_axis,delta)
 	update_animations(input_axis)
-	# Before Moving
-	var was_on_floor = is_on_floor()
-	move_and_slide()
-	# After Moving
-	var just_left_ledge = was_on_floor and not is_on_floor() and velocity.y >= 0
-	if just_left_ledge: coyote_time.start()</code></pre></div>
-			<p>First, we store if the player is on the floor before moving, then we move the player. After that we check if the player was on the floor, if the player is no longer on the floor and that the player is falling (so not jumping). If all those conditions are met, we start the CoyoteTime timer.</p>
-			<p class="hint">Note the order we do things here. If we messed up what went before or after the move_and_slide method the timer would not work properly.</p>
-			<p>Of course, having the timer start does not do anything on its' own. We must also include the CoyoteTime timer in our handle_jump function. We can do this by checking if coyote_time.time_left is greater than 0 or if the player is on the ground. That script would then look like this:</p>
+	move_and_slide()</code></pre></div>
+			<p>Then we need to change the player's terminal velocity based on whether or not they are clinging to a wall. We can do this in the apply_gravity function like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func handle_jump():
-	# Jumping
-	if (is_on_floor() or coyote_time.time_left > 0.0) and Input.is_action_just_pressed("Jump"):
-		velocity.y = jump_velocity</code></pre></div>
-		<p class="hint">Note the parentheses around the is_on_floor and coyote_time.time_left conditions. This is to make sure the player jumps if either one of those conditions are true and if the player is pressing the jump key.</p>
-		<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
-		<h3>Compatibility</h3>
-		<p>Coyote Time conflicts with 1 other module:</p>
-		<ol>
-			<li><h5>Double Jump</h5></li>
-		</ol>
-		<p>If you have any of these modules please follow the instructions for that module:</p>
-		<h4>Double Jump</h4>
-		<p>Right now, whenever the player uses coyote time to jump, the player also uses up an air jump. To fix this we need to add a condition to the air jump section of our handle_jump function to check if the CoyoteTime timer has time left.</p>
+			<pre><code class="language-gdscript">func apply_gravity(delta):
+	var current_terminal_velocity = cling_speed if clinging else terminal_velocity
+	if not is_on_floor():
+		velocity.y += gravity * gravity_scale * delta
+		velocity.y = min(velocity.y,current_terminal_velocity)</code></pre></div>
+		<p class="hint">Note the change in the min method of terminal_velocity to current_terminal_velocity.</p>
+		<p>Finally, we can edit the update_animations function by playing the cling animation when the clinging variable is true:</p>
 		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript"># Air Jumps
-		if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps and coyote_time.time_left == 0.0:
-			velocity.y = jump_velocity * air_jump_scale
-			air_jumps_made += 1</code></pre></div>
-		</div>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Grounded Animations
+	if input_axis:
+		sprite.flip_h = input_axis < 0
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")
+		if clinging: sprite.play("cling")</code></pre></div>
+		<p>And that is all! Go ahead and try out your new ability and mess around with some variables, then go ahead and move on to a new module.</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">
@@ -94,7 +105,7 @@
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('playerMovement','pmCoyoteTime','playerMovementToggle')
+		expandAndHighlight('playerMovement','pmWallJump','playerMovementToggle')
 	}
 </script>
 </body>

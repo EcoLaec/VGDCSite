@@ -111,8 +111,10 @@ func _physics_process(delta):
 				</li>
 			</ol>
 			<p>Lets continue on with our player stats. For our initial script we will need acceleration (set to 800.0), friction (1200.0), jump_velocity (-300), gravity_scale (1.0), and terminal_velocity(500.0). Your variables should then look like this:</p>
+			<p class="hint">The section that starts with a # is a comment. Comments are not run as code but are instead used as reminders or organization. I will be peppering them throughtout this course to make finding specific sections of code easier.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">@export var speed = 100.0
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
 @export var acceleration = 800.0
 @export var friction = 1200.0
 @export var jump_velocity = -300.0
@@ -123,6 +125,7 @@ func _physics_process(delta):
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">extends CharacterBody2D
 
+# Player Stats
 @export var speed = 100.0
 @export var acceleration = 800.0
 @export var friction = 1200.0
@@ -130,6 +133,7 @@ func _physics_process(delta):
 @export var gravity_scale = 1.0
 @export var terminal_velocity = 500.0
 
+# Reference Variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = $AnimatedSprite2D
 

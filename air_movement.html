@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Double Jumps</title>
+	<title>Aerial Mobility</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,10 +34,10 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Double Jumps</h3>
-			<p>Double jumping (or triple, quadruple, quintuple ect.) is the ability to jump a certain number of times while in the air. Also known as air jumps, adding this can allow the player more freedom of movement and an option to rethink their jumps while in motion.</p>
+			<h3>Aerial Mobility</h3>
+			<p>Right now our player is able to move just as freely in the air as they can on the ground. This is not very realistic, and while we aren't exactly striving for realism, having some reduced acceleration and friction in the air can help the player make sense of the controls easier.</p>
 			<h4>Editing the Player Script</h4>
-			<p>In order to implement a flexible air jump system we need three variables: one for how many air jumps the player can make, one to control how strong the air jumps are, and a third to keep track of how many air jumps the player has made since they last touched the ground. We will put the first two in our player stats and the third in our reference variables:</p>
+			<p>We need two variables for aerial mobility: air acceleration and air friction. These will replace their regular counterparts when the player is not grounded. Lets put these in the player stats:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript"># Player Stats
 @export var speed = 100.0
@@ -46,57 +46,29 @@
 @export var jump_velocity = -300.0
 @export var gravity_scale = 1.0
 @export var terminal_velocity = 500.0
-@export var air_jumps = 1
-@export var air_jump_scale = 0.8
-
-# Reference Variables
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-@onready var sprite = $AnimatedSprite2D
-var air_jumps_made = 0</code></pre></div>
-		<p>Before we can set up the jumps themselves, however, we want to make sure we are resetting our air jumps when we are on the ground. We can do this by adding a simple check at the top of our handle_jump function:</p>
-		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-		<pre><code class="language-gdscript">func handle_jump():
-	# Reset Air Jumps
-	if is_on_floor(): air_jumps_made = 0
-
-	# Jumping
-	if is_on_floor() and Input.is_action_just_pressed("Jump"):
-		velocity.y = jump_velocity</code></pre></div>
-		<p>In order to actually allow air jumps, let's go back to our handle_jump function. We want to add a check to see if the player is in the air, then if the player presses the jump key while having air jumps left, set their vertical velocity. Our final function should look like this:</p>
-		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-		<pre><code class="language-gdscript">func handle_jump():
-	# Reset Air Jumps
-	if is_on_floor(): air_jumps_made = 0
-
-	# Jumping
-	if is_on_floor() and Input.is_action_just_pressed("Jump"):
-		velocity.y = jump_velocity
-	
-	# Off of Floor
-	if not is_on_floor():
-		# Air Jumps
-		if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps:
-			velocity.y = jump_velocity * air_jump_scale
-			air_jumps_made += 1</code></pre></div>
-		<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
-		<h3>Compatibility</h3>
-		<p>Coyote Time conflicts with 2 other modules:</p>
-		<ol>
-			<li><h5>Coyote Time</h5></li>
-			<li><h5>Wall Jump</h5></li>
-		</ol>
-		<p>If you have any of these modules please follow the instructions for that module:</p>
-		<h4>Coyote Time</h4>
-		<p>Right now, whenever the player uses coyote time to jump, the player also uses up an air jump. To fix this we need to add a condition to the air jump section of our handle_jump function to check if the CoyoteTime timer has time left.</p>
-		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript"># Air Jumps
-if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps and coyote_time.time_left == 0.0:
-	velocity.y = jump_velocity * air_jump_scale
-	air_jumps_made += 1</code></pre></div>
-		<h4>Wall Jump</h4>
-		<p>Filler.</p>
-		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">Filler</code></pre></div>
+@export var air_acceleration = 600.0
+@export var air_friction = 200.0</code></pre></div>
+			<p>Next, lets edit our apply_acceleration function by checking if the player is on the ground, using our previous code if so, and using air_acceleration if not:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	if input_axis:
+		if is_on_floor():
+			# Grounded Acceleration
+			velocity.x = move_toward(velocity.x, speed * input_axis, acceleration * delta)
+		else:
+			# Aerial Acceleration
+			velocity.x = move_toward(velocity.x, speed * input_axis, air_acceleration * delta)</code></pre></div>
+			<p>Finally, we can easily repeat the same for the apply_friction function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_friction(input_axis,delta):
+	if not input_axis:
+		if is_on_floor():
+			# Grounded Friction
+			velocity.x = move_toward(velocity.x, 0, friction * delta)
+		else:
+			# Aerial Friction
+			velocity.x = move_toward(velocity.x, 0, air_friction * delta)</code></pre></div>
+			<p>And that's all that is required! Go ahead and try some different values for your stats and then move on to another module.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -108,7 +80,7 @@ if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps and coyot
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('playerMovement','pmDoubleJump','playerMovementToggle')
+		expandAndHighlight('playerMovement','pmAirMove','playerMovementToggle')
 	}
 </script>
 </body>

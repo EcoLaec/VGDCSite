@@ -40,11 +40,14 @@
 			<p>Since we are modifying jumping, lets go to the handle_jump function in the player script. We want the player to be able to reduce their vertical speed while they are in the air and currently jumping (moving up). One way of achieving short hopping would look like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
 	if is_on_floor() and Input.is_action_just_pressed("Jump"):
 		velocity.y = jump_velocity
 	
+	# Off of Floor
 	if not is_on_floor():
-		if Input.is_action_just_released("Jump") && velocity.y < jump_velocity / 2:
+		# Short Hops
+		if Input.is_action_just_released("Jump") and velocity.y < jump_velocity / 2:
 			velocity.y = jump_velocity / 2</code></pre></div>
 			<p class="hint">Note that we are checking if the player's velocity is less than the jump_velocity / 2. This is to make sure the player cannot get a boost by letting go of the jump key.</p>
 			<p>And that's all that is needed! Pretty simple addition, but adds so much in terms of game feel. Go ahead and test out your ability to short hop, then go ahead and select another module!</p>

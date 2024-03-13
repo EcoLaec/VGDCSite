@@ -28,14 +28,14 @@
 		</div>
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Creating the Player Scene (Part 1)</h3>
-			<p>This page will walk through setting up the player scene with and assigning the player animations!</p>
+			<p>This page will walk through setting up the player scene and assigning the player animations!</p>
 			<h4>Choosing a Root Node</h4>
 			<p>Continuing from our last tutorial, we should have a blank scene. In our scene tree Godot will be requesting we choose a <strong>Root Node</strong>.</p>
 			<img src="images/getting_started/first_steps/blank_scene_other_node.png" class="img-fluid" alt="Empty Scene Tree">
 			<p> A root node is the node from which all other nodes in a scene are descendants of. To keep with the tree metaphor, the root node is the roots of the tree that all the other nodes 'branch' off from. The root node provides the most basic functionality of a scene. For our player we will need to select a CharacterBody2D node. You may notice that is not an option in the scene tree right now, so we must select the Other Node option. This will bring up a menu to select from any of Godot's node types.</p>
 			<p class="hint">You can use the search bar at the top of the new node menu to quickly find nodes!</p>
 			<img src="images/getting_started/first_steps/character_body2d_new_node.png" class="img-fluid" alt="Selecting CharacterBody2D">
-			<p>The root node for a scene also provides the name the scene will have when it is put into another scene. Due to this is is generally a good idea to rename your root node. You can do this by right clicking the node and selecting Rename. Lets rename our CharacterBody2D to Player.</p>
+			<p>The root node for a scene also provides the name the scene will have when it is put into another scene. Due to this is is generally a good idea to rename your root node. You can do this by right clicking the node and selecting Rename. Let's rename our CharacterBody2D to Player.</p>
 			<p class="hint">To check out more details on node types, you can always right click a node in the scene tree and select 'Open Documentation'. Or to see all your options check out Godot's official documentation <a href="https://docs.godotengine.org/en/stable/classes/index.html#nodes">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<h4>Adding Sprites and Animations</h4>
 			<p>You may notice that our scene in the viewport is still empty. This is because we haven't added any visuals to our player! In order to fix this we need to first add a new AnimatedSprite2D node as a child of our Player (CharacterBody2D) node by right clicking the Player node and selecting Add Child Node.</p>
@@ -48,11 +48,11 @@
 			<ol>
 				<li>
 					<h5>Animation Controls</h5>
-					<p>Highlighted in blue, the animation controls allow you to (in order) create and delete animations, set an animation to play when the asset is loaded, set if an animation loops and it's playback speed in frames per second.</p>
+					<p>Highlighted in blue, the animation controls allow you to (in order) create and delete animations, set an animation to play when the asset is loaded, set if an animation loops and its playback speed in frames per second.</p>
 				</li>
 				<li>
 					<h5>Animation Frame Controls</h5>
-					<p>Highlighted in green, the animation frame controls allow you to play and stop your animation in the veiwport (very useful for testing), add frames from textures or sprite sheets, copy and paste frames, insert blank frames, move and delete frames, and finaly set an individual frame's duration (relative to the animation's speed).</p>
+					<p>Highlighted in green, the animation frame controls allow you to play and stop your animation in the veiwport (very useful for testing), add frames from textures or sprite sheets, copy and paste frames, insert blank frames, move and delete frames, and finaly set an individual frame's duration (relative to the animation's speed.)</p>
 				</li>
 				<li>
 					<h5>Animation List</h5>
@@ -65,15 +65,15 @@
 			</ol>
 			<p>For this project we will need four animations for our player: walking, jumping, falling and idle (standing still). But we don't have any textures yet! No worries, I have provided all resources necessary to complete every part of this course in the VGDC-2024 Assets file on your computer's desktop.</p>
 			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-			<p>To import textures (or any other asset) into your Godot project is quite simple! Simply find the assets you wish to add (in this case, it is all the png files in the Getting Started file in our VGDC-2024 Assets folder) and drag them into your file system dock in Godot (Bottom left corner beneath the scene tree). Once they are imported, you can easily reorganize the assets in Godot.</p>
+			<p>To import textures (or any other asset) into your Godot project is quite simple! Simply find the assets you wish to add (in this case, it is all the png files in the Getting Started file in our VGDC-2024 Assets folder) and drag them into your file system dock in Godot (bottom left corner beneath the scene tree.) Once they are imported, you can easily reorganize the assets in Godot.</p>
 			<p class="hint">Organizing your assets is incredibly important, especially as a project grows. You can create folders by right clicking in the file system dock. I usually have a folder for each type of asset, like textures, sounds, scripts, scenes etc. with subfolders for further structure. Do whatever organization strategy that makes the most sense to you, however!</p>
 			<img src="images/getting_started/first_steps/imported_assets.png" class="img-fluid" alt="My File Structure">
-			<p>Once we have imported our assets we can add our first animation! Select the default animationin the sprite frames editor on the bottom panel and rename it to idle. Select the Add Sprites from Sheet option in the animation frame controls. The icon looks like a three by three grid.</p>
+			<p>Once we have imported our assets we can add our first animation! Select the default animation in the sprite frames editor on the bottom panel and rename it to idle. Select the Add Sprites from Sheet option in the animation frame controls. The icon looks like a three by three grid.</p>
 			<img src="images/getting_started/first_steps/adding_sprite_from_sheet.png" class="img-fluid" alt="Adding Sprite from Sheet">
 			<p class="hint">A sprite sheet is an image that has more than one frame or sprite on it.</p>
 			<p>A new menu will appear that will show your file system structure. Navigate through it to where you stored your player sprites and select the Green Dino Idle texture.</p>
 			<img src="images/getting_started/first_steps/selecting_texture.png" class="img-fluid" alt="Selecting Texture">
-			<p>Another menu will appear prompting you to select frames, though before we can we must let Godot know how many sprites we have in the sprite sheet. We do this by using the horizontal and vertical elements in the top left corner of the menu. Horizontal is the number of sprites we have horizontally and vertically is the same but vertically (you can think of it like a grid). Since we have four sprites in a horizontal line and only one row, we set horizontal to 4 and vertical to 1. We can then select out frames in the order we want them to play (in this case left to right).</p>
+			<p>Another menu will appear prompting you to select frames, though before we can we must let Godot know how many sprites we have in the sprite sheet. We do this by using the horizontal and vertical elements in the top left corner of the menu. Horizontal is the number of sprites we have horizontally and vertically is the same but vertically (you can think of it like a grid.) Since we have four sprites in a horizontal line and only one row, we set horizontal to 4 and vertical to 1. We can then select out frames in the order we want them to play (in this case left to right.)</p>
 			<img src="images/getting_started/first_steps/selecting_frames.png" class="img-fluid" alt="Selecting Frames">
 			<p>Once the frames are selected, you will see them in the frame list in the sprite frames editor. To add the rest of the animations, press the Add Animation button (the icon looks like a piece of paper with a plus sign), then repeat the steps you made for the idle animation.</p>
 			<p class="hint">Note that the jump and fall animations are 1 sprite long and walk is 6 sprites long instead of the idle animation's 4.</p>

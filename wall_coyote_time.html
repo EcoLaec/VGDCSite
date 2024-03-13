@@ -34,96 +34,7 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Wall Jumping</h3>
-			<p>Wall jumping is the ability for the player to 'jump' off of a wall they are running into to get extra height. Adding it increases the amount of options the player has to get around.</p>
-			<h4>Editing the Player Script</h4>
-			<p>Before we can add wall jumps we need two variables. One for the vertical velocity and another for the horizontal velocity to apply to the player when they wall jump. Lets add these as multipliers in our player stats:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript"># Player Stats
-@export var speed = 100.0
-@export var acceleration = 800.0
-@export var friction = 1200.0
-@export var jump_velocity = -300.0
-@export var gravity_scale = 1.0
-@export var terminal_velocity = 500.0
-@export var wall_jump_horizontal_scale = 1.0
-@export var wall_jump_vertical_scale = 1.0</code></pre></div>
-			<p>We will apply these scales to our jump_velocity and speed later on. Our next step is to add a new handle_wall_jump function in our _physics_process function, like this:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func _physics_process(delta):
-	var input_axis = Input.get_axis("Left","Right")
-	apply_gravity(delta)
-	handle_wall_jump()
-	handle_jump()
-	apply_acceleration(input_axis,delta)
-	apply_friction(input_axis,delta)
-	update_animations(input_axis)
-	move_and_slide()</code></pre></div>
-			<p class="hint">Note that the handle_wall_jump function is above the handle_jump function. This is incredibly important for compatibility with certain modules!</p>
-			<p>Finally, we can create our new function. Let's just put it in and then explore what it's components are:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func handle_wall_jump():
-	# Skip if not on Wall
-	if not is_on_wall_only(): return
-	var wall_normal = get_wall_normal()
-	if Input.is_action_just_pressed("Jump"):
-		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
-		velocity.y = jump_velocity * wall_jump_vertical_scale</code></pre></div>
-			<p>We have two new parts here: <strong>Return</strong> and <strong>Normals</strong>. The return keyword cuts a function short, effectively skipping anything after it when called. Normals are vectors that are perpendicular to a surface. Put more simply, they point away from a surface.</p>
-			<p class="hint">Normals can be pretty confusing, so if they are hard to understand, don't worry! There is no test on what a normal is in this course!</p>
-			<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
-			<h3>Compatibility</h3>
-			<p>Coyote Time conflicts with 1 other module:</p>
-			<ol>
-				<li><h5>Double Jump</h5></li>
-			</ol>
-			<p>If you have any of these modules please follow the instructions for that module:</p>
-			<h4>Double Jump</h4>
-			<p>Right now, whenever the player jumps off of a wall, it will also use a double jump. To fix this we need to store if the player has wall jumped this frame, and if so, prevent the player from using their air jumps during the frame (This is why we had to have the handle_wall_jump function come before the handle_jump function.) First lets add the new variable to our reference variables:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript"># Reference Variables
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-@onready var sprite = $AnimatedSprite2D
-var just_wall_jumped = false</code></pre></div>
-			<p>Next, we must reset the just_wall_jumped variable each frame <strong>after</strong> the handle_jump function. For me, I will put it after the move_and_slide function:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func _physics_process(delta):
-	var input_axis = Input.get_axis("Left","Right")
-	apply_gravity(delta)
-	handle_wall_jump()
-	handle_jump()
-	apply_acceleration(input_axis,delta)
-	apply_friction(input_axis,delta)
-	update_animations(input_axis)
-	move_and_slide()
-	# After Moving
-	just_wall_jumped = false</code></pre></div>
-			<p>Next, we need to set the just_wall_jumped variable to true whenever the player does wall jump. Doing so is easy enough. Inside of the handle_wall_jump function lets add a simple assignment like so:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func handle_wall_jump():
-	# Skip if not on Wall
-	if not is_on_wall_only(): return
-	var wall_normal = get_wall_normal()
-	if Input.is_action_just_pressed("Jump"):
-		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
-		velocity.y = jump_velocity * wall_jump_vertical_scale
-		just_wall_jumped = true</code></pre></div>
-			<p>Finally, all we need to do is add a check for the just_wall_jumped variable in our handle_jump function in our air jump checks:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func handle_jump():
-	# Resetting Air Jumps
-	if is_on_floor(): air_jumps_made = 0
-	# Jumping
-	if is_on_floor() and Input.is_action_just_pressed("Jump"):
-		velocity.y = jump_velocity
-	
-	# Off of Floor
-	if not is_on_floor():
-		
-		# Air Jumps
-		if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps and not just_wall_jumped:
-			velocity.y = jump_velocity * air_jump_scale
-			air_jumps_made += 1</code></pre></div>
+			<h3>Wall Coyote Time</h3>
 		</div>
 	</div>
 	<div class="row">
@@ -135,7 +46,7 @@ var just_wall_jumped = false</code></pre></div>
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('playerMovement','pmWallJump','playerMovementToggle')
+		expandAndHighlight('playerMovement','pmWallCoyoteTime','playerMovementToggle')
 	}
 </script>
 </body>

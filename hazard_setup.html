@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hazard Setup</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Setting Up Hazards</h3>
+			<p>On this page we will add the ability for the player to die and respawn, as well as our first hazard: the bottomless void.</p>
+			<h4>Creating the Hazard Physics Layer</h4>
+			<p>Before we can create any functionality for hazards, we need to let Godot know we want to track a new physics layer. Navigate to project settings, then find the Layer names -> 2D Physics option. Name a new layer Hazard.</p>
+			<img src="images/challenges/hazard_physic_layer.png" class="img-fluid">
+			<h4>Adding a Hazard Collider on the Player</h4>
+			<p>Next, we need to add a way for the player to detect hazards. We can do this by going to our player scene, right-clicking our player node and adding a new Area2D node. Let's name the new node HazardCollider. Then, right-click the new node and add a CollisionShape2D node.</p>
+			<img src="images/challenges/hazard_scene_tree.png" class="img-fluid">
+			<p>Right now, however, our collider is still set to default layers and masks. For this specific collider we don't need a layer, as it won't physically stop anything, but we want to set it's mask to our new hazard layer. We can set the collision layers in the inspector while having the HazardCollider selected.</p>
+			<img src="images/challenges/hazard_collider_layers.png" class="img-fluid">
+			<p>Next, select the new collision shape, go to the inspector and add a new rectange shape. Let's resize it to fit the player closer.</p>
+			<img src="images/challenges/hazard_collider_shape.png" class="img-fluid">
+			<p class="hint">Note that I made the hazard collider shape smaller than we did the player's collider. This is to grant the player more wiggle room and is good practice for any collisions that have a negative result.</p>
+			<h4>Connecting the Collider to the Player Script</h4>
+			<p>Now our collider will detect hazards, but it still won't do anything on it's own. In order to remedy this we need to have the collider send a <strong>Signal</strong> to our player script when it enters a hazard. Signals are the way that children nodes can communicate events to its parent node (a parent node can simply call a child node using its path, like what we did for the player's AnimatedSprite2D node.) To connect a signal, select the HazardCollider node and navigate to the top of the inspector. Select the node tab, and you will see a list of available signals the node can send.</p>
+			<img src="images/challenges/hazard_signals.png" class="img-fluid">
+			<p>Select the body_entered signal and a new menu will appear:</p>
+			<img src="images/challenges/connect_a_signal.png" class="img-fluid">
+			<p>Make sure you have the player node selected, then select Connect. At the bottom of the player script a new function should appear called _on_hazard_collider_body_entered. Go ahead and repeat the same steps for the area_entered signal, as we want to be able to detect both.</p>
+			<p class="hint">The difference between collision bodies and areas comes down to how their collision works. An area only provides detection and influence, and will not stop objects. A body on the other hand, will collide with and stop objects based on it's layers. You can learn more about Godot's collision objects throught thier documentation <a href="https://docs.godotengine.org/en/stable/tutorials/physics/physics_introduction.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Right now neither signal has any functionality. To add some we need to decide what we want to happen to the player when they collide with a hazard. For now we will simply return the player to their starting point, but other modules will expand on this. To start lets create a new variable to store our player's initial position. We will add it to our reference variables:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+var respawn_point = Vector2.ZERO</code></pre></div>
+			<p>Next lets save the player's position when it is fully loaded. We will do this in the ready function (if you do not have a ready function, don't worry! You may not of needed it until now. It runs once when the game starts.)</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	respawn_point = position</code></pre></div>
+			<p>We still need to reset the player's position after they collide with a hazard. Though to save the hassle of repeating code (and in order to make changes easier), we will make a new die function that we can call in both signals. In it we will set the player's position back to it's respawn_point.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	position = respawn_point</code></pre></div>
+			<p>Finally we can connect the signals with our new function. To do so we will use the call_deferred("die") method in both signals.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_hazard_collider_body_entered(_body):
+	call_deferred("die")
+
+func _on_hazard_collider_area_entered(area):
+	call_deferred("die")</code></pre></div>
+			<p class="hint">We use the call_deferred method in order to make sure the function we gave it does not run until the end of the current physics loop. While not required for the function right now, we will need it for more complex behaviors in some other modules.</p>
+			<h4>Adding the Void</h4>
+			<p>You may notice that even if we boot up the game, there is nothing for our collider to detect! To fix this, as well as another glaring issue, we will add a new collider in the world to catch any players that falls off the map. To start, go to our world scene, right click our world node and add a new Area2D node. Lets name it VoidCollider, then right click the new node and add a CollisionShape2D node.</p>
+			<img src="images/challenges/void_collider_scene_tree.png" class="img-fluid">
+			<p class="hint">You may notice the yellow names. This is due to me having implemented multiple levels, but will not change anything for you. If you would like to check out how to add multiple levels you can <a href="multiple_levels.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next, select the void collider node and find the collision section in the inspector. We will set it's layer to be our hazard layer and it's masks will be empty.</p>
+			<img src="images/challenges/hazard_collision.png" class="img-fluid">
+			<p>Finally, select the void collider's collision shape node and add a new rectangle shape. Lets resize it to extend past the bounds of the level to make sure the player cannot bet past it and be softlocked.</p>
+			<img src="images/challenges/void_collider.png" class="img-fluid">
+			<p>And your done! Go ahead and test out your new collider (you may need to edit your level) and respawn, then move on to another module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('hazard','hSetup','hazardToggle')
+	}
+</script>
+</body>
+</html>

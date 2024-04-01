@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Time Limit</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Time Limit</h3>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a> and <a href="ui.html">UI</a> modules to be completed first!</strong></p>
+			<p>On this page we will make the game a more stressful by adding a time limit!</p>
+			<h4>Creating the Timer</h4>
+			<p>In order to have a timer we need, well, a timer. Create a new scene and choose a Timer node as the root node. You can keep all of it's settings as default, but let's rename the node LevelTimer. We then need to save the scene. Next, go to your project settings under the autoload tab and press the file icon next to path. Find where you saved your level timer scene and press add.</p>
+			<img src="images/challenges/autoload_timer.png" class="img-fluid" alt="Setting the level timer to load automatically.">
+			<h4>Editing the World Script</h4>
+			<p>Now we can access our LevelTimer from anywhere. To start, navigate to your world scene. Open your world script (or attach one to your world node if you do not have one) and at the top add a new export variable called level_time.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var level_time = 180</code></pre></div>
+			<p>Next, in the world script's _ready function, we can start the LevelTimer using the level's time limit using the following line of code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	LevelTimer.start(level_time)</code></pre></div>
+			<h4>Editing the Player Script</h4>
+			<p>Of course, right now when the timer finishes, nothing happens. To fix this go to the player script, and add the following line of code into the player's _ready function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	LevelTimer.timeout.connect(die)</code></pre></div>
+			<p class="hint">This line of code is another way to connect a signal to a node. In this case, the player will call it's die function when the level timer reaches 0.</p>
+			<h4>Adding the UI Element</h4>
+			<p>Now, while we have all the functionality working, we still cannot see how much time we have left. In order to fix this lets go to our UI scene. Selecting the Center node, create a new VBoxContainer node as a child, then create a new Label node as a child of the v-box container.</p>
+			<img src="images/challenges/time_scene_tree.png" class="img-fluid" alt="Adding time label to UI tree.">
+			<p>Select the TimeLabel, right click it and select Access as Unique Name, then open your UI script (or attach a new one to the UI's canvas layer if you do not already have one.) In the script's _process function add the following line of code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _process(delta):
+	%TimeLabel.text = str(int(LevelTimer.time_left) / 60) + ":" + str(int(LevelTimer.time_left) % 60)</code></pre></div>
+			<p>And You are done! Go ahead and set your level(s) time limits and try it out! Once you are done go ahead and try another module.</p>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('hazard','hTimeLimit','hazardToggle')
+	}
+</script>
+</body>
+</html>

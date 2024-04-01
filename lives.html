@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Limited Lives</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Limited Lives</h3>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a>, <a href="global_script.html">Global Script</a> and <a href="ui.html">UI</a> modules to be completed first!</strong></p>
+			<p>On this page we will help turn up the heat on our players by limiting the number of chances they get!</p>
+			<h4>Scripting Player Lives</h4>
+			<p>We need to track player lives, but we don't want the lives to be reset each time a player completes a stage. In order to work around this we will store the player's lives in our global script. We can do this quite simply by adding a new variable to the global script with some default number of starting lives.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">var player_lives = 5</code></pre></div>
+			<p>Next, we need to update the number of lives the player has each time they die, and if they run out, reset the stage. We can do this by navigating to our player script and editing our die function like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	Global.player_lives -= 1
+	if Global.player_lives <= 0:
+		get_tree().reload_current_scene()
+		Global.player_lives = 5
+	else:
+		global_position = respawn_point</code></pre></div>
+			<p>And now they player has limited attempts! Of course, right now we cannot see how many lives we have left (nor when we reset.)</p>
+			<h4>Adding Lives to the UI</h4>
+			<p>To remedy the lack of information, we can add an element to our UI that shows our current lives. Before we can do that, we need to decide where we want to element to go. I want mine in the top left corner, and I want both a sprite of an egg and a number showing the number of lives left.</p>
+			<p class="hint">The placement of the elements are arbitrary, you can just as easily set it in any corner, top, bottom or even center if you wanted.</p>
+			<p>Go to your UI scene, then select the Left node. Create a new VBoxContainer node, then as a child of that a new HBoxContainer node. Next, select the new h-box container and add two children nodes: a TextureRect node and a Label node. Rename the label to LivesLabel, then the scene tree should look like this:</p>
+			<img src="images/challenges/lives_scene_tree.png" class="img-fluid" alt="UI scene tree after adding lives elements.">
+			<p>You may notice the % symbol next to the LivesLabel node. This means the node has a unique name, allowing it to be accessed anywhere in the tree, even if you end up changing it's parents or location. You can do the same by right clicking the LivesLabel node and selecting Access as Unique Name.</p>
+			<img src="images/challenges/set_unique_name.png" class="img-fluid" alt="Setting a unique name.">
+			<p>Next, let's attach a texture to our TextureRect node. Go ahead and open up the Limited Lives folder in your VGDC-2024 Assets folder, select the egg sprite you like and drag it into your file system. After that, select the TextureRect node and drag your egg sprite into the texture property in the inspector (if the egg looks slim in game, you can change the expand mode property to fit width.)</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="images/challenges/lives_texture_rect.png" class="img-fluid" alt="Setting up the TextureRect.">
+			<p>Finally, we can update the LivesLabel node with the player's lives. Open up your UI script (or attack a new one to the UI's canvas layer if you do not have one) and add the following line of code to it's _process function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _process(delta):
+	%LivesLabel.text = "x" + str(Global.player_lives)</code></pre></div>
+			<p>And that's all! You should see a new element on the UI that shows the player's current lives. Once you made sure it works, go ahead and move onto a new module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('hazard','hLives','hazardToggle')
+	}
+</script>
+</body>
+</html>

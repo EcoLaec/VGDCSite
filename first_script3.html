@@ -43,6 +43,7 @@
 	if not is_on_floor():
 		velocity.y += gravity * gravity_scale * delta
 		velocity.y = min(velocity.y,terminal_velocity)</code></pre></div>
+			<p class="hint">Note that the functions themselves are <i>outside</i> of the _physics_process function. We call the functions inside of other functions in order to break code up into easier to read and reusable sections.</p>
 			<ol>
 				<li>
 					<h5>if not is_on_floor():</h5>

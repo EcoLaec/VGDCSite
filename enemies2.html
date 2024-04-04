@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Enemies Part 2</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Enemies Part 2</h3>
+			<p>In this module we will create a new enemy inheriting from our enemy scene, as well as give the player the ability to jump on them!</p>
+			<h4>Creating a New Inherited Scene</h4>
+			<p>An <strong>Inherited Scene</strong> is a scene that inherits all of the nodes and properties of a different scene. To create one, find your enemy scene in your file system, right click it and select New Inherited Scene.</p>
+			<img src="images/challenges/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>You will see a copy of the enemy scene appear, except all the inherited nodes will be yellow. Rename the root node to Trike, then save the new scene as trike as well.</p>
+			<h4>Adding Visuals</h4>
+			<p>Next lets add the trike's animations. Select the AnimatedSprite2D node, go to the inspector and create a new spriteframes. 
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('hazard','hEnemies2','hazardToggle')
+	}
+</script>
+</body>
+</html>

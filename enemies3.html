@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Sprinting</title>
+	<title>Advanced Enemies</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,61 +34,43 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Sprinting</h3>
-			<p>We can add the ability for the player to run when holding a key. Doing so can add more options for the player and frankly is just fun.</p>
-			<h4>Getting the New Assets</h4>
-			<p>Before we can start adding the ability to sprint, we need the new sprites! Go ahead and open up the Sprinting folder in your VGDC-2024 Assets folder, find the appropriate file and drag it into your file system.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called sprint and import the new file as a frame.</p>
-			<img src="images/player_movement/sprint_sprite_frames.png" class="img-fluid">
-			<p class="hint">Note that the animation speed for sprinting is 12 fps! You can change it but you do want it faster than walking.</p>
-			<h4>Adding the Input</h4>
-			<p>Next we must add a new input action for sprinting. Go to your project settings then the input map tab. Create a new action called Sprint and add a key (I will add shift as my sprint key.)</p>
-			<img src="images/player_movement/sprinting_input.png" class="img-fluid">
-			<h4>Editing the Player Script</h4>
-			<p>Now we can finally add the functionality to our player script. First we need two variables: one in our player stats for our sprinting speed, and one in our reference variables to store whether or not the player is sprinting. Our variables should look something like this:</p>
+			<h3>Advanced Enemies</h3>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="enemies1.html">Simple Enemy Part 1</a> and <a href="enemies2.html">Simple Enemy Part 2</a> modules to be completed first!</strong></p>
+			<p>In this module we build off of our simple enemy to create some more advanced enemies: the anklyo, ptero and para!</p>
+			<p class="hint">Note that each of these enemies can be added individually. If you don't want one, just skip it!</p>
+			<h4>Creating the Ptero</h4>
+			<p>The ptero will be a simple flying enemy. To add the functionality of flight to enemies, open up the enemy script. In the variables section, add a new @export variable named flying and set it to false by default, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript"># Player Stats
-@export var speed = 100.0
-@export var acceleration = 800.0
-@export var friction = 1200.0
-@export var jump_velocity = -300.0
-@export var gravity_scale = 1.0
-@export var terminal_velocity = 500.0
-@export var sprint_speed = 130.0
-
-# Reference Variables
+			<pre><code class="language-gdscript">@export var speed = 25.0
+@export var flying = false
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = $AnimatedSprite2D
-var sprinting = false</code></pre></div>
-			<p>Next, we need to be able to switch between our regular speed and sprint_speed variables based on our input. We can do this by adding a new variable in our apply_acceleration function that replaces the max speed argument of the move_toward method with the proper speed. That should look like this:</p>
+@onready var shape = $CollisionShape2D
+var direction = Vector2.RIGHT
+var is_moving = true</code></pre></div>
+			<p>Next, in the _physics_process function, we will edit the if not is_on_floor() condition by add a and not flying in order to disable gravity if the enemy is flying, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
-	sprinting = Input.is_action_pressed("Sprint")
-	var current_speed = sprint_speed if sprinting else speed
-	if input_axis:
-		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
-			<p class="hint">Note that speed was replaced with current_speed in the move_toward method.</p>
-			<p>Finally, we can add the animations to our update_animations function. Inside of our grounded animations we need to check if sprinting is true, and if so, play the sprint animation instead of walk. That should look like so:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func update_animations(input_axis):
-	# Grounded Animations
-	if input_axis:
-		sprite.flip_h = input_axis < 0
-		if sprinting: 
-			sprite.play("sprint")
-		else:
-			sprite.play("walk")
-	else:
-		sprite.play("idle")
-	
-	# Aerial Animations
-	if not is_on_floor():
-		if velocity.y <= 0:
-			sprite.play("jump")
-		else:
-			sprite.play("fall")</code></pre></div>
-			<p>And we are done! Go ahead and test out your new ability, mess around with the speed and once you are happy with it, move on to another module!</p>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	if not is_on_floor() and not flying: velocity.y += gravity * delta
+	velocity.x = direction.x * speed
+	if not is_moving: velocity = Vector2.ZERO
+	move_and_slide()
+	if is_on_wall(): change_direction()</code></pre></div>
+			<p>Next, in order to create the new enemy itself, repeat the same steps we used for the trike in the <a href="enemies2.html">Simple Enemy Part 2</a> module, starting by creating a new inherited scene from our enemy scene.</p>
+			<img src="images/challenges/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>Then, rename the Enemy node to Ptero and create a new sprite frames, using the ptero sprites. You can find them in the Advanced Enemies folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="images/challenges/ptero_sprite_frames.png" class="img-fluid" alt="Ptero sprite frames and animation.">
+			<p>Next, create a new rectangle shape for the ptero's CollisionShape2D node and resize it to fit the sprite.</p>
+			<img src="images/challenges/ptero_viewport.png" class="img-fluid" alt="Ptero collision shape.">
+			<p>Finally, select the Ptero node and go to the inspector. Set the speed you want it to move and make sure to check the flying box like so:</p>
+			<img src="images/challenges/ptero_inspector.png" class="img-fluid" alt="Ptero export variables in the inspector.">
+			<p>And that is the Ptero! Go ahead and save the scene and add it to your level.</p>
+			<h4>Creating the Para</h4>
+			<p>Next we will make the Para, an enemy that will turn around when it reaches the edge of a platform instead of falling. To get started, open the enemy scene, right click the Enemy node and create a new Area2D node as a child. Name the new node EdgeDetector and create a new CollisionShape2D node as it's child. The Enemy scene tree should look something like this:</p>
+			<img src="images/challenges/advanced_enemy_scene_tree.png" class="img-fluid" alt="Advanced enemy scene tree with EdgeDetector.">
+			<p>Now select the EdgeDetector node</p>
+
 		</div>
 	</div>
 	<div class="row">
@@ -100,7 +82,7 @@ var sprinting = false</code></pre></div>
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('playerMovement','pmSprint','playerMovementToggle')
+		expandAndHighlight('hazard','hEnemies3','hazardToggle')
 	}
 </script>
 </body>

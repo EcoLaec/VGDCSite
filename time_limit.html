@@ -60,7 +60,7 @@
 			<p>Select the TimeLabel, right click it and select Access as Unique Name, then open your UI script (or attach a new one to the UI's canvas layer if you do not already have one.) In the script's _process function add the following line of code:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _process(delta):
-	%TimeLabel.text = str(int(LevelTimer.time_left) / 60) + ":" + str(int(LevelTimer.time_left) % 60)</code></pre></div>
+	%TimeLabel.text = str(int(LevelTimer.time_left) / 60).pad_zeros(2) + ":" + str(int(LevelTimer.time_left) % 60).pad_zeros(2)</code></pre></div>
 			<p>And You are done! Go ahead and set your level(s) time limits and try it out! Once you are done go ahead and try another module.</p>
 	</div>
 	<div class="row">

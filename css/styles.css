@@ -197,6 +197,7 @@ h5 {
     --string-color: #ffcd00;
     --built_in-color: #FFFFFF;
     --number-color: #80bc00;
+    --literal-color: #80bc00;
 }
 
 pre, code, code.hljs {
@@ -219,6 +220,10 @@ code.hljs .hljs-built_in {
 
 code.hljs .hljs-number {
     color: var(--number-color);
+}
+
+code.hljs .hljs-literal {
+    color: var(--literal-color);
 }
 
 code.hljs .hljs-title {

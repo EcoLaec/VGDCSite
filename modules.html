@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Short Hop</title>
+	<title>Modules</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,23 +34,10 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Short Hopping</h3>
-			<p>Right now every time we press the jump key the player always jumps the exact same height. In order to give the player more control in their movement we can add a short hop, or ability to cut a jump short by letting go of the jump key.</p>
-			<h4>Editing the Player Script</h4>
-			<p>Since we are modifying jumping, lets go to the handle_jump function in the player script. We want the player to be able to reduce their vertical speed while they are in the air and currently jumping (moving up). One way of achieving short hopping would look like this:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func handle_jump():
-	# Jumping
-	if is_on_floor() and Input.is_action_just_pressed("Jump"):
-		velocity.y = jump_velocity
-	
-	# Off of Floor
-	if not is_on_floor():
-		# Short Hops
-		if Input.is_action_just_released("Jump") and velocity.y < jump_velocity / 2:
-			velocity.y = jump_velocity / 2</code></pre></div>
-			<p class="hint">Note that we are checking if the player's velocity is less than the jump_velocity / 2. This is to make sure the player cannot get a boost by letting go of the jump key.</p>
-			<p>And that's all that is needed! Pretty simple addition, but adds so much in terms of game feel. Go ahead and test out your ability to short hop, then go ahead and select another module!</p>
+			<h3>Intro to Modules</h3>
+			<p>Congratulations on completing the introduction! From here on out the course opens up to a much more free-form experience, meaning you get to choose how your game evolves! I have set up many <strong>Modules</strong>, or tutorials that you can select from. For the most part you can choose what modules to complete, skip and what order you do them in.</p>
+			<p class="hint">Some modules require other modules to be completed first. When this is the case there will be an <strong>Important!</strong> message at the top of the page with links to the required modules.</p>
+			<p>Each module has a category, estimated time and difficulty. Categories are used to simply break the modules into smaller groups as to not be overwhelming. The module's estimated time and difficulty are there to help guide you towards what level of challenge and effort you want to put in but do note that these are estimates, sometimes a module will take more or less time, or may be harder or easier for you than what it says. When this happens, don't be discouraged
 		</div>
 	</div>
 	<div class="row">
@@ -62,7 +49,7 @@
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('playerMovement','pmShortHop','playerMovementToggle')
+		expandAndHighlight('modules',null,null)
 	}
 </script>
 </body>

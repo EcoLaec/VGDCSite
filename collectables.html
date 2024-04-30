@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Collectables</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Collectables</h3>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="trigger_setup.html">Trigger Setup</a> module to be completed first!</strong></p>
+			<p>In this module we will be creating pick-ups, objects the player can run into for some benefit. Many other modules will use this functionality, but for now we will simply add gems the player can pick up.</p>
+			<h4>Creating the Pickup Scene</h4>
+			<p>Due to the fact so many different modules will require the player to be able to pick something up, we will be making a parent scene first and foremost with the basic pickup functionality. To get started, create a new scene. For the root node, select an Area2D node and rename it to Pickup. Then, create two new child nodes for the Pickup node, one being an CollisionShape2D and another being an AnimatedSprite2D. The scene should then look like this:</p>
+			<img class="img-fluid" src="images/gameplay/pickup_scene_tree.png" alt="Pickup scene tree">
+			<p class="hint">Note that we are not adding a collision shape nor sprite frames to our Pickup scene. This is so that each inherited scene can have it's own unique animations and collision shapes!</p>
+			<p>Next, we need to set the Pickup node's collision layers and masks. In the inspector while you have the Pickup node selected go under the collision section. We will set the layers to be empty and the mask to be our trigger layer, like so:</p>
+			<img class="img-fluid" src="images/gameplay/trigger_collision.png" alt="Pickup scene tree">
+			<h4>Creating the Pickup Script</h4>
+			<p>Creating the script for pickups is pretty simple. First select the Pickup node and add a new script. At the top of the script, above the extends Area2D we will set a new <strong>Class Name</strong> by adding class_name Pickup. By adding a new class name, we effectively create a new node type that other scripts can inherit from. So later when we create new types of pickups, we don't need to copy any code we already wrote!</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">class_name Pickup
+extends Area2D</code></pre></div>
+			<p>Next we want to create a new function called onPickup. for it's arguments we want to set it to _area and inside of the functions body all we want to put is to call the queue_free() method, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func onPickup(_area):
+	queue_free()</code></pre></div>
+			<p class="hint">Note that we aren't actually using the _area argument right now. It is there for other modules, but if you end up not using it you can delete it if you choose.</p>
+			<p>Finally, we want the pickup to actually detect when the player's trigger collider, well, collides with it. Select the Pickup node, go to the node tab in the inspector and under signals select area_entered. Connect it to the pickup script. In the new function call the onPickup function we created, passing area as the argument.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_area_entered(area):
+	onPickup(area)</code></pre></div>
+			<p>Make sure to save the Pickup scene!</p>
+			<h4>Creating the Jade Pickup</h4>
+			<p>Of course, right now we don't have any pickup for the player to interact with. To remedy this we need to create a new inherited scene. In the filesystem right click the pickup scene and select new inherited scene.</p>
+			<img src="images/gameplay/pickup_inherited_scene.png" class="img-fluid" alt="New inherited scene from pickup scene.">
+			<p>In the new scene, rename the Pickup node to Jade, then select the AnimatedSprite2D node. In the inspector create a new sprite frames and import the jade sprite from the Pickups folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>In the sprite frames, import the jade sprite as a sprite sheet, set it to autoplay on load, set the play speed to 12 fps and set the first frame's duration to 50 like so:</p>
+			<img src="images/gameplay/jade_sprite_frames.png" class="img-fluid" alt="Jade sprite frames.">
+			<p>Next, we need to add a collision shape to our jade pickup. Select the Collisionshape2D node and in the inspector create a new circle shape. Resize it to fit the sprite.</p>
+			<img src="images/gameplay/jade_viewport.png" class="img-fluid" alt="Jade viewport with sprite and collision shape.">
+			<p>And that is the pickup done! you can save the scene and drag and drop it into your world scene as per usual, though you may notice a problem: adding many pickups quickly begins to clutter the world's scene tree. To fix this we can use another function of the Tilemap node.</p>
+			<h4>Creating a Scene Collection</h4>
+			<p>In the world scene, right click the World node and create a new tilemap node as a child node. Name it LevelObjects. In the inspector create a new tileset, then in the tileset tab in the bottom bar press the plus symbol. You will see the option for an atlas (which we already have used) and one for a new scenes collection, select that.</p>
+			<img src="images/gameplay/scene_collection.png" class="img-fluid" alt="New scene collection.">
+			<p>A scene collection is a grouping of scenes as tiles, allowing you to place scenes the same way you do with tiles, as well as neatly organizing them as to not clutter up the scene tree. Make sure to name the scene collection (I will name mine Pickups) then you can drag and drop the jade scene into the large box on the right of the bottom bar.</p>
+			<img src="images/gameplay/pickups_tileset.png" class="img-fluid" alt="Pickups tileset.">
+			<p>Go ahead and save the scene, then select the tilemap tab in the bottom bar. You can now place the jade scene in the same way you placed your ground tiles!</p>
+			<p class="hint">Note that you can put as many scene collections and scenes into the LevelObjects tilemap. You can add other pickups, enemies and even the player! Go ahead and try out organizing your level scene with scene collections!</p>
+			<p>And that is pickups set up! While the jade doesn't do anything right now, in later modules you can add score to it, or simply have it as a way to guide players through the level. Either way, test it out, then move on to another module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('fun','gCollectables','gameplayToggle')
+	}
+</script>
+</body>
+</html>

@@ -77,12 +77,12 @@ func _on_hazard_collider_area_entered(area):
 	call_deferred("die")</code></pre></div>
 			<p class="hint">We use the call_deferred method in order to make sure the function we gave it does not run until the end of the current physics loop. While not required for the function right now, we will need it for more complex behaviors in some other modules.</p>
 			<h4>Adding the Void</h4>
-			<p>You may notice that even if we boot up the game, there is nothing for our collider to detect! To fix this, as well as another glaring issue, we will add a new collider in the world to catch any players that falls off the map. To start, go to our world scene, right click our world node and add a new Area2D node. Lets name it VoidCollider, then right click the new node and add a CollisionShape2D node.</p>
+			<p>You may notice that even if we boot up the game, there is nothing for our collider to detect! To fix this, as well as another glaring issue, we will add a new collider in the world to catch any player that falls off the map. To start, go to our world scene, right click our world node and add a new Area2D node. Lets name it VoidCollider, then right click the new node and add a CollisionShape2D node.</p>
 			<img src="images/challenges/void_collider_scene_tree.png" class="img-fluid">
 			<p class="hint">You may notice the yellow names. This is due to me having implemented multiple levels, but will not change anything for you. If you would like to check out how to add multiple levels you can <a href="multiple_levels.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Next, select the void collider node and find the collision section in the inspector. We will set it's layer to be our hazard layer and it's masks will be empty.</p>
 			<img src="images/challenges/hazard_collision.png" class="img-fluid">
-			<p>Finally, select the void collider's collision shape node and add a new rectangle shape. Lets resize it to extend past the bounds of the level to make sure the player cannot bet past it and be softlocked.</p>
+			<p>Finally, select the void collider's collision shape node and add a new rectangle shape. Lets resize it to extend past the bounds of the level to make sure the player cannot get past it and be softlocked.</p>
 			<img src="images/challenges/void_collider.png" class="img-fluid">
 			<p>And your done! Go ahead and test out your new collider (you may need to edit your level) and respawn, then move on to another module!</p>
 		</div>

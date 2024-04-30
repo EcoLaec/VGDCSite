@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Multiple Levels</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Multiple Levels</h3>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="collectables.html">Collectables</a> and <a href="global_script.html">Global Script</a> modules to be completed first!</strong></p>
+			<p>Right now we have a problem: one level does not make much of a game. On this page we will add the ability for you to create multiple levels and for the player to be able to move between them.</p>
+			<h4>Preparing the World Scene</h4>
+			<p>In order to create new levels, we first need to destroy. Create a copy of your world scene, then remove all enemies, pickups, objects and tiles from the viewport (you will want to keep tilemaps, canvas layers and the player in the scene tree.) Once you are done with it you should have a clear viewport like so:</p>
+			<img class="img-fluid" src="images/gameplay/empty_world.png" alt="Empty world viewport.">
+			<p class="hint">Note that if you have added UI elements from another module they will also be visible. We want anything that isn't shared amongst every level to be removed.</p>
+			<p>Go ahead and save the empty world scene. You can also rename your original level scene Level0 or other name that makes sense to you. You can now create new levels by right clicking the world scene in the file system and selecting new inherited scene.</p>
+			<img class="img-fluid" src="images/gameplay/new_level.png" alt="Creating a new level from the world scene.">
+			<p>Go ahead and make two levels this way called Level1 and Level2. Use the tilemap and scenes you've saved just like when you made your test level!</p>
+			<h4>Creating the End Level Signal</h4>
+			<p>Next, navigate to the global script. In it we will be creating our own signal. Similar to how nodes can connect using signal like area_entered, we can create our own signals to communicate across nodes. To create one is pretty simple: in the top to the global script add signal level_complete. Additionally, we want to have a variable that stores what scene to load once this one finishes. We can do that by adding an export variable called next_level that requires a PackedScene.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var next_level : PackedScene
+signal level_complete</code></pre></div>
+			<p>Of course a signal on it's own doesn't accomplish much. To get it to do something we need to connect it to a function via out script. Open your world script (or attach one to your world node if you do not have one), and then in the _ready function add the following snippet of code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	Global.level_complete.connect(complete_level)</code></pre></div>
+			<p>This will immediately throw an error. this is because we are trying to call a function we haven't created yet! Under the _ready function create a new function called complete_level. In the function body we will let godot know to load the next level by calling the tree's change_scene_to_packed method like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func complete_level():
+	get_tree().change_scene_to_packed(next_level)</code></pre></div>
+			<p>We still have a problem though: we haven't set what level should come after the first one! Go to your first level and select the World node. In the inspector you should see the next_level section. Drag whatever level you want to happen next from your file system into that section. You will need to do this for each level that has a following level.</p>
+			<img class="img-fluid" src="images/gameplay/next_level.png" alt="Assigning the next level in the inspector.">
+			<p class="hint">Note that if you want to change your starting level (called the main scene) you can by going to your project settings under run. Just locate the scene you want to use in your file system!</p>
+			<h4>Creating the Win Condition</h4>
+			<p>Of course, in this current state there is nothing actually emitting the level_complete signal, meaning the level will never change! To fix this we will add a simple pickup that completes the level. Let's repeat the steps we took to make the jade pickup by creating a new inherited scene from the Pickup scene. Name the root node Amber, then follow the steps to create a new sprite frames. You can find the amber sprite in the multiple levels folder of your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>The Amber's sprite sheet should look like this:</p>
+			<img class="img-fluid" src="images/gameplay/amber_animation.png" alt="Amber pickup's sprite frames.">
+			<p>Continue with the pickup creation, adding the collision shape. The Amber's viewport should look like this:</p>
+			<img class="img-fluid" src="images/gameplay/amber_viewport.png" alt="Amber pickup's viewport with collision shape.">
+			<p>Next, we will need to add additional functionality to the amber beyond the regular pickup script. Go ahead and disconnect the Amber node's script (it is the same button used to add one) then attach a new script to it. In the window that pops up, we need to change what node the script inherits from. In this case we want to set it to Pickup.</p>
+			<img class="img-fluid" src="images/gameplay/extended_script.png" alt="Creating a new script inheriting from the pickup script.">
+			<p>By inheriting from the Pickup script, we gain all of its functionality, but we gain the ability to overwrite and add our own functionality. In this case we want to overwrite the onPickup function by first emitting the level_complete signal then running the default Pickup script's onPickup function. We can do that like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func onPickup(_body):
+	Global.level_complete.emit()
+	super.onPickup(_body)</code></pre></div>
+			<p class="hint">Note that we still need to have the same arguments as the base function, and that we need to pass the same arguments to the base function when we call it.</p>
+			<p>By using the super keyword, we can call the original version of a function that a script has inherited, allowing us to add to a function instead of simply replacing it. And that is the amber pickup done! Go ahead and save it as a new scene and add it to your world scene. You can then move it wherever you want in your levels. Here is my test level:</p>
+			<img class="img-fluid" src="images/gameplay/pickup_scene.png" alt="Level including pickups and amber.">
+			<p>And that is the module complete! Go ahead and make sure everything is working, make some levels and then move on to another module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('fun','gMultipleLevels','gameplayToggle')
+	}
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Lava</title>
+	<title>Score</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,35 +34,7 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Lava</h3>
-			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a> module to be completed first!</strong></p>
-			<p>On this page we will add a new danger for our player: bubbling magma!</p>
-			<h4>Getting the Lava Tiles</h4>
-			<p>First we need to import our lava sprite. Go ahead and open up the Lava folder in your VGDC-2024 Assets folder, find the Lava Tile.png and drag it into your file system.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-			<h4>Creating the TileMap</h4>
-			<p>Next, navigate to your world scene. Right click the world node and add a new TileMap node. Let's name it LavaTiles.</p>
-			<img src="images/challenges/lava_scene_tree.png" class="img-fluid">
-			<p>Go to the inspector and create a new tile set. Still in the inspector, select the new tileset and go to the Physic layers section. Set the layer to be the hazard layer and it's masks are empty.</p>
-			<img src="images/challenges/lava_tileset_layers.png" class="img-fluid">
-			<p>In the bottom bar select the TileSet tab and click the plus sign beneath the dark box. Select atlas, then navigate to your lava tile sprite you imported and open it. A popup will appear asking if you would like to automatically create tiles. Select no (If you accidently select yes you can right click the tiles and delete them.)</p>
-			<img src="images/challenges/lava_blank_tileset.png" class="img-fluid">
-			<p>In the setup tab, name the tiles Lava and then click the two left-most tiles like so:</p>
-			<img src="images/challenges/lava_tileset_setup.png" class="img-fluid">
-			<p>Next, go to the paint tab, and select the physics layer 0 property in the paint properties dropdown. You can immediately click the lower tile, but for the top one we will need to change the collision shape. We can do this by Moving the points of the shape shown then clicking the upper tile(you can select the grid icon with the magnet to enable snapping for a more accurate shape)</p>
-			<img src="images/challenges/lava_physics_layer.png" class="img-fluid">
-			<h4>Animating the Lava</h4>
-			<p>The lava is now functional, but it is quite boring. Fortunately, the sprite we imported includes an animation for the lava. To get started, go to the select tab and select the top lava tile. Under the animation section we need to do 4 things:</p>
-			<ol>
-				<li>Set the Columns property to 16.</li>
-				<li>Set the Speed property to 5.</li>
-				<li>Change the Mode property from default to Random Start Times. This makes each lava tile start at random frames, making it look better.</li>
-				<li>Under frames, keep adding elements until the entire top row is highlighted.</li>
-			</ol>
-			<img src="images/challenges/lava_animation.png" class="img-fluid">
-			<p>Finally we can add the lava to our world. In the world scene select the LavaTiles node, then select TileMap in the bottom bar. You can select which tile to place. Add a small lava pit or other hazard to the level.</p>
-			<img src="images/challenges/lava_scene.png" class="img-fluid">
-			<p>And you're done! Go ahead and test out the new hazard, then go ahead and try out a different module!</p>
+			<h3>Score</h3>
 		</div>
 	</div>
 	<div class="row">
@@ -74,7 +46,7 @@
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('hazard','hLava','hazardToggle')
+		expandAndHighlight('fun','gScore','gameplayToggle')
 	}
 </script>
 </body>

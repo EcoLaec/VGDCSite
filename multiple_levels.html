@@ -53,9 +53,10 @@ signal level_complete</code></pre></div>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _ready():
 	Global.level_complete.connect(complete_level)</code></pre></div>
-			<p>This will immediately throw an error. this is because we are trying to call a function we haven't created yet! Under the _ready function create a new function called complete_level. In the function body we will let godot know to load the next level by calling the tree's change_scene_to_packed method like so:</p>
+			<p>This will immediately throw an error. this is because we are trying to call a function we haven't created yet! Under the _ready function create a new function called complete_level. In the function body we will check if the next_level variable is set (skipping the function if not), then we will let godot know to load the next level by calling the tree's change_scene_to_packed method like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func complete_level():
+	if not next_level is PackedScene: return
 	get_tree().change_scene_to_packed(next_level)</code></pre></div>
 			<p>We still have a problem though: we haven't set what level should come after the first one! Go to your first level and select the World node. In the inspector you should see the next_level section. Drag whatever level you want to happen next from your file system into that section. You will need to do this for each level that has a following level.</p>
 			<img class="img-fluid" src="images/gameplay/next_level.png" alt="Assigning the next level in the inspector.">

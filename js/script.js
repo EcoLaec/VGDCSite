@@ -26,6 +26,25 @@ function initPage() {
 	});
 }
 
+function applyComplexity() {
+	$('.complexity').each(function() {
+		var val = parseFloat($(this).html());
+		$(this).html('<i class="bi bi-star-fill"></i>');
+		val -= 1.0;
+		for (let i = 0; i <= 1; i++) {
+			if (val >= 1.0) {
+				$(this).append('<i class="bi bi-star-fill"></i>');
+				val -= 1.0;
+			} else if (val >= 0.5) {
+				$(this).append('<i class="bi bi-star-half"></i>');
+				val -= 0.5;
+			} else {
+				$(this).append('<i class="bi bi-star"></i>');
+			}
+		}
+	});
+}
+
 function toggleSideBar() {
 	$(".bg-dark:first-of-type").toggleClass("t-none");
 }

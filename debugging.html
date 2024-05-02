@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Debugging</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Debugging</h3>
+			<p>Code will break, and it will break a lot. One of the most important skills to have as a game developer (and just an important skill in general) is knowing how to pinpoint where an issue is arising, and figuring out how to fix it. Fortunately there are many useful tools provided by Godot that you can use to help in this process.</p>
+			<h4>The Usual Suspects</h4>
+			<p>When it comes to bugs in code, the vast majority of errors are on of what I call the big three: <strong>Spelling, Syntax and Arguments</strong>.</p>
+			<ul>
+			<li><strong>Spelling</strong> is pretty simple. If you mispell a variable or function, the engine will begin looking for something that doesn't exist. Computers are not good readers, they can't correct for mispelled words, even if it is something as simple as a wrong capitalization or a missing underscore. Fonrtunately, Godot is pretty quick to recognize these types of errors and will let you know right away if it is lost. Just fix the mistake and move on.</li>
+			<li><strong>Syntax</strong>, on the other hand, is a bit more complex. Syntax is the way the code is structured, and just like spelling, a mistake here can make the engine unable to read the script. Make sure to double check lines of code have the proper indentation, make sure the code in a function is inside of it's block, and code outside of functions are outside of their blocks. Fortunately, Godot has built in indentation markers (they look like a small arrow and line) that can help make syntax error fixing more visual and intuitive.</li>
+			<li><strong>Arguments</strong> are the variables passed through methods. A method call needs to have exactly the number of arguments as the function it is calling, and those arguments need to be the correct datatypes. For example, if in our player's update_animations function if when I called the sprite's play method I passed the number 12 (or even a string that isn't the same name as one of the animations) the game would crash. Arguments are easy to forget about, but fortunately like the rest of the big three, Godot is pretty quick to point out any mistake made.</li>
+			</ul>
+			<h4>Using Godot's Error Messages</h4>
+			<p>Most mistakes we make will be caught by Godot pretty quickly, causing the engine to highlight the offending lines in red and showing an <strong>Error Message</strong> at the bottom of the script. While at first the messages may be hard to understand, as you begin to piece together the common issues you will get a good sense of what each means. Most mistakes in the script screen itself are pretty quick to fix.</p>
+			<img src="images/misc/script_error_message.png" class="img-fluid" alt="An example error message at the bottom of the script screen.">
+			<p>This example shows an error message pointing to line 40, 19 characters in where the variable delts was not declared in the current scope (aka in the current script or function.) This is a pretty simple fix though, as I just mispelled delta. I can quickly remedy that and move on.</p>
+			<h4>Using Godot's Stack Trace Tab</h4>
+			<p>By far one of the most useful tools Godot provides for debugging is the <strong>Stack Trace</strong>. To get to it go to the bottom bar and select debugger. The default tab should be the stack trace. Here is where fatal errors will appear when your try and run your game. The errors will appear in the left most box as a list. Each error shows the path to the script that caused the issue, as well as what line the error was detected. By clicking the error, you can directly open the troublesome script to the exact line Godot was having trouble with. Additionally, at the top of the stack trace will also show the error message from Godot, very similarly to the errors messages that appear in the script screen.</p>
+			<img src="images/misc/stack_trace.png" class="img-fluid" alt="The stack trace tab with an example error.">
+			<p>This example shows an error in the world script (located in the scripts folder.) More specifically, on line 10 of the script there was an error where Godot could not find anything called "level_timw" in the current scope. Of course, there is no level_timw because I made yet another spelling mistake. Fortunately, I can get back to the correct line and fix it by making sure I spelled everything correct.</p>
+			<h4>Using Godot's Error Tab</h4>
+			<p>Next to the stack trace tab is the <strong>Errors</strong> tab. This tab works similarly to it's neighbor, however, it shows non-fatal errors, or errors that do not cause your game to crash. While usually these messages are just warnings and usually can be ignored, sometimes these errors can lead to strange, unintended or even broken code. If all else fails, check these warnings to see if the offending area shows up. You can also select the errors to see exactly where the error is as well as more details about the error.</p>
+			<img src="images/misc/errors.png" class="img-fluid" alt="The errors tab with some example errors.">
+			<p>This example shows two errors. The first one is simply letting me know that I am using integer division in my script and Godot will remove all decimals from it, and the second error says I have a parameter I am not using, and provides a simple fix to get rid of the error.</p>
+			<h4>Using Godot's Print Method</h4>
+			<p>Sometimes something just won't work even though there are no errors. The game will run, everything works, but just this one thing simply won't do what it is supposed to. In cases like this there likely no actual, tangible mistakes in the code itself, but instead an error in how we structured or applied it. When this happens we must use our secret weapon: the print to console method. You can find the console on the bottom bar labelled output. By adding Print("Your message here") anywhere in a function you can check if that line (and by proxy the surrounding code) is successfully being ran. By layering these throughout the troublesome functions you can relatively quickly pinpoint the breaking point. Printing to console doesn't tell you how to fix whatever is happening wrong, but it is much faster to find where a problem is actually happening before you start trying fixes at random.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">print("Player jumped!")</code></pre></div>
+			<h4>When All Else Fails...</h4>
+			<p>When you are absolutely stuck on something, look it up. There is nothing wrong with not knowing how to do something, and by exploring options you can spark ideas to try something else. There are lots of videos and forums online for Godot, and the engine itself has some pretty solid <a href="https://docs.godotengine.org/en/stable/index.html">documentation</a>. And of course, if you are taking this in person, you can always ask your instructor(s).
+			<p>And that is the basics of debugging. It's really more of an art than a science, but as you learn more you will gain an intuitive sense of the process. Things will be breaking constantly, but that is just one of the joys of programming. Good luck, and go ahead and move on to a different module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('debugging',null,null)
+	}
+</script>
+</body>
+</html>

@@ -37,7 +37,62 @@
 			<h3>Intro to Modules</h3>
 			<p>Congratulations on completing the introduction! From here on out the course opens up to a much more free-form experience, meaning you get to choose how your game evolves! I have set up many <strong>Modules</strong>, or tutorials that you can select from. For the most part you can choose what modules to complete, skip and what order you do them in.</p>
 			<p class="hint">Some modules require other modules to be completed first. When this is the case there will be an <strong>Important!</strong> message at the top of the page with links to the required modules.</p>
-			<p>Each module has a category, estimated time and difficulty. Categories are used to simply break the modules into smaller groups as to not be overwhelming. The module's estimated time and difficulty are there to help guide you towards what level of challenge and effort you want to put in but do note that these are estimates, sometimes a module will take more or less time, or may be harder or easier for you than what it says. When this happens, don't be discouraged
+			<p>Each module has a category, estimated time and difficulty. Categories are used to simply break the modules into smaller groups as to not be overwhelming. The module's estimated time and difficulty are there to help guide you towards what level of challenge and effort you want to put in but do note that these are estimates, sometimes a module will take more or less time, or may be harder or easier for you than what it says.</p>
+			<p class="hint">Some modules conflict with others and require additional changes to work with one another. When this happens the module will have a <strong>Compatability</strong> section including all such conflicts and their fixes. Both modules that conflict have a copy of the solution, and the solution only needs to be applied once. Additionally, compatability fixes only need to be completed if you have the conflicting module.</p>
+			<p>You can complete modules in any order, however, it is recommended to complete modules in order of their categories, as later modules require more modules and knowledge (in general.)</p>
+			<h4>Player Movement</h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Module</th>
+						<th scope="col">Time</th>
+						<th scope="col">Complexity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row"><a href="air_movement.html">Aerial Mobility</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="coyote_time.html">Coyote Time</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="double_jump.html">Double Jump</a></th>
+						<td>20 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="short_hop.html">Short Hop</a></th>
+						<td>8 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="sprinting.html">Sprinting</a></th>
+						<td>25 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="wall_jump.html">Wall Jump</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="wall_cling.html">Wall Cling</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="wall_coyote_time.html">Wall Coyote Time</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+				</tbody>
+			</table>
+
 		</div>
 	</div>
 	<div class="row">
@@ -47,6 +102,7 @@
 </div>
 <script>
 	initPage()
+	applyComplexity()
 
 	function triggerExpand() {
 		expandAndHighlight('modules',null,null)

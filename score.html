@@ -102,6 +102,16 @@
 	get_tree().change_scene_to_packed(next_level)</code></pre></div>
 			<p>This code snippet adds 5 points per second left on the level timer. You can change it by replacing the 5 with how many points you want each second to be worth.</p>
 			<p class="hint">Note the int() surrounding the Leveltimer.time_left. This is call casting. By doing this we turn the time_left into an integer, or whole number, so that we always end up with a multiple of 5 and no decimals.</p>
+			<h4>Checkpoint... Points</h4>
+			<p>This section requires the <a href="checkpoints.html">Checkpoints</a> module. Navigate to your checkpoint script. Inside of the _on_area_entered function and within the if not active statement (as we want the points to be applied only once) add the following line of code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_area_entered(area):
+	area.get_parent().respawn_point = global_position
+	if not active: 
+		$AnimatedSprite2D.play("activate")
+		Global.score += 1500
+	active = true</code></pre></div>
+	<p class="hint">Note you can change the 1500 points to whatever number you want, and even could set it up as an export variable if you want to have more flexibility. For my usage, however, a hard-coded value like this works just fine.</p>
 			<p>And that is score implemented! You can use the methods used in this module to add score bonuses to just about any action in the game you want! Go ahead and try some out then move on to another module.</p>
 		</div> 
 	</div>

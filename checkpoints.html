@@ -35,8 +35,23 @@
 		</div>
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Checkpoints</h3>
-			<p>Filler</p>
-			<h4>Section 1</h4>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="trigger_setup.html">Trigger Setup</a> and <a href="hazard_setup.html">Hazard Setup</a> modules to be completed first!</strong></p>
+			<p>Checkpoints are points in a level where the player can effectively save their progress, allowing them to return to the checkpoint if they fail instead of restarting the whole level! Adding checkpoints can allow you to make longer and more challenging levels while also lessening how "unfair" the game feels. On this page we will create a checkpoint that activates when the player touches it, allowing them to respawn and playing a short animation.</p>
+			<h4>Creating the Checkpoint Scene</h4>
+			<p>First things first, we need to create a new scene. Choose an Area2D node as the root node and rename it to Checkpoint. Next, right click the Checkpoint node and add a CollisionShape2D node and an AnimatedSprite2D node as children. The scene tree should now look like this:</p>
+			<img src="images/gameplay/checkpoint_scene_tree.png" class="img-fluid" alt="Scene tree for the checkpoint scene.">
+			<p class="hint">The two symbols next to the Checkpoint node show an attached script and a connected signal. They will show up as we move through this module.</p>
+			<p>Select the checkpoint module. Go to the inspector and under collisions set the physics layers to be empty and the physics masks to our trigger layer, like so:</p>
+			<img src="images/gameplay/trigger_collision.png" class="img-fluid" alt="Scene tree for the checkpoint scene.">
+			<h4>Creating the Checkpoint Sprite Frames and Collision Shape</h4>
+			<p>Next select the AnimatedSprite2D node. In the inspector create a new sprite frames. Import the Checkpoint sprite from the Checkpoints folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Lets's rename the animation to activate. We don't want it to auto play nor loop, let's set the animation speed to 12.</p>
+			<img src="images/gameplay/checkpoint_sprite_frames.png" class="img-fluid" alt="Sprite frames for the checkpoint.">
+			<p>Next select the CollisionShape2D node. In the inspector create a new rectangle collision shape. We want the new shape to be around twice as large as a tile (you can change the animation frame to the last one in the inspector if you want to see the full size of the flower to set the collision shape.)</p>
+			<img src="images/gameplay/checkpoint_viewport.png" class="img-fluid" alt="Viewport view of the checkpoint including it's collision shape.">
+			<h4>Creating the Checkpoint Script</h4>
+			<p>We still don't have any functionality yet. 
 		</div>
 	</div>
 	<div class="row">

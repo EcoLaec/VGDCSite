@@ -51,7 +51,21 @@
 			<p>Next select the CollisionShape2D node. In the inspector create a new rectangle collision shape. We want the new shape to be around twice as large as a tile (you can change the animation frame to the last one in the inspector if you want to see the full size of the flower to set the collision shape.)</p>
 			<img src="images/gameplay/checkpoint_viewport.png" class="img-fluid" alt="Viewport view of the checkpoint including it's collision shape.">
 			<h4>Creating the Checkpoint Script</h4>
-			<p>We still don't have any functionality yet. 
+			<p>Of course we still don't have any functionality yet. Let's add a new script to the Checkpoint node. We need to connect the CollisionShape2D node to the script. Select it then go to the node tab in the inspector. Select the area_entered signal and connect it to the script.</p>
+			<img src="images/gameplay/trigger_signal.png" class="img-fluid" alt="Connecting a signal from the inspector.">
+			<p>In the checkpoint script itself we need to first add a new variable: active. This variable will store whether or not the checkpoint has been activated, in order to prevent it from playing it's activate animation each time the player touches it. Let's start it off as false.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">var active = false</code></pre></div>
+			<p>Finally, within the on_area_entered function we need to set the player's respawn point, play the activate animation if the checkpoint isn't already active, then set the active variable to true. One such function looks like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_area_entered(area):
+	area.get_parent().respawn_point = global_position
+	if not active: 
+		$AnimatedSprite2D.play("activate")
+		Global.score += 1500
+	active = true</code></pre></div>
+			<p class="hint">Note that we are getting the parent of the area the checkpoint collided with. This is because we need to access the player scene's trigger collider's parent node, aka the player node.</p>
+			<p>And you are done! Go ahead and add some checkpoints into your world and try them out, then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">

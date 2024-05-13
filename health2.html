@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Health Part 2</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Health Part 2</h3>
+			<p>Continuing from where we left off, I mentioned there was two issues with the health that had to still be solved. Those issues are 1) the ability for the player to not take damage if they stay within the collider of a single hazard and 2) the ability for the player to effectively go through some hazards we may not want them to (like the void collider or lava.) On this page we will fix both of those issues by adding <strong>Strong Damage</strong> and <strong>Invincibility Frames</strong>.</p>
+			<h4>Adding Invincibility Frames</h4>
+			<p>Invincibility frames are a time after the player takes damage where they cannot take damage again. To add this go to the player scene. Right click the player node and create a new Timer node. Rename it to InvincibilityTimer. In the inspector set it's wait_time to 1 second and set it's one_shot property to true.</p>
+			<img src="images/gameplay/invince_timer_inspector.png" class="img-fluid" alt="Inspector for the Invincibility Timer.">
+			<p>Next open the player script. Select the InvincibilityTimer node and drag it into the reference variables section, start holding control and drop it in to get it as a reference variable.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+@onready var invincibilty_timer = $InvincibiltyTimer
+var respawn_point = Vector2.ZERO
+var current_health = max_health</code></pre></div>
+			<p>Next, in the damage function, we will want to set the function to only run if the invincibility timer has no time left, and start the timer when the player does take damage, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func damage():
+	if invincibilty_timer.time_left == 0.0:
+		current_health -= 1
+		invincibilty_timer.start()
+		if current_health <= 0:
+			die()</code></pre></div>
+			<p>Finally, we want to check if the player is still touching a hazard when the invincibility timer runs out. We can do this by connecting the invincibility timer's timeout signal from the node tab in the inspector to the player script and quickly disabling and re-enabling the player's hazard collider when the signal occurs.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_invincibilty_timer_timeout():
+	$HazardCollider/CollisionShape2D.disabled = true
+	$HazardCollider/CollisionShape2D.disabled = false</code></pre></div>
+			<p>There is problem one solved, but also it has made problem two even worse! Fortunately we have a solution.</p>
+			<h4>"Hard" Damage</h4>
+			<p>Hard damage is damage that forces the player to reset. Many games have bottomless pits and lava that returns the player to solid ground, regardless of health. To start setting it up for our game, let's assign a new group to our VoidCollider node in the world scene. Select the VoidCollider, then in the inspector select the node tab and then the group tab. In the empty box type HardDamage and then press add.</p>
+			<img src="images/gameplay/hard_damage_group.png" class="img-fluid" alt="Group tab for the VoidCollider node with the HardDamage group.">
+			<p class="hint">You can add this group to any hazard to force the player to reset if they collide with it. I would recommend adding it to the LavaTiles node if you have it.</p>
+			<p>Next, back in the player script go to the damage function. First add a new argument to the function called hardDamage with a required bool data type. Next, in the if statement where we check if the invincibility_timer has time left, add or hardDamage (we do to make sure hardDamage ignores invincibility so the player cannot slip through.) Finally, at the bottom of the function add if hardDamage: global_position = respawn_point.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func damage(hardDamage : bool):
+	if invincibilty_timer.time_left == 0.0 or hardDamage:
+		current_health -= 1
+		invincibilty_timer.start()
+		if current_health <= 0:
+			die()
+		if hardDamage: global_position = respawn_point</code></pre></div>
+			<p>Of course, we still need to make sure we are passing our new argument to our damage function. We can do this in both our _on_hazard_collider_body_entered and _on_hazard_collider_area_entered functions by adding a check for if the body or area are in the HardDamage group in our call_deferred method like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_hazard_collider_body_entered(_body):
+	call_deferred("damage",_body.is_in_group("HardDamage"))
+
+func _on_hazard_collider_area_entered(_area):
+	call_deferred("damage",_area.is_in_group("HardDamage"))</code></pre></div>
+			<p>And that is health complete! Go ahead and test it out and then move on to another module!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('fun','gHealth2','gameplayToggle')
+	}
+</script>
+</body>
+</html>

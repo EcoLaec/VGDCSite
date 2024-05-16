@@ -62,7 +62,6 @@
 	area.get_parent().respawn_point = global_position
 	if not active: 
 		$AnimatedSprite2D.play("activate")
-		Global.score += 1500
 	active = true</code></pre></div>
 			<p class="hint">Note that we are getting the parent of the area the checkpoint collided with. This is because we need to access the player scene's trigger collider's parent node, aka the player node.</p>
 			<p>And you are done! Go ahead and add some checkpoints into your world and try them out, then move on to another module!</p>

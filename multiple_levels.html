@@ -45,13 +45,14 @@
 			<img class="img-fluid" src="images/gameplay/new_level.png" alt="Creating a new level from the world scene.">
 			<p>Go ahead and make two levels this way called Level1 and Level2. Use the tilemap and scenes you've saved just like when you made your test level!</p>
 			<h4>Creating the End Level Signal</h4>
-			<p>Next, navigate to the global script. In it we will be creating our own signal. Similar to how nodes can connect using signal like area_entered, we can create our own signals to communicate across nodes. To create one is pretty simple: in the top to the global script add signal level_complete. Additionally, we want to have a variable that stores what scene to load once this one finishes. We can do that by adding an export variable called next_level that requires a PackedScene.</p>
+			<p>Next, navigate to the global script. In it we will be creating our own signal. Similar to how nodes can connect using signal like area_entered, we can create our own signals to communicate across nodes. To create one is pretty simple: in the top to the global script add signal level_complete.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">signal level_complete</code></pre></div>
+			<p>Of course a signal on it's own doesn't accomplish much. To get it to do something we need to connect it to a function via our script, and set up a variable to store what level comes after the current one. Open your world script (or attach one to your world node if you do not have one) and create an export variable called next_level that requires a PackedScene. Then in the _ready function add the following snippet of code:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">@export var next_level : PackedScene
-signal level_complete</code></pre></div>
-			<p>Of course a signal on it's own doesn't accomplish much. To get it to do something we need to connect it to a function via out script. Open your world script (or attach one to your world node if you do not have one), and then in the _ready function add the following snippet of code:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func _ready():
+
+func _ready():
 	Global.level_complete.connect(complete_level)</code></pre></div>
 			<p>This will immediately throw an error. this is because we are trying to call a function we haven't created yet! Under the _ready function create a new function called complete_level. In the function body we will check if the next_level variable is set (skipping the function if not), then we will let godot know to load the next level by calling the tree's change_scene_to_packed method like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>

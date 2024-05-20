@@ -60,7 +60,7 @@
 			<p>Next, go in the onPickup function and add the following line of code above the queue_free method:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func onPickup(_area):
-	Global.score_queue += points
+	Global.score += points
 	queue_free()</code></pre></div>
 			<p>You can change the point values each pickup type gives by selecting their root node in their specific scenes and changing points in the inspector.</p>
 			<img class="img-fluid" src="images/gameplay/change_pickup_points.png" alt="changing the points value for a pickup in the inspector.">
@@ -75,7 +75,7 @@
 	call_deferred("disable_collision")
 	sprite.play("death")
 	await sprite.animation_finished
-	Global.score_queue += points
+	Global.score += points
 	queue_free()</code></pre></div>
 			<p class="hint">Note that if you have completed the <a href="enemies3.html">Advanced Enemies</a> module, you still put the line of code above the queue_free method, just inside of the if then statement like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>

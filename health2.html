@@ -44,15 +44,15 @@
 			<pre><code class="language-gdscript"># Reference Variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var sprite = $AnimatedSprite2D
-@onready var invincibilty_timer = $InvincibiltyTimer
+@onready var invincibility_timer = $InvincibilityTimer
 var respawn_point = Vector2.ZERO
 var current_health = max_health</code></pre></div>
 			<p>Next, in the damage function, we will want to set the function to only run if the invincibility timer has no time left, and start the timer when the player does take damage, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func damage():
-	if invincibilty_timer.time_left == 0.0:
+	if invincibility_timer.time_left == 0.0:
 		current_health -= 1
-		invincibilty_timer.start()
+		invincibility_timer.start()
 		if current_health <= 0:
 			die()</code></pre></div>
 			<p>Finally, we want to check if the player is still touching a hazard when the invincibility timer runs out. We can do this by connecting the invincibility timer's timeout signal from the node tab in the inspector to the player script and quickly disabling and re-enabling the player's hazard collider when the signal occurs.</p>
@@ -68,9 +68,9 @@ var current_health = max_health</code></pre></div>
 			<p>Next, back in the player script go to the damage function. First add a new argument to the function called hardDamage with a required bool data type. Next, in the if statement where we check if the invincibility_timer has time left, add or hardDamage (we do to make sure hardDamage ignores invincibility so the player cannot slip through.) Finally, at the bottom of the function add if hardDamage: global_position = respawn_point.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func damage(hardDamage : bool):
-	if invincibilty_timer.time_left == 0.0 or hardDamage:
+	if invincibility_timer.time_left == 0.0 or hardDamage:
 		current_health -= 1
-		invincibilty_timer.start()
+		invincibility_timer.start()
 		if current_health <= 0:
 			die()
 		if hardDamage: global_position = respawn_point</code></pre></div>

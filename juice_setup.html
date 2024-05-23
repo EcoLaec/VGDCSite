@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Player Sounds</title>
+	<title>Juice Setup</title>
 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
@@ -34,35 +34,48 @@
 			</nav>
 		</div>
 		<div class="col-lg-9 col-md-8 content">
-			<h3>Player Sounds</h3>
-			<p class="hint"><strong>IMPORTANT! This module requires the <a href="juice_setup.html">Juice Setup</a> module to be completed first!</strong></p>
-			<p>Sounds are one of the most important parts for game feel. Adding them can make actions feel more responsive, and as such adding sounds to our player's most important actions (jumping, falling and getting hurt) will go a long way in making the game feel nice.</p>
-			<h4>Jumping Sounds</h4>
-			<p>First things first go to your player scene. Right click the player node and create a new AudioStreamPlayer node as a child. Rename it to JumpSound.</p>
-			<img src="images/visual_audio/new_audiostreamplayer.png" class="img-fluid" alt="Creating a new AudioStreamPlayer node.">
-			<p>Next we need to import our jump sound from the Player Sounds folder in your VGDC-2024 Assets folder.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-			<p>Now select your JumpSound node. In the inspector you can drag the jump sound file from our file system to the stream property, as well as change the volume of the sound (I set mine to -10 db.)</p>
-			<img src="images/visual_audio/jump_sound_inspector.png" class="img-fluid" alt="Inspector for the JumpSound node with the volume and audio stream selected.">
-			<p>To actually play the sound, however, we will need to go into our player script. We will add the following line of code to our jump_effects function:</p>
+			<h3>Juice Setup</h3>
+			<p>One of the most important terms in making a good game is <strong>Juice</strong>. Juice, also known as game feel, is the vague concept of the game's responsiveness and how good it feels to play at any given moment. Including particles, sounds, satisfying clicks, rumbles and game art, juice is vital for an enjoyable experience. As an intro to this idea we will start setting up some functions to add juice to our player's jumps and landing, though we will only add actual effects in later modules.</p>
+			<h4>Setting up the Jump Effects Function</h4>
+			<p>As we are making a platforming game, we will be jumping a lot. In order to make things easier in the future we will create a new function called jump_effects inside of our player script.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func jump_effects():
-	$JumpSound.play()</code></pre></div>
-			<h4>Landing Sounds</h4>
-			<p>To add sounds when the player lands repeat the same process as jumping sounds, creating a new AudioStreamPlaye node and naming it LandSound. Import the sound and drop it into the LandSound's stream property. Though once you are ready to move to the script add the following to the land_effects functionL</p>
+	pass</code></pre></div>
+			<p>Next up we need to call the jump_effects function when we jump. Inside the player's handle_jump function add a call to our jump_effects function after we apply the player's jump_velocity.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func land_effects():
-	$LandSound.volume_db = (stored_velocity.y * 0.1) - 60.0
-	$LandSound.play()</code></pre></div>
-			<p class="hint">Note that the line setting the LandSound's volume_db is causing the volume to scale with the player's vertical velocity. Without this, falling one tile would be just as loud as falling one hundred, which would not make much sense and would get very annoying.</p>
-			<h4>Hurt Sounds</h4>
-			<p>This section requires the <a href="hazard_setup.html">Hazard Setup</a> module. Repeat the same steps from the previous two sections to create a new AudioStreamPlayer named HurtSound with the proper sound file. Next go to the player's die function. In it add the following line of code:</p>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity
+		jump_effects()</code></pre></div>
+			<p class="hint">Note that if you have double jumping or wall jumping you will want to add a call to the jump_effects function under where they set the player's vertical velocity as well.</p>
+			<h4>Setting up the Land Effects Function</h4>
+			<p>What goes up must come down, and since we will be jumping so much, we will also be landing just as much. One of the most important parts of juice is responsiveness, or the feeling the game is reacting to your inputs and movements. Let's set up the ability for the player to detect landing, passing important arguments like vertical_velocity and calling a new landing_effects function. To get satrted create a new reference variable in the player's script called stored_velocity.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func die():
-	$HurtSound.play()
-	position = respawn_point</code></pre></div>
-			<p class="hint">Note that if you have the Health module, you will need to add the $HurtSound.play() line into your damage function instead!</p>
-			<p>And that is it! Go ahead and try out the new sounds for your player then move on to another module!</p>
+			<pre><code class="language-gdscript"># Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+var stored_velocity = Vector2.ZERO</code></pre></div>
+			<p>Next, we need to go into our _physics_process function. Right before the move_and_slide function, we will check if the player is off of the ground, and if so, storing the current velocity in the stored_velocity variable. Then after move_and_slide we will check if the player was not on the floor and is currently on the floor, calling the landing_effects function if so.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	# Before Moving
+	var was_on_floor = is_on_floor()
+	if not was_on_floor: stored_velocity = velocity
+	move_and_slide()
+	# After Moving
+	if not was_on_floor and is_on_floor(): landing_effects()</code></pre></div>
+			<p>Of course, there is no landing_effects function just yet. Let's add one but simply pass it for now.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func landing_effects():
+	pass</code></pre></div>
+			<p>And that is everything set up! To add some effects try out the <a href="squish.html">Squish</a>, <a href="particles.html">Particles</a> and/or <a href="player_sounds.html">Player Sounds</a> modules!</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">
@@ -73,7 +86,7 @@
 	initPage()
 
 	function triggerExpand() {
-		expandAndHighlight('vs','vsPlayerSounds','vandsToggle')
+		expandAndHighlight('vs','vsJuiceSetup','vandsToggle')
 	}
 </script>
 </body>

@@ -35,8 +35,34 @@
 		</div>
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Squish</h3>
-			<p>Description</p>
-			<h4>Section 1</h4>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="juice_setup.html">Juice Setup</a> module to be completed first!</strong></p>
+			<p>A rather silly name but makes a huge difference in a game's feel. Adding a small amount of bounce and flex to a character can make them feel far more alive then they would otherwise. On this page we will add the ability for the player to squish and stretch when jumping and landing.</p>
+			<h4>Creating the Squish Function</h4>
+			<p>First, let's create a squish function. We will add two arguments: squish_scale which is how much we want to squish and stretch the player horizontally and vertically, and time which will set how long the squish is applied before returning fully back to normal.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func squish(squish_scale : Vector2, time : float):
+	pass</code></pre></div>
+			<p>Now, inside of the squish function is where things start to get interesting, as we will use something called a <strong>Tween</strong>. Short for in-between, a tween is a way to smoothly move a property (in this case scale) between two values inside of code instead of in animations. They are very flexible, as unlike animations, you can set the starting and ending values in the code. Let's see it in action then I will explain in more depth.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func squish(squish_scale : Vector2, time : float):
+	var tween = create_tween().set_trans(Tween.TRANS_BOUNCE)
+	sprite.scale = squish_scale
+	tween.tween_property(sprite, "scale", Vector2(1,1), time)</code></pre></div>
+			<p>Alright, that's a lot to take in, but let's break it apart.</p>
+			<ol>
+				<li>The first line in the function is creating a new tween and saving it as a local variable. The set_trans(Tween.TRANS_BOUNCE) is setting how the tween will move between the two values, in this case bounce makes the transition smoother and more lively.</li>
+				<li>The second line sets the player's sprite to the stretched/squished scale.</li>
+				<li>The final line sets the tween to return the sprite's scale back to normal (1,1) after the time passed into the function.</li>
+			</ol>
+			<h4>Calling the Squish Function</h4>
+			<p>Of course we still need to call our new function somewhere! Let's start in the jump_effects function. I'll have the player squish horizontally 10% (making it 0.9) and stretch vertically 10% as well (making it 1.1) for 0.25 seconds. This will have the player seem to elongate when they jump up and would look something like this in the script:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func jump_effects():
+	squish(Vector2(0.9,1.1),0.25)</code></pre></div>
+			<p>To continue on, lets add squish to the player's landing_effects function. This one may look more complicated (because it is) but I a merely setting it up so that the squish scales based on how fast the player is falling. Without this, a single tile drop will look oddly strong and falling at max speed would look weak.</p>
+			<pre><code class="language-gdscript">func on_landing():
+	squish(Vector2(1.0 + stored_velocity.y * 0.0003,1.0 - stored_velocity.y * 0.0003), 0.25)</code></pre></div>
+			<p>And your done! If you want to apply squish at any time you can just call the function. Go ahead and try out some different values and then move onto another module!</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">

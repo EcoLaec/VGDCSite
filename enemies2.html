@@ -56,7 +56,7 @@
 			<p class="hint">Note how I extend the EnemyCollider beyond the player by quite some pixels. This is to minimize the chances of the player's HazardCollider hitting the enemy when the player is falling at high speeds.</p>
 			<p>Of course, the player still doesn't have any functionality when they do jump on an enemy. To add some, select the EnemyCollider node, then in the inspector go to the node tab and under signals connect the body_entered signal to our player script.</p>
 			<img src="images/challenges/hazard_signals.png" class="img-fluid" alt="Enemy collider signals.">
-			<p>Finally, in the player script, go to our new _on_enemy_collider_body_entered function. We need to check if the hazard (in this case body) is in the Enemy group and if the player is currently falling, and if so, make the player to bounce upwards and call the enemy's die function. That code will look like this:</p>
+			<p>Finally, in the player script, go to our new _on_enemy_collider_body_entered function. We need to check if the hazard (in this case body) is in the Enemy group and if the player is currently falling, and if so, make the player bounce upwards and call the enemy's die function. That code will look like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _on_enemy_collider_body_entered(body):
 	if body.is_in_group("Enemy") and velocity.y > 0.0:

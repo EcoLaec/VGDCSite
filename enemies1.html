@@ -38,7 +38,7 @@
 			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a> module to be completed first!</strong></p>
 			<p>In this module we will set up our Enemy scene from which all our enemies will inherit from!</p>
 			<h4>Designing our Enemy</h4>
-			<p>Before we start making anything, it is useful to consider what we want our enemy to do. For this example, we will be making an enemy that walks left and right, changing direction when it hits a wall. We wnt the enemy to fall when it is not on a platform. Finally we want the enemy to freeze and play a death animation when the player jumps on it.</p>
+			<p>Before we start making anything, it is useful to consider what we want our enemy to do. For this example, we will be making an enemy that walks left and right, changing direction when it hits a wall. We want the enemy to fall when it is not on a platform. Finally we want the enemy to freeze and play a death animation when the player jumps on it.</p>
 			<h4>Creating the Enemy Scene</h4>
 			<p>To get started with our Enemy scene, create a new blank scene. Choose the other node option and select the CharacterBody2D node as the scene's root node and rename it Enemy. We want to use a CharacterBody2D node because, just like our player, we want the enemies to have physics. Next add two children nodes to the Enemy node: an AnimatedSprite2D and a CollisionShape2D.</p>
 			<img src="images/challenges/enemy_scene_tree.png" class="img-fluid" alt="Enemy scene tree">
@@ -71,7 +71,7 @@ var is_moving = true</code></pre></div>
 	if not is_moving: velocity = Vector2.ZERO
 	move_and_slide()
 	if is_on_wall(): change_direction()</code></pre></div>
-			<p>You may notice some similarities to the player's script, though we are not calling seperate fcuntions for the most part. Let's go line by line:</p>
+			<p>You may notice some similarities to the player's script, though we are not calling seperate functions for the most part. Let's go line by line:</p>
 			<ol>
 				<li>The first line checks if the enemy is on the ground, and if not applies gravity.</li>
 				<li>Line two sets the enemy's horizontal velocity to it's speed in the direction it is facing.</li>

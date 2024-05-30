@@ -35,8 +35,66 @@
 		</div>
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Particles</h3>
-			<p>Description</p>
-			<h4>Section 1</h4>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="juice_setup.html">Juice Setup</a> module to be completed first!</strong></p>
+			<p>A commonplace in modern games, particles are small temporary visual effects. Some examples are things like dust, smoke and footprints. Due to the high amount of them in games, they are handled in very different (and more efficient) ways than most objects, usually through something called an emitter. On this page we will explore particles and create several varieties of them to add more juice to our game.</p>
+			<h4>Jump Particles</h4>
+			<p>One of the key actions in our game is jumping. As such it is always good to make the act of jumping as rewarding as possible through juice, and in this case, particles. To get started create a new scene. For the root node create a new GPUParticles2D node. Rename it to JumpParticle.</p>
+			<img src="images/visual_audio/new_gpu_particle_node.png" class="img-fluid" alt="A GPUParticles2D node in the new node pop up.">
+			<p>Next we need to get our particle and textures themselves. Locate and import the jump particle and dust sprite from the Particles folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Go ahead and select the JumpParticle node. Drag your jump_particle asset you imported from the file system into the inspector as the Process Material, then repeat the same with the dust sprite as the Texture. The JumpParticle node has many options (and the jump_particle asset has even more.) To ease any confusion, here is the setup I am using for the JumpParticle scene.</p>
+			<img src="images/visual_audio/jump_particle_inspector.png" class="img-fluid" alt="The inspector for the JumpParticle node.">
+			<p>There is a lot happening here, so let me go through what each of the changed properties are doing.</p>
+			<ol>
+				<li><strong>Emitting</strong> is whether or not the node is creating particles. It disables it self when set not to loop.</li>
+				<li><strong>Amount</strong> is how many particles the node emits during one cycle. I have it set to 5 because that is what looks good to me.</li>
+				<li><strong>Process Material</strong> is the specific particle(s) the emitter creates. I made this one as a preset, but you can select it and mess around with values to see just how powerful particles can be.</li>
+				<li><strong>Texture</strong> is the sprite that will be used for the particles.</li>
+				<li><strong>Lifetime</strong> is how long each particle lasts in seconds. I set mine to 0.5 to keep them noticeable but not lingering.</li>
+				<li><strong>One shot</strong>, just like sounds, sets the node to not loop, meaning the particles only occur once.</li>
+				<li><strong>Explosiveness</strong> is a scale from 0 to 1, where 0 emits particles continuously and 1 emits them all at once. In between values emit particles in bursts.</li>
+			</ol>
+			<p class="hint">There are a whole lot more particles can do. If you want to learn more you can check out the documentation on them <a href="https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>That's the Jump Particle scene done. Go ahead and save the scene. Though of course it does not do anything on it's own. To be able to have the particles appear when the player jumps let's go to our player script. in the reference variables we will add a new export variable called jump_particle with the type of PackedScene like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+@export var jump_particle : PackedScene</code></pre></div>
+			<p>Next we need to assign the Jump Particle scene to the new variable. Select the player node and then drag the jump particle scene from the file system into the jump_particle property in the inspector. Once that is onde we can have the player create a Jump Particle scene each time they jump. Navigate to the jump_effects function in the player script and add the following code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func jump_effects():
+	var p = jump_particle.instantiate()
+	p.emitting = true
+	p.global_position = global_position + Vector2(0,8)
+	get_parent().add_child(p)</code></pre></div>
+			<p>Once again there is quite a bit here. Let's break it down.</p>
+			<ol>
+				<li><strong>var p = jump_particle.instantiate()</strong> this line creates a new instance, or copy of the jump_particle and saving it as a variable so we can edit it as needed.</li>
+				<li><strong>p.emitting = true</strong> this line sets the new particle to be emitting.</li>
+				<li><strong>p.global_position = global_position + Vector2(0,8)</strong> this line sets the particles position, in this case by the player's feet.</li>
+				<li><strong>get_parent().add_child(p)</strong> and finally this line set's the particle be be the world's child so that it does not move with the player.</li>
+			</ol>
+			<p>And that is the jump particles done.</p>
+			<h4>Landing Particles</h4>
+			<p>As the opposite of jumping, we want our landings to be just as impactful as the jump itself. To get started we don't want to just make a new scene. I just so happened to make sure that the landing particles and jump particles are the same other than their process material, so we can duplicate our jump particle scene as the base. Then, rename the root node the LandParticle and rename the scene as well. Finally, import the land particle asset from the Particles folder in your VGDC-2024 Assets folder. Drag it from the file system to the LandParticle's Process Material property.</p>
+			<p class="hint">Just like the jump particle you can mess around with the values to get the look you want.</p>
+			<p>Next go to the player scene again. In the player script we will create a new export variable called land_particle in our reference variables.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+@export var jump_particle : PackedScene
+@export var land_particle : PackedScene</code></pre></div>
+			<p>Just like the jump particle, drag the land particle scene from the filesystem into the player's inspector as the land_particle property. Next navigate to the land_effects function and add the following code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func jump_effects():
+	var p = jump_particle.instantiate()
+	p.emitting = true
+	p.global_position = global_position + Vector2(0,8)
+	p.lifetime = stored_velocity.y * 0.0015
+	get_parent().add_child(p)</code></pre></div>
+			<p>The only new part of this particle is scaling the particle's life, or time active, with the player's stored velocity. This makes the particles last shorter the less the player has fallen. And you're done! Go ahead and mess with some values for the particles then move on to another module!</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">

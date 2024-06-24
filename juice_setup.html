@@ -50,7 +50,7 @@
 		jump_effects()</code></pre></div>
 			<p class="hint">Note that if you have double jumping or wall jumping you will want to add a call to the jump_effects function under where they set the player's vertical velocity as well.</p>
 			<h4>Setting up the Land Effects Function</h4>
-			<p>What goes up must come down, and since we will be jumping so much, we will also be landing just as much. One of the most important parts of juice is responsiveness, or the feeling the game is reacting to your inputs and movements. Let's set up the ability for the player to detect landing, passing important arguments like vertical_velocity and calling a new landing_effects function. To get satrted create a new reference variable in the player's script called stored_velocity.</p>
+			<p>What goes up must come down, and since we will be jumping so much, we will also be landing just as much. One of the most important parts of juice is responsiveness, or the feeling the game is reacting to your inputs and movements. Let's set up the ability for the player to detect landing, passing important arguments like vertical_velocity and calling a new landing_effects function. To get started create a new reference variable in the player's script called stored_velocity.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript"># Reference Variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")

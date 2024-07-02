@@ -41,7 +41,26 @@
 			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>You may of noticed there are many different tilesets. That is on purpose. We will be able to use them all in combination to make far more detailed (and visual appealing) levels. To start with choose either the grass or stone tileset, whichever one you think you will use more, and we will use that for our auto tiling.</p>
 			<p class="hint">While it is possible to set up auto-tiling on multiple tilesets, there is no way for Godot to be able to connect them together (at least by default.) As such, if you need to connect multiple tileset, you will need to manually add tiles.</p>
-			<p>Navigate to your ground tiles scene. Select the GroundTiles node and then the tile set in the inspector.
+			<p>Navigate to your ground tiles scene. Select the GroundTiles node and then the tile set in the inspector. Go to the terrain sets section and add a new element, then inside of the new terrain set add a new element. This is our <strong>terrain</strong>, Godot's autotiling functionality. Go ahead and rename the terrain (I named mine grass) and change its color to something brighter to make it easier to see later.</p>
+			<img src="images/visual_audio/new_terrain.png" class="img-fluid" alt="New terrain and terrain set in the ground tiles inspector.">
+			<p>Next go to the bottom bar with the tile set selected. Go to the tileset tab. You can delete the stone block tile, then press the + symbol and create a new atlas. Import the tileset you choose, and select yes on the popup to automatically create the tiles. It should then look something like this:</p>
+			<img src="images/visual_audio/grass_tileset.png" class="img-fluid" alt="The grass tileset in the tileset bottom bar tab.">
+			<p>Then go to the paint tab in the center of the tileset bar. Under paint properties choose physics layer 0, then paint on each tile like so:</p>
+			<img src="images/visual_audio/tiles_paint_physics.png" class="img-fluid" alt="The grass tileset with physics property.">
+			<p>Finally, to setup the auto tiling we need to let Godot know how we want the tiles to interact with one another. We can do this by selecting the terrain paint property and selecting the terrain set and terrain we want to use like so:</p>
+			<img src="images/visual_audio/terrain_paint_prep.png" class="img-fluid" alt="The grass tileset with terrain property selected.">
+			<p>Though to actually communicate how the tiles connect is a bit more complicated. I'll show you what it looks like and then (try) and describe what it actually is doing.</p>
+			<img src="images/visual_audio/tileset_terrain_painted.png" class="img-fluid" alt="A completely painted tileset for the terrain property.">
+			<p>There is a lot going on here. Each tile is broken up into nine squares. Each colored square represents a neighboring tile and each empty square represents an empty space, with the center square representing the tile itself. Godot uses these as a model to decide where each tile should go. For example:</p>
+			<img src="images/visual_audio/top_corner_tile.png" class="img-fluid" alt="The top left corner tile of the tileset.">
+			<p>Godot will choose this tile when there is a tile below, to the right and in the bottom right corner of the selected tile, and there are no tiles in any other adjacent squares.</p>
+			<p class="hint">The terrains feature can be pretty hard to wrap your head around, so if you want to look deeper into it you can check out Godot's tutorial <a href="https://docs.godotengine.org/en/stable/tutorials/2d/using_tilesets.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>To add your tiles to your levels, go to your level and select the ground tiles node. In the tile map tab in the bottom bar select terrains and then your new terrain. You can now paint the tiles out like before, but now they should be automatically connecting!</p>
+			<h4>Prettier Platforms</h4>
+			<p>This module requires the <a href="platforms">Platforms</a> module. Navigate to the ground tiles scene. Select the tile set in the inspector then go to the tile set tab in the bottom bar. Create a new atlas using one of the platform tile sets. Select yes on the popup to automatically create tiles, then name the new tile set. Go to the paint properties and select the physics layer 0 property. In the new options that appear modify the collision shape to be about 1/3 of a tile tall and check the polygon_0_one_way property. Finally, paint the collision shape on all the tiles that have full tops like so:</p>
+			<img src="images/visual_audio/platform_physics_layer.png" class="img-fluid" alt="The physic property and options for the platform tileset.">
+			<p class="hint">I did not set the platforms to have a terrain on purpose in order to not have them try and connect or replace the grass tileset. As such, we will need to place these tiles manually.</p>
+			<p>And that is it! Congrats! Autotiling can be pretty complex but you did it! Go ahead and piece together some test levels and then move on to another module!</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">

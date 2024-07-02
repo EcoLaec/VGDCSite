@@ -49,19 +49,12 @@
 			<pre><code class="language-gdscript">func jump_effects():
 	$JumpSound.play()</code></pre></div>
 			<h4>Landing Sounds</h4>
-			<p>To add sounds when the player lands repeat the same process as jumping sounds, creating a new AudioStreamPlaye node and naming it LandSound. Import the sound and drop it into the LandSound's stream property. Though once you are ready to move to the script add the following to the land_effects functionL</p>
+			<p>To add sounds when the player lands repeat the same process as jumping sounds, creating a new AudioStreamPlayer node and naming it LandSound. Import the sound and drop it into the LandSound's stream property. Though once you are ready to move to the script add the following to the land_effects functionL</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func land_effects():
 	$LandSound.volume_db = (stored_velocity.y * 0.1) - 60.0
 	$LandSound.play()</code></pre></div>
 			<p class="hint">Note that the line setting the LandSound's volume_db is causing the volume to scale with the player's vertical velocity. Without this, falling one tile would be just as loud as falling one hundred, which would not make much sense and would get very annoying.</p>
-			<h4>Hurt Sounds</h4>
-			<p>This section requires the <a href="hazard_setup.html">Hazard Setup</a> module. Repeat the same steps from the previous two sections to create a new AudioStreamPlayer named HurtSound with the proper sound file. Next go to the player's die function. In it add the following line of code:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func die():
-	$HurtSound.play()
-	position = respawn_point</code></pre></div>
-			<p class="hint">Note that if you have the Health module, you will need to add the $HurtSound.play() line into your damage function instead!</p>
 			<p>And that is it! Go ahead and try out the new sounds for your player then move on to another module!</p>
 	</div>
 	<div class="row">

@@ -35,8 +35,47 @@
 		</div>
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Hazard Sounds</h3>
-			<p>Description</p>
-			<h4>Section 1</h4>
+			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a> module to be completed first!</strong></p>
+			<p>Right now you may notice a pretty serious issue: there is virtually no feedback for when the player takes damage. Of course the player can still die, but it is very easy to not notice if you were hit, which can leave the player confused and frustrated (not to mention how unsastifying it is.) To fix this we can add some sounds to our player and enemies to let the player know when they get hurt!</p>
+			<h4>Hurt Sounds</h4>
+			<p>First things first go to your player scene. Right click the player node and create a new AudioStreamPlayer node as a child. Rename it to HurtSound.</p>
+			<img src="images/visual_audio/new_audiostreamplayer.png" class="img-fluid" alt="Creating a new AudioStreamPlayer node.">
+			<p>Next we need to import our hurt sound from the Hazard Sounds folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now select your HurtSound node. In the inspector you can drag the hurt sound file from our file system to the stream property, as well as change the volume of the sound (I set mine to -10 db.)</p>
+			<img src="images/visual_audio/hurt_sound_inspector.png" class="img-fluid" alt="Inspector for the HurtSound node with the volume and audio stream selected.">
+			<p>To actually play the sound, however, we will need to go into our player script. We will add the following line of code to our die function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	$HurtSound.play()
+	position = respawn_point</code></pre></div>
+			<p class="hint">Note that if you have the Health module, you will need to add the $HurtSound.play() line into your damage function instead, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func damage():
+	$HurtSound.play()
+	current_health -= 1
+	if current_health <= 0:
+		die()</code></pre></div>
+			<h4>Enemy Sounds</h4>
+			<p>This section requires both of the <a href="enemies1.html">Simple Enemies</a> modules. To add a death sound to our enemies first go to your enemy scene (the base scene not the specific enemy.) Right click the enemy node and create a new AudioStreamPlayer node as a child. Rename it to HurtSound.</p>
+			<img src="images/visual_audio/new_audiostreamplayer.png" class="img-fluid" alt="Creating a new AudioStreamPlayer node.">
+			<p>Next we need to import our enemy hurt sound(s) from the Hazard Sounds folder in your VGDC-2024 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next navigate to the specific enemy scene you want to add the sound to (in this case the Trike enemy scene.) Select the HurtSound node and drop the imported sound into the stream property in the inspector like so:</p>
+			<img src="images/visual_audio/enemy_hurt_sound_inspector.png" class="img-fluid" alt="Hurt sound inspector for the trike enemy.">
+			<p>In order to actually play the sound, however, we will need to go into the enemy script. At the top with the other variables add the following line or click and hold the HurtSound node, hold control then drag and drop it into the script.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@onready var hurt_sound = $HurtSound</code></pre></div>
+			<p>Next, go to the die function and at the top of it add a line to play the hurt_sound like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	hurt_sound.play()
+	is_moving = false
+	call_deferred("disable_collision")
+	sprite.play("death")
+	await sprite.animation_finished
+	queue_free()</code></pre></div>
+			<p>And that is the hazard sounds done! Go ahead and mess around with what sounds you want to use, then move on to another module!</p>
 	</div>
 	<div class="row">
 		<div class="col-12" id="bottombar">

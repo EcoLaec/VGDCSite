@@ -69,6 +69,26 @@
 			# Aerial Friction
 			velocity.x = move_toward(velocity.x, 0, air_friction * delta)</code></pre></div>
 			<p>And that's all that is required! Go ahead and try some different values for your stats and then move on to another module.</p>
+
+			<h3>Compatibility</h3>
+			<p>Aerial Mobility conflicts with 1 other module:</p>
+			<ol>
+				<li><h5>Sprinting</h5></li>
+			</ol>
+			<p>If you have any of these modules please follow the instructions for that module:</p>
+			<h4>Sprinting</h4>
+			<p>A relatively minor fix, but in order to make sure that the player's speed is consistent, make sure to update the speed variable to current_speed for both grounded and aerial acceleration. in the apply_acceleration function as shown:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+	var current_speed = sprint_speed if sprinting else speed
+	if input_axis:
+		if is_on_floor():
+			# Grounded Acceleration
+			velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)
+		else:
+			# Aerial Acceleration
+			velocity.x = move_toward(velocity.x, current_speed * input_axis, air_acceleration * delta)</code></pre></div>
 		</div>
 	</div>
 	<div class="row">

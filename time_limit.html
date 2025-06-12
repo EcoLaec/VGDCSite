@@ -38,7 +38,7 @@
 			<p class="hint"><strong>IMPORTANT! This module requires the <a href="hazard_setup.html">Hazard Setup</a> and <a href="ui.html">UI</a> modules to be completed first!</strong></p>
 			<p>On this page we will make the game a more stressful by adding a time limit!</p>
 			<h4>Creating the Timer</h4>
-			<p>In order to have a timer we need, well, a timer. Create a new scene and choose a Timer node as the root node. You can keep all of it's settings as default, but let's rename the node LevelTimer. We then need to save the scene. Next, go to your project settings under the autoload tab and press the file icon next to path. Find where you saved your level timer scene and press add.</p>
+			<p>In order to have a timer we need, well, a timer. Create a new scene and choose a Timer node as the root node. In its inspector, check one-shot so that it is active, and keep all the other settings as default. Rename the node LevelTimer. We then need to save the scene. Next, go to your project settings under the autoload tab and press the file icon next to path. Find where you saved your level timer scene and press add.</p>
 			<img src="images/challenges/autoload_timer.png" class="img-fluid" alt="Setting the level timer to load automatically.">
 			<h4>Editing the World Script</h4>
 			<p>Now we can access our LevelTimer from anywhere. To start, navigate to your world scene. Open your world script (or attach one to your world node if you do not have one) and at the top add a new export variable called level_time.</p>

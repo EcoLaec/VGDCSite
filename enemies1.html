@@ -42,8 +42,10 @@
 			<h4>Creating the Enemy Scene</h4>
 			<p>To get started with our Enemy scene, create a new blank scene. Choose the other node option and select the CharacterBody2D node as the scene's root node and rename it Enemy. We want to use a CharacterBody2D node because, just like our player, we want the enemies to have physics. Next add two children nodes to the Enemy node: an AnimatedSprite2D and a CollisionShape2D.</p>
 			<img src="images/challenges/enemy_scene_tree.png" class="img-fluid" alt="Enemy scene tree">
-			<p>You may notice the square icon next to the Enemy node in the image above. This symbolizes that the node is in a <strong>Group</strong>. Groups are effectively tags to help categorize nodes. To add a group to the Enemy node, select it and go to the inspector. Select the Node tab, then below that select the Groups tab (you will notice the same square icon.) In the blank box beneath Manage Groups, type Enemy and press add.</p>
+			<p>You may notice the square icon next to the Enemy node in the image above. This symbolizes that the node is in a <strong>Group</strong>. Groups are effectively tags to help categorize nodes. To add a group to the Enemy node, select it and go to the inspector. Select the Node tab, then below that select the Groups tab (you will notice the same square icon.) We will need to create a new global group for enemies by first pressing the plus symbol.</p>
 			<img src="images/challenges/new_group.png" class="img-fluid" alt="Adding a new group">
+			<p>Then, name the new group Enemy, turn the Global slider on, then press create.</p>
+			<img src="images/challenges/new_group_name.png" class="img-fluid" alt="Naming a new group">
 			<p>The new group will show up in the list below, and the square icon will appear next to the Enemy node. Next, we need to set the Enemy node's collision. Still in the inspector go to the inspector tab and find the collision category. Change the physics layers to the hazard layer and the physics masks to the world layer (we want the enemy to be treated as a hazard and look for the level for collisions.)</p>
 			<img src="images/challenges/enemy_collision.png" class="img-fluid" alt="Setting enemy node collision layers">
 			<h4>Creating the Enemy Script</h4>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dashing</title>
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Dashing</h3>
+			<p>Dashing can be thought of as a horizontal jump, a short but fast burst of speed to clear gaps or reposition. With this module we will create a precise dash mechanic to aid in tight p[latforming sections.</p>
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the ability to dash, we need the new sprites! Go ahead and open up the Dashing folder in your VGDC-2025 Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called dash and import the new file as a frame.</p>
+			<img src="images/player_movement/dash_animation.png" class="img-fluid">
+			<h4>Adding the Input</h4>
+			<p>Next we must add a new input action for dashing. Go to your project settings then the input map tab. Create a new action called Dash and add a key (I will add shift as my dash key.)</p>
+			<img src="images/player_movement/dash_input.png" class="img-fluid">
+			<h4>Adding the Timers</h4>
+			<p>The next thing we want to do is add two new timer nodes to our player. Navigate to the player scene tree and add a new node to our player node. Find the timer node, add it, and then rename it (I will name mine DashTimer and DashCooldown).</p>
+			<img src="images/player_movement/dash_player_scene.png" class="img-fluid">
+			<p>Once you have the timers added, select the DashTimer and look in the inspector. We want to set the Wait Time to a very small number (I set mine to 0.15), and check One Shot (which makes the timer stop when it's done instead of looping.) The DashCooldown should be set up the same, with a slightly longer Wait time (I used 0.25).</p>
+			<img src="images/player_movement/dash_timer_inspector.png" class="img-fluid">
+			<p>Finally, while we are messing with the timers, we need to add a signal from the DashTimer to the player script. We can do this by selecting the DashTimer node, then in the inspector select the Node tab, then Signals and double click the timeout() signal. Create the new signal (which will add a new function to your script).</p>
+			<img src="images/player_movement/dash_timer_signal.png" class="img-fluid">
+			<h4>Editing the Player Script</h4>
+			<p>Finally we are ready to start programming! In order to implement a flexible dash system we need three variables: one for how fast the dash's max speed will be, one for how quickly the player will accelerate into the dash (and deaccelerate after it ends) and a variable to store the players input when they start dashing to prevent them from changing direction mid dash. We will put the first two in our player stats and the third in our reference variables. additionally, we will add references to our two timers as well:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity_scale = 1.0
+@export var terminal_velocity = 500.0
+@export var dash_speed = 300.0
+@export var dash_acceleration = 3000.0
+
+# Reference Variables
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var sprite = $AnimatedSprite2D
+@onready var dash_timer = $DashTimer
+@onready var dash_cooldown = $DashCooldown
+var stored_input = 0</code></pre></div>
+		<p>Our next step is to add a new handle_dash function within the _physics_process function. Additionally we want to disable the player's normal gravity, acceleration and friction while dashing by only calling those functions while not dashing, as so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	handle_jump()
+	handle_dash(input_axis,delta)
+	if dash_timer.time_left == 0.0:
+		apply_gravity(delta)
+		apply_acceleration(input_axis,delta)
+		apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()</code></pre></div>
+		<p class="hint">Note that the apply_gravity function was moved down with acceleration and friction! Accidentally duplicating it will result in some weird results!</p>
+		<p>Iyou will notice a large error. To fix this we need to create the handle dash function! It may seem like a lot, but I'll break it down:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
+	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+		velocity.y = 0
+		if input_axis:
+			stored_input = input_axis
+		else:
+			stored_input = -1 if sprite.flip_h else 1
+		dash_timer.start()
+	if dash_timer.time_left > 0.0:
+		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
+		<p>First we are testing if the player is pressing the dash key and the dash is not on cooldown. If true, we reset their vertical speed (as to make sure the dash is only horizontal), store which way they are facing, then start the dash timer. In a seperate if then statement, we check if the dash timer is active, and if so, accelerate the player towards their dash speed.</p>
+		<p class="hint">You can modify the distance and speed of the dash by changine the DashTimer node's wait time and the player's dash speed variable!</p>
+		<p>At this point the dash is tehcnically functional, but there is still some behaviors we should address. At the moment the dash can kind of "launch" the player after it finishes, potentially making control difficult. In order to remedy this we want to quickly deaccelerate the player after the dash completes down to their max speed. We can do so by adding a line of code in the apply_acceleration function:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	# Deacceleration after Dash
+	if abs(velocity.x) > speed: velocity.x = move_toward(velocity.x, speed * input_axis, dash_acceleration * delta)
+	
+	if input_axis:
+		velocity.x = move_toward(velocity.x, speed * input_axis, acceleration * delta)</code></pre></div>
+		<p class="hint">Note that the new line is not in any if/then statements. We want this line to always be active, regardless of the player's inputs.</p>
+		<p>Next, we should figure out how jumping while dashing works. If you want to disable jumping, you can add it into the same statement as the gravity, friction and acceleration functions in _physics_process, but for this example I will have jumping cancel the dash early. We can do this by stopping the dash timer and calling its timeout function like so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity
+		if dash_timer.time_left > 0.0:
+			dash_timer.stop()
+			_on_dash_timer_timeout()</code></pre></div>
+		<p>Speaking of the dash timer's timout function, we need to make sure it starts the cooldown timer when triggered! We can do this easily like so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func _on_dash_timer_timeout():
+	dash_cooldown.start()</code></pre></div>
+		<p>Finally, to add the dashing animation to our dinosaur friend, we need to add a new statement in the update_animations function. We need to make sure that while dashing, we use the stored input instead of the actual input to decide where the player is facing, as well as add the return keyword to override the rest of the function, as shown:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Dashing
+	if dash_timer.time_left > 0.0:
+		sprite.flip_h = stored_input < 0
+		sprite.play("dash")
+		return
+	
+	# Grounded Animations
+	if input_axis:
+		sprite.flip_h = input_axis < 0
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+		<p>And that is dashing done! Dashing does conflict with many other modules though, so make sure to check the compability below before you move on to another module.</p>
+		
+
+		<h3>Compatibility</h3>
+		<p>Dashing conflicts with 4 other modules:</p>
+		<ol>
+			<li><h5>Wall Cling</h5></li>
+			<li><h5>Double Jump</h5></li>
+			<li><h5>Ramps</h5></li>
+			<li><h5>Sprinting</h5></li>
+		</ol>
+		<p>If you have any of these modules please follow the instructions for that module:</p>
+		
+		<h4>Wall Cling</h4>
+		<p>Right now, whenever the player attempts to dash while clinging to a wall, they merely dash directly into it! To remedy this we will reverse the player's stored input if they are clinging, as so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
+	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+		velocity.y = 0
+		if input_axis:
+			stored_input = input_axis
+		else:
+			stored_input = -1 if sprite.flip_h else 1
+		if clinging: stored_input = -stored_input
+		dash_time.start()
+		floor_snap_length = 0.0
+	if dash_time.time_left > 0.0:
+		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
+		
+		<h4>Double Jump</h4>
+			<p>Just as the player can jump when grounded to cancel the dash, we can easily add the same ability to air jumping:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Reset Air Jumps
+	if is_on_floor(): air_jumps_made = 0
+
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity
+		if dash_timer.time_left > 0.0:
+			dash_timer.stop()
+			_on_dash_timer_timeout()
+	
+	# Off of Floor
+	if not is_on_floor():
+		# Air Jumps
+		if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps:
+			velocity.y = jump_velocity * air_jump_scale
+			air_jumps_made += 1
+			if dash_timer.time_left > 0.0:
+				dash_timer.stop()
+				_on_dash_timer_timeout()</code></pre></div>
+			
+		<h4>Ramps</h4>
+			<p>At the moment when the player dashes on or over a slope, the will snap to it, following it instead of moving straight. To fix this we can temporarily set the player's snap length to 0 while dashing, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
+	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+		velocity.y = 0
+		if input_axis:
+			stored_input = input_axis
+		else:
+			stored_input = -1 if sprite.flip_h else 1
+		dash_timer.start()
+		floor_snap_length = 0.0
+	if dash_timer.time_left > 0.0:
+		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
+		<p>Of course, we need to make sure that it is re-enabled after the dash ends! We can do so in the dash timer's timout function:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_dash_timer_timeout():
+	dash_cooldown.start()
+	floor_snap_length = 3.0</code></pre></div>
+		<p class="hint">Make sure to set the 3.0 in the function above with whatever you set your snap length to!</p>
+
+		<h4>Sprinting</h4>
+			<p>If you were looking to have sprinting and dashing, you may of noticed the use of the same key. In order to use both you will need to set one of the two to a different key. Additionally, the dash's deacceleration interferes with sprinting. We can fix this by setting the max speed for the player to their sprint speed like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	# Deacceleration after Dash
+	if abs(velocity.x) > sprint_speed: velocity.x = move_toward(velocity.x, sprint_speed * input_axis, dash_acceleration * delta)
+	
+	sprinting = Input.is_action_pressed("Sprint")
+	var current_speed = sprint_speed if sprinting else speed
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	initPage()
+
+	function triggerExpand() {
+		expandAndHighlight('playerMovement','pmDashing','playerMovementToggle')
+	}
+</script>
+</body>
+</html>

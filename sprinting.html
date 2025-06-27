@@ -37,8 +37,8 @@
 			<h3>Sprinting</h3>
 			<p>We can add the ability for the player to run when holding a key. Doing so can add more options for the player and frankly is just fun.</p>
 			<h4>Getting the New Assets</h4>
-			<p>Before we can start adding the ability to sprint, we need the new sprites! Go ahead and open up the Sprinting folder in your VGDC-2024 Assets folder, find the appropriate file and drag it into your file system.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Before we can start adding the ability to sprint, we need the new sprites! Go ahead and open up the Sprinting folder in your VGDC-2025 Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called sprint and import the new file as a frame.</p>
 			<img src="images/player_movement/sprint_sprite_frames.png" class="img-fluid">
 			<p class="hint">Note that the animation speed for sprinting is 12 fps! You can change it but you do want it faster than walking.</p>
@@ -91,11 +91,13 @@ var sprinting = false</code></pre></div>
 			<p>And we are done! Go ahead and test out your new ability, mess around with the speed and once you are happy with it, move on to another module!</p>
 
 			<h3>Compatibility</h3>
-			<p>Sprinting conflicts with 1 other module:</p>
+			<p>Sprinting conflicts with 2 other modules:</p>
 			<ol>
 				<li><h5>Aerial Mobility</h5></li>
+				<li><h5>Dashing</h5></li>
 			</ol>
 			<p>If you have any of these modules please follow the instructions for that module:</p>
+			
 			<h4>Aerial Mobility</h4>
 			<p>A relatively minor fix, but in order to make sure that the player's speed is consistent, make sure to update the speed variable to current_speed for both grounded and aerial acceleration. in the apply_acceleration function as shown:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
@@ -109,6 +111,18 @@ var sprinting = false</code></pre></div>
 		else:
 			# Aerial Acceleration
 			velocity.x = move_toward(velocity.x, current_speed * input_axis, air_acceleration * delta)</code></pre></div>
+
+			<h4>Dashing</h4>
+			<p>If you were looking to have sprinting and dashing, you may of noticed the use of the same key. In order to use both you will need to set one of the two to a different key. Additionally, the dash's deacceleration interferes with sprinting. We can fix this by setting the max speed for the player to their sprint speed like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	# Deacceleration after Dash
+	if abs(velocity.x) > sprint_speed: velocity.x = move_toward(velocity.x, sprint_speed * input_axis, dash_acceleration * delta)
+	
+	sprinting = Input.is_action_pressed("Sprint")
+	var current_speed = sprint_speed if sprinting else speed
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
 		</div>
 	</div>
 	<div class="row">

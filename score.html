@@ -43,7 +43,7 @@
 			<pre><code class="language-gdscript">var score = 0</code></pre></div>
 			<h4>Adding the Score to the UI</h4>
 			<p>Of course, we still can't see the score anywhere in game. To fix that navigate to your UI scene. Right click our Right node, and create a new VBoxContainer node as a child. Then right click the new VBoxContainer and add a label node as a child. Rename the label to ScoreLabel, and then set it to have a unique identifier by right clicking it and pressing Access as Unique Name.</p>
-			<img class="img-fluid" src="images/challenges/set_unique_name.png" alt="Setting a unique name.">
+			<img class="img-fluid" src="images/gameplay/score_scene.png" alt="Setting a unique name.">
 			<p>The UI scene tree should now look something like this:</p>
 			<img class="img-fluid" src="images/gameplay/score_scene_tree.png" alt="UI scene tree with score label node.">
 			<p>Next, we need to set the ScoreLabel node to update with the player's score. Open up the UI script, then in the _process function we will add the following line of code:</p>

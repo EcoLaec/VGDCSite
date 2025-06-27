@@ -86,8 +86,8 @@ var current_health = max_health</code></pre></div>
 func _on_hazard_collider_area_entered(_area):
 	call_deferred("damage")</code></pre></div>
 			<h4>Adding Health to the UI</h4>
-			<p>Let's import the health sprites. You need both the full and empty heart sprites from the Health folder in your VGDC-2024 Assets folder.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Let's import the health sprites. You need both the full and empty heart sprites from the Health folder in your VGDC-2025 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Next navigate to your UI scene. Right click the Left node and create a new VBoxContainer as a child node (if you already have one from a previous module you can use that.) Right click the VBoxContainer node and create a new HBoxContainer node. Rename it Health and set it to be accessed by a unique name.</p>
 			<img src="images/gameplay/health_scene_tree.png" class="img-fluid" alt="Scene tree for the health in the UI scene.">
 			<p>Next open up the UI script. At the top add 2 new export variables: full_heart_sprite and empty_health_sprite. Set both to require Texture2Ds, but leave their values blank like so:</p>

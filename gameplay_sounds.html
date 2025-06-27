@@ -39,8 +39,8 @@
 			<h4>Pickup Sounds</h4>
 			<p>This section requires the <a href="collectables.html">Collectables</a> module. First things first, navigate to your pickup scene. Right click the Pickup node and create a new AudioStreamPlayer node as a child. Rename it to PickupSound.</p>
 			<img src="images/visual_audio/new_audiostreamplayer.png" class="img-fluid" alt="Creating a new AudioStreamPlayer node.">
-			<p>Next we need to import our enemy hurt sound(s) from the Gameplay Sounds folder in your VGDC-2024 Assets folder.</p>
-			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1JqGETKVdyFGBVo7yKvaT3fDf-fxFcGfW?usp=sharing">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next we need to import our enemy hurt sound(s) from the Gameplay Sounds folder in your VGDC-2025 Assets folder.</p>
+			<p class="hint">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Next go to the specific pickup scene you want to add your sound to (in this case I am using the jade pickup scene.) Select the PickupSound node, then in the inspector drop your imported sound into the stream property like so:</p>
 			<img src="images/visual_audio/pickup_sound_inspector.png" class="img-fluid" alt="Pickup sound inspector for the jade pickup.">
 			<p>In order to have the sound play when the player picks up the pickup we need to go into the pickup script. Within the onPickup function we need to add the following line of code:</p>

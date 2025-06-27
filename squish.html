@@ -60,8 +60,9 @@
 			<pre><code class="language-gdscript">func jump_effects():
 	squish(Vector2(0.9,1.1),0.25)</code></pre></div>
 			<p>To continue on, lets add squish to the player's landing_effects function. This one may look more complicated (because it is) but I a merely setting it up so that the squish scales based on how fast the player is falling. Without this, a single tile drop will look oddly strong and falling at max speed would look weak.</p>
-			<pre><code class="language-gdscript">func on_landing():
-	squish(Vector2(1.0 + stored_velocity.y * 0.0003,1.0 - stored_velocity.y * 0.0003), 0.25)</code></pre></div>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func landing_effects():
+	squish(Vector2(1.0 + stored_velocity.y * 0.0003, 1.0 - stored_velocity.y * 0.0003), 0.25)</code></pre></div>
 			<p>And your done! If you want to apply squish at any time you can just call the function. Go ahead and try out some different values and then move onto another module!</p>
 	</div>
 	<div class="row">

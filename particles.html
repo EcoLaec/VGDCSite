@@ -88,7 +88,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var land_particle : PackedScene</code></pre></div>
 			<p>Just like the jump particle, drag the land particle scene from the filesystem into the player's inspector as the land_particle property. Next navigate to the land_effects function and add the following code:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func jump_effects():
+			<pre><code class="language-gdscript">func land_effects():
 	var p = jump_particle.instantiate()
 	p.emitting = true
 	p.global_position = global_position + Vector2(0,8)

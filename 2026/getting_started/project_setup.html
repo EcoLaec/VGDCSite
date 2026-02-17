@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Project Setup</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+
+			<!-- Section -->
+			<h3>Setting Up Your Project</h3>
+			<p>This page will get you started with a new project, as well as explore some core concepts of Godot's engine.</p>
+			<p class="hint add-info">For a more in depth look of Godot. check out their official documentation <a href="https://docs.godotengine.org/en/stable/index.html" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+
+			<h4>Downloading and Intalling Godot</h4>
+			<p class="hint alert">If you're taking this course in person you likely already have Godot on the computer you will be working on and can skip this step.</p>
+			<p>The Godot engine can be downloaded from their site using this <a href="https://docs.godotengine.org/en/stable/index.html" target="_blank">Link<i class="linkbox bi bi-box-arrow-up-right"></i></a>. The site will automatically detect your computer's operating system. Once on the page, press the download button that says Godot Engine.</p>
+			<img src="getting_started/images/godot_page.png" class="img-fluid" alt="Godot's main download page.">
+			<p>Once the download has finished, move the file to your desktop and extract it's contents into a folder (I recommend making a new folder for this). You must make sure that both the application and the console within the file are in the same folder. After that, open up Godot and it will bring you to your project manager.</p>
+
+			<h4>Creating a New Project</h4>
+			<p>Once you have opened Godot it will bring you to the project manager. If this is your first time opening Godot, a popup will appear asking if you want to explore example projects. Press cancel on the popup and you will see your list of projects, which will likely be empty.</p>
+			<img src="getting_started/images/godot_project_select.png" class="img-fluid" alt="The Godot engine's main project manager.">
+			<p>To create a new project press the New button at the top of the manager. A popup will appear with details for your new project.</p>
+			<img src="getting_started/images/godot_new_project.png" class="img-fluid" alt="Godot's create new project pop-up.">
+			<p>There is a lot happening here, so lets break it down.</p>
+			<ol>
+				<li><p><strong>Project Name</strong><br>
+				The project name is the name of your project (this one is pretty simple). Most of the time when you start a new project you won't have an official name yet, but it is alright to simply use a working name until you come up with something better. (You can always change the project's name in the project settings later)</p></li>
+				<li><p><strong>Project Path</strong><br>
+				This is the location that all of your project's files and assets will be stored. I usually store my active projects on my desktop for ease of access, but as long as you remember where it is, you can choose to put your project anywhere that makes sense to you. It is best practice to select an empty folder for your project, however, so the files don't get mixed up with something else.</p></li>
+				<li><p><strong>Renderer</strong><br>
+				Your renderer choice decides how the engine processes the visuals of your project. The details of rendering is far beyond the scope of this course, but for our purposes Forward+ allows the most complex graphics but least number of compatable devices, whereas Compatibility has the simplest graphic options but can work on most devices. Mobile is between those two extremes. Since we are making a simple 2D game, any would work, but I recommend Mobile or Compatability for this course.</p>
+				<p class="hint add-info">If you want to look deeper into what the actual differences the renderer's have (and possibly develop a headache), check out Godot's documentation on them <a href="https://docs.godotengine.org/en/stable/contributing/development/core_and_modules/internal_rendering_architecture.html" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p></li>
+				<li><p><strong>Version Control Metadata</strong><br>
+				This option sounds confusing, but all it does is setup a project to work with Git, a program that helps manage different versions of files and allow collaboration between different users. For this project we will not be using Git, but having the option to connect does not change the project in anyway and I consider it good practice to always leave this option on Git.</p></li>
+			</ol>
+			<p>Once you are happy with your project settings, go ahead and press Create at the bottom of the popup and the editor will open (provided you have the edit now checkbox selected).</p>
+
+			<div class="text-center">
+				<a href="getting_started/editor_tour.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','ProjectSetup','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

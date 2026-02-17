@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Creating the Player: Part 1</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Creating the Player Scene (Part 1)</h3>
+			<p>This page will walk through setting up the player scene and assigning the player animations!</p>
+
+			<h4>Choosing a Root Node</h4>
+			<p>Continuing from our last tutorial, we should have a blank scene. In our scene tree Godot will be requesting we choose a <strong>Root Node</strong>.</p>
+			<img src="getting_started/images/create_new_node.png" class="img-fluid" alt="Empty Scene Tree">
+			<p> A root node is the node from which all other nodes in a scene are descendants of. To keep with the tree metaphor, the root node is the roots of the tree that all the other nodes 'branch' off from. The root node provides the most basic functionality of a scene. For our player we will need to select a CharacterBody2D node. You may notice that is not an option in the scene tree right now, so we must select the Other Node option. This will bring up a menu to select from any of Godot's node types.</p>
+			<p class="hint tip">You can use the search bar at the top of the new node menu to quickly find nodes!</p>
+			<img src="getting_started/images/select_node_type.png" class="img-fluid" alt="Selecting CharacterBody2D">
+			<p>The root node for a scene also provides the name the scene will have when it is put into another scene. Due to this is is generally a good idea to rename your root node. You can do this by right clicking the node and selecting Rename. Let's rename our CharacterBody2D to Player.</p>
+			<p class="hint add-info">To check out more details on node types, you can always right click a node in the scene tree and select 'Open Documentation'. Or to see all your options check out Godot's official documentation <a href="https://docs.godotengine.org/en/stable/classes/index.html#nodes" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+
+			<h4>Adding Sprites and Animations</h4>
+			<p>You may notice that our scene in the viewport is still empty. This is because we haven't added any visuals to our player! In order to fix this we need to first add a new AnimatedSprite2D node as a child of our Player (CharacterBody2D) node by right clicking the Player node and selecting Add Child Node.</p>
+			<img src="getting_started/images/add_child_node.png" class="img-fluid" alt="Adding Child Node">
+			<p>Navigate through the new node menu and select AnimatedSprite2D. Once it is added to the scene tree, select it and you will see it's details appear in the inspector. In order to add our sprites we must assign the node a <strong>Sprite Frames</strong> asset. We can do this by selecting the empty dropdown next to the sprite frames element and selecting New Sprite Frames.</p>
+			<img src="getting_started/images/new_sprite_frames.png" class="img-fluid" alt="Adding New Sprite Frames">
+			<p>Sprite frames are collections of 2D animations that we can switch between using code later on. We can select our new sprite frames in the inspector and a new tab will appear in the bottom panel: the sprite frames editor.</p>
+			<img src="getting_started/images/sprite_frames_editor.png" class="img-fluid" alt="Sprite Frame Editor">
+			<p>The sprite frames editor is split up into 4 major parts:</p>
+			<ol>
+				<li>
+					<h5>Animation Controls</h5>
+					<p>Found in the top left corner, the animation controls allow you to (in order) create and delete animations, set an animation to play when the asset is loaded, set if an animation loops and its playback speed in frames per second.</p>
+				</li>
+				<li>
+					<h5>Animation Frame Controls</h5>
+					<p>Found on the right side of the animation controls, the animation frame controls allow you to play and stop your animation in the veiwport (very useful for testing), add frames from textures or sprite sheets, copy and paste frames, insert blank frames, move and delete frames, and finaly set an individual frame's duration (relative to the animation's speed.)</p>
+				</li>
+				<li>
+					<h5>Animation List</h5>
+					<p>Found below the animation controls, here is where you can see the list of animations in the sprite frames, as well as easily delete, select and rename them.</p>
+				</li>
+				<li>
+					<h5>Frame List</h5>
+					<p>Found below the animation frame controls, here you can see all the frames in the currently selected animation and in which order they will play.</p>
+				</li>
+			</ol>
+
+			<p>For this project we will need four animations for our player: walking, jumping, falling and idle (standing still). But we don't have any textures yet! No worries, I have provided all resources necessary to complete every part of this course in the VGDC-2025 Assets file on your computer's desktop.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>To import textures (or any other asset) into your Godot project is quite simple! Simply find the assets you wish to add (in this case, it is all the png files in the Getting Started file in our VGDC-2024 Assets folder) and drag them into your file system dock in Godot (bottom left corner beneath the scene tree.) Once they are imported, you can easily reorganize the assets in Godot.</p>
+			<p class="hint tip">Organizing your assets is incredibly important, especially as a project grows. You can create folders by right clicking in the file system dock. I usually have a folder for each type of asset, like textures, sounds, scripts, scenes etc. with subfolders for further structure. Do whatever organization strategy that makes the most sense to you, however!</p>
+			<img src="getting_started/images/imported_assets.png" class="img-fluid" alt="My File Structure">
+
+			<p>Once we have imported our assets we can add our first animation! Select the default animation in the sprite frames editor on the bottom panel and rename it to idle. Select the Add Sprites from Sheet option in the animation frame controls. The icon looks like a three by three grid.</p>
+			<img src="getting_started/images/add_frames_from_sheet.png" class="img-fluid" alt="Adding Sprite from Sheet">
+			<p class="hint add-info">A sprite sheet is an image that has more than one frame or sprite on it.</p>
+			<p>A new menu will appear that will show your file system structure. Navigate through it to where you stored your player sprites and select the Green Dino Idle texture.</p>
+			<img src="getting_started/images/select_sprite_sheet.png" class="img-fluid" alt="Selecting Texture">
+			<p>Another menu will appear prompting you to select frames, though before we can we must let Godot know how many sprites we have in the sprite sheet. We do this by using the horizontal and vertical elements in the top left corner of the menu. Horizontal is the number of sprites we have horizontally and vertically is the same but vertically (you can think of it like a grid.) Since we have four sprites in a horizontal line and only one row, we set horizontal to 4 and vertical to 1. We can then select out frames in the order we want them to play (in this case left to right.)</p>
+			<img src="getting_started/images/select_frames_from_sheet.png" class="img-fluid" alt="Selecting Frames">
+			
+			<p>Once the frames are selected, you will see them in the frame list in the sprite frames editor. To add the rest of the animations, press the Add Animation button (the icon looks like a piece of paper with a plus sign), then repeat the steps you made for the idle animation.</p>
+			<p class="hint alert">Note that the jump and fall animations are 1 sprite long and walk is 6 sprites long instead of the idle animation's 4.</p>
+			<p>Once you have created all of the animations, change the walk animation's speed to 10 frames per second. Your sprite frames editor should look something like this:</p>
+			<img src="getting_started/images/set_animation_speed.png" class="img-fluid" alt="Completed Animations">
+
+			<p>You can select an animation and press play to see the animation play, though you may notice player is blurry. If you do, it's an easy fix. Go to the top bar of the Godot editor and select project, then the Project Settings option.</p>
+			<img src="getting_started/images/project_settings_in_menu.png" class="img-fluid" alt="Project Menu">
+			<p>This will open up your project settings. Once there use the menu on the left to navigate to the Rendering/Textures section. Set the default texture filter to Nearest, then close the project settings.</p>
+			<img src="getting_started/images/texture_render_setting.png" class="img-fluid" alt="Default Texture Filter set to Nearest">
+			<p class="hint tip">You can use the Filter Settings bar to quickly search for settings!</p>
+			<p>You will now see nice crisp edges on your player's sprite! Go ahead and try out some different animation speeds. Once you are happy with them, you can move on to part 2 of making our character scene.</p>
+			
+			<div class="text-center">
+				<a href="getting_started/create_player_scene_part_2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','PlayerScene1','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

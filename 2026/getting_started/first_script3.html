@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Player Script: Part 3</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+			<h3>Creating the Player Script (Part 3)</h3>
+			<p>On this page we will finish our player script and complete the introduction portion of this course!</p>
+			<h4>Applying Gravity</h4>
+			<p>The first function on our list is the apply_gravity function. The purpose of this function is to handle gravity and our terminal velocity. I'll show you the complete function then we will go over how it works, go ahead and add it beneath the _physics_process function.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_gravity(delta):
+	if not is_on_floor():
+		velocity.y += gravity * delta
+		velocity.y = min(velocity.y,terminal_velocity)</code></pre></div>
+			<p class="hint alert">Note that the functions themselves are <i>outside</i> of the _physics_process function. We call the functions inside of other functions in order to break code up into easier to read and reusable sections.</p>
+			<ol>
+				<li>
+					<h5>if not is_on_floor():</h5>
+					<p>The conditional (or if/then statement) is the core way we can test some condition in programming. If a conditional's condition (the section after if) is true, then all code in the block beneath it is ran. In this case, the conditional is if the player is not on the floor (using the inherited is_on_floor function) then it will run the code beneath it.</p>
+				</li>
+				<li>
+					<h5>velocity.y</h5>
+					<p>Velocity is an inherited variable from the CharacterBody2D that represents the player's current speed both vertically and horizontally. Velocity is actually a data type known as a <strong>Vector2D</strong>, which is a pair of 2 values. The .y after the velocity means we are getting the 'y' axis of the vector2d, or in this case, the vertical speed of the player.</p>
+				</li>
+				<li>
+					<h5>gravity * delta</h5>
+					<p>This phrase means our gravity variable times delta, making sure our gravity stays constant regardless of frame rate.</p>
+				</li>
+				<li>
+					<h5>+=</h5>
+					<p>This assignment means the same as setting velocity.y to velocity.y + gravity * delta.</p>
+				</li>
+				<li>
+					<h5>min(velocity.y,terminal_velocity)</h5>
+					<p>This function returns the lower of its two inputs. This guarantees that our player is never falling faster than our terminal velocity.</p>
+				</li>
+			</ol>
+			<p class="hint add-info">If you want to learn more about keywords and assignments, you can check out Godot's documentation on them <a href="https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>If parts of these functions are confusing, do not worry. This entire course is precoded, and coding knowledge is not required for it. These details are here for if you wish to try and step outside of the provided code and explore some of your own ideas!</p>
+			
+			<h4>Handling Jumps</h4>
+			<p>Next function! For jumping we want to check if the player is on the floor and pressed the jump key then set their vertical velocity to the jump_velocity variable. A function that does that could look like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity</code></pre></div>
+			<p class="hint alert">Note the Input.is_action_just_pressed function. This allows us to check if a button was pressed but ignores the input if it is held down.</p>
+
+			<h4>Applying Acceleration</h4>
+			<p>Acceleration is the rate the player speeds up. For this function we want to check if the player is pushing a movement direction then move our horizontal velocity towards that direction by our acceleration. An example of that would be this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	if input_axis:
+		velocity.x = move_toward(velocity.x, speed * input_axis, acceleration * delta)</code></pre></div>
+			<p class="hint add-info">The move towards function takes 3 arguments, the starting value, the ending value, and the amount to change by. In this case we are taking the player's horizontal speed and adding acceleration until it reaches the max speed in the direction the player is moving.</p>
+			
+			<h4>Applying Friction</h4>
+			<p>Friction is the opposite of acceleration, as it is the rate the player slows down. The functions are very similar, but the condition is if the player isn't moving and the end value is 0.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_friction(input_axis,delta):
+	if not input_axis:
+		velocity.x = move_toward(velocity.x, 0, friction * delta)</code></pre></div>
+			
+			<h4>Updating Animations</h4>
+			<p>While we have all of our movement down, the player definitely doesn't look that good. Let's use our sprite variable to call the play function from our AnimatedSprite2D to change our animations. The following function does this well:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Grounded Animations
+	if input_axis:
+		sprite.flip_h = input_axis < 0
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p class="hint add-info">To check out more details on AnimatedSprite2Ds, you can check out Godot's documentation on them <a href="https://docs.godotengine.org/en/stable/classes/class_animatedsprite2d.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+
+			<p>Congrats! That is the player script (and the introduction of this course) done! Go ahead and test your game, change some variables and have fun! If you are running into issues, here is the completed player script to compare to:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">extends CharacterBody2D
+
+# Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+
+# Reference Variables
+@onready var sprite = $AnimatedSprite2D
+
+func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()
+
+func apply_gravity(delta):
+	if not is_on_floor():
+		velocity.y += gravity * delta
+		velocity.y = min(velocity.y,terminal_velocity)
+
+func handle_jump():
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity
+
+func apply_acceleration(input_axis,delta):
+	if input_axis:
+		velocity.x = move_toward(velocity.x, speed * input_axis, acceleration * delta)
+
+func apply_friction(input_axis,delta):
+	if not input_axis:
+		velocity.x = move_toward(velocity.x, 0, friction * delta)
+
+func update_animations(input_axis):
+	# Grounded Animations
+	if input_axis:
+		sprite.flip_h = input_axis < 0
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p>Once you are happy with what you have, go ahead and go to the next section to see what your next steps will be!</p>
+			<div class="text-center">
+				<a href="modules.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('gettingStarted','PlayerScript3','gettingStartedToggle')
+	}
+</script>
+</body>
+</html>

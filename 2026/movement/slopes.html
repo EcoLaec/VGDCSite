@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Slopes</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,53 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
+			<h3>Slopes</h3>
+			<p>At the moment, all of our tiles are neat right angles, making everything a bit boxy. To fix this we can add slopes to really smooth out our movement. Slopes are usually (one of) the banes of game development. Fortunately for us, Godot already does much of the work required to handle them!</p>
+			<h4>Creating the Slopes</h4>
+			<p>To get started we need to import the stone slope texture from the Slope folder in your Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Once imported, go to your ground tiles scene, and select the tile set property in the inspector, then the tile set tab in the bottom bar. You should see your stone block tile like so:</p>
+			<img src="getting_started/images/stone_tile.png" class="img-fluid" alt="The current state of the ground tiles tileset.">
+			<p>Next press the plus icon beneath the stone tile. Select atlas and choose the newly imported slopes sprite. Select yes on the popup and rename the atlas to Stone Slope.</p>
+			<img src="movement/images/slope_tiles.png" class="img-fluid" alt="The ground tiles tile set after adding the stone slopes.">
+			<p>Of course, the slopes still do not have collision. To add some, select the paint tab in the tileset editor and choose the physics layer 0 property. Using the shape editor below create the shapes for each tile and then click them to assign the shapes.</p>
+			<p class="hint tip">I recommend using the the grid snap options when making the shapes. You can enable them by pressing the icon with the magnet and choosing grid snap. For these set the grid size to 2.</p>
+			<img src="movement/images/slope_collisions.png" class="img-fluid" alt="The slopes collision shapes.">
+			<p>Go ahead and open up your world scene. Select the GroundTiles node and in the tilemap tab in the bottom bar you can select and place the ramps into your level!</p>
+			<h4>Changing Slope Properties</h4>
+			<p>If you try out the new ramps you may notice some oddities with how the player interacts with ramps. We can change some properties to fix or change them. Open up your player scene, select the root node and in the inspector under floor you will see these options:</p>
+			<img src="movement/images/player_floor_options.png" class="img-fluid" alt="The floor section in the player properties.">
+			<p>I made two changes here. First I enabled constant speed, which makes the player move at the same speed when going up and down slopes (if you prefer slopes to slow players moving up them and provide speed to players moving down, keep this disabled.) Secondly, I increased the snap length. The snap length keeps the player attached to slopes when moving down them, making movement smoother. The faster your player is the higher you will need this, but if it's too high the player can end up teleporting down when they walk of ledges.</p>
+			<p class="hint tip">There is a surprising amount of depth with the few floor properties here. Try messing around with some and see what is right for your game.</p>
+			<p>And that's it! Go ahead and make sure your ramps are working as you want, then move on to another module!</p>
 
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h3>Compatibility</h3>
+		<p>Dashing conflicts with 1 other module:</p>
+		<ol>
+			<li><h5>Dashing</h5></li>
+		</ol>
+		<p>If you have any of these modules please follow the instructions for that module:</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+		<h4>Dashing</h4>
+			<p>At the moment when the player dashes on or over a slope, the will snap to it, following it instead of moving straight. To fix this we can temporarily set the player's snap length to 0 while dashing, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
+	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+		velocity.y = 0
+		if input_axis:
+			stored_input = input_axis
+		else:
+			stored_input = -1 if sprite.flip_h else 1
+		dash_timer.start()
+		floor_snap_length = 0.0
+	if dash_timer.time_left > 0.0:
+		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
+		<p>Of course, we need to make sure that it is re-enabled after the dash ends! We can do so in the dash timer's timout function:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_dash_timer_timeout():
+	dash_cooldown.start()
+	floor_snap_length = 3.0</code></pre></div>
+		<p class="hint alert">Make sure to set the 3.0 in the function above with whatever you set your snap length to!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +91,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','Slopes','movementToggle')
 	}
 </script>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Short Hop</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,33 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Short Hopping</h3>
+			<p>Right now every time we press the jump key the player always jumps the exact same height. In order to give the player more control in their movement we can add a short hop, or ability to cut a jump short by letting go of the jump key.</p>
+			<h4>Editing the Player Script</h4>
+			<p>Since we are modifying jumping, lets go to the handle_jump function in the player script. We want the player to be able to reduce their vertical speed while they are in the air and currently jumping (moving up). One way of achieving short hopping would look like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+	# Short Hops
+	if Input.is_action_just_released("Jump") and velocity.y < jump_velocity / 2:
+		velocity.y = jump_velocity / 2</code></pre></div>
+			<p class="hint alert">Note that we are checking if the player's velocity is less than the jump_velocity / 2. This is to make sure the player cannot get a boost by letting go of the jump key.</p>
+			<p>And that's all that is needed! Pretty simple addition, but adds so much in terms of game feel. Go ahead and test out your ability to short hop, then go ahead and select another module!</p>
+			<h3>Compatibility</h3>
+		<p>Short conflicts with 2 other modules:</p>
+		<ol>
+			<li><h5>Double Jump</h5></li>
+			<li><h5>Swimming</h5></li>
+		</ol>
+		<h4>Double Jump and Swimming</h4>
+		<p>Fortunately the solution is the same for both. We just need to change the jump_velocity variables in our short hop section to current_jump_velocity.</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Short Hops
+if Input.is_action_just_released("Jump") and velocity.y < current_jump_velocity / 2:
+		velocity.y = current_jump_velocity / 2</code></pre></div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +71,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','ShortHop','movementToggle')
 	}
 </script>
 </body>

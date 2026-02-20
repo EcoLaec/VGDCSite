@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Double Jump</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,203 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Double Jumps</h3>
+			<p>Double jumping (or triple, quadruple, quintuple ect.) is the ability to jump a certain number of times while in the air. Also known as air jumps, adding this can allow the player more freedom of movement and an option to rethink their jumps while in motion.</p>
+			<h4>Editing the Player Script</h4>
+			<p>In order to implement a flexible air jump system we need three variables: one for how many air jumps the player can make, one to control how strong the air jumps are, and a third to keep track of how many air jumps the player has made since they last touched the ground. We will put the first two in our player stats and the third in our reference variables:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.00
+@export var terminal_velocity = 500.0
+@export var air_jumps = 1
+@export var air_jump_velocity = -240.0
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+# Reference Variables
+@onready var sprite = $AnimatedSprite2D
+var air_jumps_made = 0</code></pre></div>
+		<p>To get started with air jumps, we need to make a couple changes in our handle_jump function. Specifically, we need to change our jump velocity based on if we are on the floor or not, as well as remove the is_on_floor() condition in our Jumping section like so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func handle_jump():
+	# Set Jump Velocity
+	var current_jump_velocity
+	if not is_on_floor():
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):	
+		velocity.y = current_jump_velocity</code></pre></div>
+		<p>Of course, right now you can jump in the air indefinitely. To fix this we will add an if/then statement within the Jumping statement to either increment our air_jumps_made variable and skip the jump if we've reached our maximum number:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func handle_jump():
+	# Set Jump Velocity
+	var current_jump_velocity
+	if not is_on_floor():
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):
+		# Air Jumps
+		if not is_on_floor():
+			if air_jumps_made < air_jumps:
+				air_jumps_made += 1
+			else:
+				return
+
+		velocity.y = current_jump_velocity</code></pre></div>
+		<p>Though if you test now, you may notice something odd: we can only air jump once, ever! To remedy this lets add a final check to reset our air jumps whenever we touch the ground:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+		<pre><code class="language-gdscript">func handle_jump():
+	# Reset Air Jumps
+	if is_on_floor(): air_jumps_made = 0
+
+	# Set Jump Velocity
+	var current_jump_velocity
+	if not is_on_floor():
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):
+		# Air Jumps
+		if not is_on_floor():
+			if air_jumps_made < air_jumps:
+				air_jumps_made += 1
+			else:
+				return
+
+		velocity.y = current_jump_velocity</code></pre></div>
+		<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
+		<h3>Compatibility</h3>
+		<p>Double Jump conflicts with 2 other modules:</p>
+		<ol>
+			<li><h5>Coyote Time</h5></li>
+			<li><h5>Short Hop</h5></li>
+			<li><h5>Swimming</h5></li>
+			<li><h5>Wall Jump</h5></li>
+		</ol>
+		<p>If you have any of these modules please follow the instructions for that module:</p>
+		<h4>Coyote Time</h4>
+		<p>Right now, whenever the player uses coyote time to jump, the player also uses up an air jump. To fix this we need to add a condition to the Set Jump Velocity and Air Jump sections of our handle_jump function to check if the CoyoteTime timer has time left.</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Reset Air Jumps
+	if is_on_floor(): air_jumps_made = 0
+
+	# Set Jump Velocity
+	var current_jump_velocity
+	if not (is_on_floor() or coyote_time.time_left > 0.0):
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):
+		# Air Jumps
+		if not is_on_floor() and coyote_time.time_left == 0.0:
+			if air_jumps_made < air_jumps:
+				air_jumps_made += 1
+			else:
+				return
+
+		velocity.y = current_jump_velocity</code></pre></div>
+
+		<h4>Short Hop</h4>
+		<p>Fortunately the solution for short hopping is simple. We just need to change the jump_velocity variables in our short hop section to current_jump_velocity.</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Short Hops
+if Input.is_action_just_released("Jump") and velocity.y < current_jump_velocity / 2:
+		velocity.y = current_jump_velocity / 2</code></pre></div>
+
+		<h4>Swimming</h4>
+		<p>We want swimming to override air jumping while submerged, as such we will have our Set Jump Velocity section to check if we are in water first, as well as reset our air jumps while in water, like so:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	
+	# Set Jump Velocity
+	var current_jump_velocity
+	if in_water:
+		current_jump_velocity = swim_jump_velocity
+	elif not is_on_floor():
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Reset Air Jumps
+	if is_on_floor() or in_water: air_jumps_made = 0
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):
+		# Air Jumps
+		if not is_on_floor() and not in_water:
+			if air_jumps_made < player_data.air_jumps:
+				air_jumps_made += 1
+			else:
+				return
+		
+		velocity.y = current_jump_velocity</code></pre></div>
+		
+		<h4>Wall Jump</h4>
+			<p>Right now, whenever the player jumps off of a wall, it will also use a double jump. To fix this we need to store if the player has wall jumped this frame, and if so, prevent the player from using their air jumps during the frame (This is why we had to have the handle_wall_jump function come before the handle_jump function.) First lets add the new variable to our reference variables:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+@onready var sprite = $AnimatedSprite2D
+var just_wall_jumped = false</code></pre></div>
+			<p>Next, we must reset the just_wall_jumped variable each frame <strong>after</strong> the handle_jump function. For me, I will put it after the move_and_slide function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	apply_gravity(delta)
+	handle_wall_jump()
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()
+	# After Moving
+	just_wall_jumped = false</code></pre></div>
+			<p>Next, we need to set the just_wall_jumped variable to true whenever the player does wall jump. Doing so is easy enough. Inside of the handle_wall_jump function lets add a simple assignment like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_wall_jump():
+	# Skip if not on Wall
+	if not is_on_wall_only(): return
+	var wall_normal = get_wall_normal()
+	if Input.is_action_just_pressed("Jump"):
+		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
+		velocity.y = jump_velocity * wall_jump_vertical_scale
+		just_wall_jumped = true</code></pre></div>
+			<p>Finally, all we need to do is add a check for the just_wall_jumped variable in our handle_jump function in our air jump checks:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Reset Air Jumps
+	if is_on_floor(): air_jumps_made = 0
+
+	# Set Jump Velocity
+	var current_jump_velocity
+	if not is_on_floor():
+		current_jump_velocity = air_jump_velocity
+	else:
+		current_jump_velocity = jump_velocity
+	
+	# Jumping
+	if Input.is_action_just_pressed("Jump"):
+		# Air Jumps
+		if not is_on_floor() and not just_wall_jumped:
+			if air_jumps_made < air_jumps:
+				air_jumps_made += 1
+			else:
+				return
+
+		velocity.y = current_jump_velocity</code></pre></div>
+		</div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +241,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','DoubleJump','movementToggle')
 	}
 </script>
 </body>

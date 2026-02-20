@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Platforms</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,34 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Platforms</h3>
+			<p>Many platformers have platforms that are onlt semi-solid, allowing the player to jump through them. On this page we will add such one-way platforms into our game.</p>
+			<h4>Setting Up the Down Input</h4>
+			<p>In order to allow the player to fall through platforms when they choose, we need to add a new input: the down key. Navigate to your project settings and go to the input map tab. Create a new action named Down and add the required inputs (for me I will be using both the down arrow and S key.)</p>
+			<img src="movement/images/down_input.png" class="img-fluid" alt="The input map section of the project settings including a new Down action with inputs.">
+			<h4>Adding the Platform Tiles</h4>
+			<p>Next, open up your ground tiles scene. Select the tile map, then the tileset tab in the bottom bar. Press the plus symbol and add a new atlas, using the stone platform sprite from your platforms folder of your VGDC-2025 Assets folder. When the popup appears to automatically create the collision shape, select no.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Name the new atlas Stone Platform</p>
+			<img src="movement/images/platform_tile.png" class="img-fluid" alt="The platform atlas in the ground tileset.">
+			<p>Next, go to the Select tab. Select the tile, then find the physics layer 0 section. Using the shape editor, resize the collision shape to fit the sprite, then under polygon 0 check the one way property.</p>
+			<img src="movement/images/platform_collision.png" class="img-fluid" alt="The collision shape and one way property for the platform tile.">
+			<h4>Editing the Player Script</h4>
+			<p>While right now the player can jump through the platforms, they cannot yet fall back through them. To remedy this, navigate to the player script. In the _physics_process function, directly above move and slide, we will add a check if the player is on the ground and pressing the down key, pushing them down on pixel if so. Since we set up our platform to be one way, the engine will handle the rest!</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	# Before Moving
+	if is_on_floor() and Input.is_action_just_pressed("Down"): position.y += 1
+	move_and_slide()</code></pre></div>
+			<p>Though as is, we have one more, niche problem. Dropping through a platform next to a wall and holding down will cause a strange slow fall effect. To fix this select your player node and in the inspector find the Floor section. Make sure Block on Wall is unchecked, and then you're good!</p>
+			<img src="movement/images/platform_floor_options.png" class="img-fluid" alt="The Floor section options for the player node, with Block on Wall unchecked.">
+			<p>And you're done! Go ahead and add some platforms to your level and try them out! Then go ahead and move onto another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +72,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','Platforms','movementToggle')
 	}
 </script>
 </body>

@@ -98,9 +98,11 @@
 			<p>While we have all of our movement down, the player definitely doesn't look that good. Let's use our sprite variable to call the play function from our AnimatedSprite2D to change our animations. The following function does this well:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+
 	# Grounded Animations
 	if input_axis:
-		sprite.flip_h = input_axis < 0
 		sprite.play("walk")
 	else:
 		sprite.play("idle")
@@ -156,9 +158,11 @@ func apply_friction(input_axis,delta):
 		velocity.x = move_toward(velocity.x, 0, friction * delta)
 
 func update_animations(input_axis):
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+	
 	# Grounded Animations
 	if input_axis:
-		sprite.flip_h = input_axis < 0
 		sprite.play("walk")
 	else:
 		sprite.play("idle")

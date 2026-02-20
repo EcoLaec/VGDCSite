@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Aerial Mobility</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,75 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Aerial Mobility</h3>
+			<p>Right now our player is able to move just as freely in the air as they can on the ground. This is not very realistic, and while we aren't exactly striving for realism, having some reduced acceleration and friction in the air can help the player make sense of the controls easier.</p>
+			<h4>Editing the Player Script</h4>
+			<p>We need two variables for aerial mobility: air acceleration and air friction. These will replace their regular counterparts when the player is not grounded. Lets put these in the player stats:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+@export var air_acceleration = 600.0
+@export var air_friction = 200.0</code></pre></div>
+			<p>Next, lets edit our apply_acceleration function. First we will create a new local variable called current_acceleration. Then we will set it to our air_acceleration if we are in the air, and to our base acceleration otherwise. Then, we will change our acceleration to current_acceleration in our move_toward method call like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	# Set Acceleration
+	var current_acceleration
+	if not is_on_floor():
+		current_acceleration = air_acceleration
+	else:
+		current_acceleration = acceleration
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta</code></pre></div>
+			<p>Finally, we can easily repeat the same for the apply_friction function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_friction(input_axis,delta):
+	# Set Friction
+	var current_friction
+	if not is_on_floor():
+		current_friction = air_friction
+	else:
+		current_friction = friction
+
+	if not input_axis:
+		velocity.x = move_toward(velocity.x, 0, current_friction * delta)</code></pre></div>
+			<p>And that's all that is required! Go ahead and try some different values for your stats and then move on to another module.</p>
+
+			<h3>Compatibility</h3>
+			<p>Aerial Mobility conflicts with 1 other module:</p>
+			<ol>
+				<li><h5>Sprinting</h5></li>
+			</ol>
+			<p>If you have any of these modules please follow the instructions for that module:</p>
+			<h4>Sprinting</h4>
+			<p>A relatively minor fix, but in order to make sure that the player's speed is consistent, make sure to update the speed variable to current_speed for both grounded and aerial acceleration. in the apply_acceleration function as shown:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+
+	# Set Speed
+	var current_speed
+	if sprinting: 
+		current_speed = sprint_speed
+	else:
+		current_speed = speed
+
+	# Set Acceleration
+	var current_acceleration
+	if not is_on_floor():
+		current_acceleration = air_acceleration
+	else:
+		current_acceleration = acceleration
+
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta)</code></pre></div>
+		</div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +113,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','AirMove','movementToggle')
 	}
 </script>
 </body>

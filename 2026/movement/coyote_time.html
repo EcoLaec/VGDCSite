@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Coyote Time</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,56 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Coyote Time</h3>
+			<p>Coyote time is a mechanic added to games that allows the player to jump for a brief window of time after leaving the edge of a platform. Adding this allows a lot more forgiving platforming, as well as making the game feel more fair to the player.</p>
+			<h4>Adding the Timer</h4>
+			<p>The first thing we want to do is add a timer node to our player. Navigate to the player scene tree and add a new node to our player node. Find the timer node, add it, and then rename it (I will name mine CoyoteTime).</p>
+			<img src="movement/images/coyote_time_scene_tree.png" class="img-fluid">
+			<p>Once you have the timer added, select it and look in the inspector. We want to set the Wait Time to a very small number (something between 0.1 and 0.15 works well), and check One Shot (which makes the timer stop when it's done instead of looping.)</p>
+			<img src="movement/images/coyote_time_inspector.png" class="img-fluid">
+			<h4>Editing the Player Script</h4>
+			<p>We will need access to our timer in our player script, so begin to drag the node into the script, hold control, then drop it into your script with the rest of your reference variables. It should look similar to this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">@onready var coyote_time = $CoyoteTime</code></pre></div>
+			<p>To know when we want to start the timer, we need to find a way to check when the player leaves the edge of the platform (without jumping). Fortunately, since we have the move_and_slide method in our _physics_process function, we are able to check both before and after moving the player to see if they just left a ledge. One way of doing this is as follows:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	# Before Moving
+	var was_on_floor = is_on_floor()
+	move_and_slide()
+	# After Moving
+	var just_left_ledge = was_on_floor and not is_on_floor() and velocity.y >= 0
+	if just_left_ledge: coyote_time.start()</code></pre></div>
+			<p>First, we store if the player is on the floor before moving, then we move the player. After that we check if the player was on the floor, if the player is no longer on the floor and that the player is falling (so not jumping). If all those conditions are met, we start the CoyoteTime timer.</p>
+			<p class="hint alert">Note the order we do things here. If we messed up what went before or after the move_and_slide method the timer would not work properly.</p>
+			<p>Of course, having the timer start does not do anything on its' own. We must also include the CoyoteTime timer in our handle_jump function. We can do this by checking if coyote_time.time_left is greater than 0 or if the player is on the ground. That script would then look like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Jumping
+	if (is_on_floor() or coyote_time.time_left > 0.0) and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity</code></pre></div>
+		<p class="hint alert">Note the parentheses around the is_on_floor and coyote_time.time_left conditions. This is to make sure the player jumps if either one of those conditions are true and if the player is pressing the jump key.</p>
+		<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
+		<h3>Compatibility</h3>
+		<p>Coyote Time conflicts with 1 other module:</p>
+		<ol>
+			<li><h5>Double Jump</h5></li>
+		</ol>
+		<p>If you have any of these modules please follow the instructions for that module:</p>
+		<h4>Double Jump</h4>
+		<p>Right now, whenever the player uses coyote time to jump, the player also uses up an air jump. To fix this we need to add a condition to the air jump section of our handle_jump function to check if the CoyoteTime timer has time left.</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Air Jumps
+if Input.is_action_just_pressed("Jump") and air_jumps_made < air_jumps and coyote_time.time_left == 0.0:
+	velocity.y = current_jump_velocity
+	air_jumps_made += 1</code></pre></div>
+		</div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +94,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','CoyoteTime','movementToggle')
 	}
 </script>
 </body>

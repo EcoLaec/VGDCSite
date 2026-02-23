@@ -38,7 +38,7 @@
 			<h3>Dashing</h3>
 			<p>Dashing can be thought of as a horizontal jump, a short but fast burst of speed to clear gaps or reposition. With this module we will create a precise dash mechanic to aid in tight platforming sections.</p>
 			<h4>Getting the New Assets</h4>
-			<p>Before we can start adding the ability to dash, we need the new sprites! Go ahead and open up the Dashing folder in your VGDC-2025 Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p>Before we can start adding the ability to dash, we need the new sprites! Go ahead and open up the Dashing folder in your VGDC Assets folder, find the appropriate file and drag it into your file system.</p>
 			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called dash and import the new file as a frame.</p>
 			<img src="movement/images/dash_sprite_frames.png" class="img-fluid">
@@ -124,6 +124,9 @@ var stored_input = 0</code></pre></div>
 		<p>Finally, to add the dashing animation to our dinosaur friend, we need to add a new statement in the update_animations function. We need to make sure that while dashing, we use the stored input instead of the actual input to decide where the player is facing, as well as add the return keyword to override the rest of the function, as shown:</p>
 		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 		<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+
 	# Dashing
 	if dash_timer.time_left > 0.0:
 		sprite.flip_h = stored_input < 0
@@ -132,7 +135,6 @@ var stored_input = 0</code></pre></div>
 	
 	# Grounded Animations
 	if input_axis:
-		sprite.flip_h = input_axis < 0
 		sprite.play("walk")
 	else:
 		sprite.play("idle")
@@ -193,7 +195,7 @@ var stored_input = 0</code></pre></div>
 		<p class="hint alert">Make sure to set the 3.0 in the function above with whatever you set your snap length to!</p>
 
 		<h4>Sprinting</h4>
-			<p>If you were looking to have sprinting and dashing, you may of noticed the use of the same key. In order to use both you will need to set one of the two to a different key. Additionally, the dash's deacceleration interferes with sprinting. We can fix this by setting the max speed for the player to their sprint speed like so:</p>
+			<p>If you were looking to have sprinting and dashing, you may of noticed the use of the same key. In order to use both you will need to set one of the two to a different key. Additionally, the dash's deacceleration interferes with sprinting. We can fix this by setting the max speed for the player to their current speed like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
 	sprinting = Input.is_action_pressed("Sprint")

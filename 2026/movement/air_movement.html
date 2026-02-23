@@ -78,31 +78,47 @@
 			<h3>Compatibility</h3>
 			<p>Aerial Mobility conflicts with 1 other module:</p>
 			<ol>
-				<li><h5>Sprinting</h5></li>
+				<li><h5>Swimming</h5></li>
 			</ol>
 			<p>If you have any of these modules please follow the instructions for that module:</p>
-			<h4>Sprinting</h4>
-			<p>A relatively minor fix, but in order to make sure that the player's speed is consistent, make sure to update the speed variable to current_speed for both grounded and aerial acceleration. in the apply_acceleration function as shown:</p>
+			<h4>Swimming</h4>
+			<p>A relatively minor fix, but to make sure the proper acceleration and friction is selected you need to chain together if statements using elif (else if), starting in the apply_acceleration function:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
 	sprinting = Input.is_action_pressed("Sprint")
-
+	
 	# Set Speed
 	var current_speed
-	if sprinting: 
-		current_speed = sprint_speed
+	if in_water:
+		current_speed = swim_speed
 	else:
 		current_speed = speed
-
+	
 	# Set Acceleration
 	var current_acceleration
-	if not is_on_floor():
+	if in_water:
+		current_acceleration = swim_acceleration
+	elif not is_on_floor():
 		current_acceleration = air_acceleration
 	else:
 		current_acceleration = acceleration
-
+	
 	if input_axis:
 		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta)</code></pre></div>
+		<p>Then the apply_friction function:</p>
+		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_friction(input_axis,delta):
+	# Set Friction
+	var current_friction
+	if in_water:
+		current_friction = swim_friction
+	elif not is_on_floor():
+		current_friction = air_friction
+	else:
+		current_friction = friction
+	
+	if not input_axis:
+		velocity.x = move_toward(velocity.x, 0, current_friction * delta)</code></pre></div>
 		</div>
 		</div>
 	</div>

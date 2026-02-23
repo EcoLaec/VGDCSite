@@ -47,3 +47,12 @@ function copyCode(btn) {
 	document.execCommand("copy");
 	tempArea.remove();
 }
+
+function getValue() {
+	let inputField = document.getElementById('secretCode');
+	let inputValue = inputField.value;
+	inputField.value = '';
+	if (inputValue == "_cheats") {
+		window.location.href = 'gameplay/cheats.html'
+	}
+}

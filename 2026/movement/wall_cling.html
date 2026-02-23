@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Wall Clinging</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,133 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Wall Clinging</h3>
+			<p class="hint warning"><strong>IMPORTANT! While not required, it is strongly recommended to have done the <a href="movement/wall_jump.html">Wall Jump</a> module before this one!</strong></p>
+			<p>Wall clinging is the ability to stick or slide down walls. Adding this can give more flexibility and freedom to the player by giving them more time to make decisions.</p>
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the functionality of wall clinging, we need the new sprites! Go ahead and open up the Wall Cling folder in your VGDC Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called cling and import the new file as a frame.</p>
+			<img src="movement/images/wall_cling_sprite_frames.png" class="img-fluid">
+			<h4>Editing the Player Script</h4>
+			<p>Next navigate to the player script. Wall clinging requires two variables: one to set the fall speed of the player while wall clinging and one boolean to store whether the player is currently clinging to a wall (important for animations.)</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+@export var cling_speed = 75.0
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+# Reference Variables
+@onready var sprite = $AnimatedSprite2D
+var clinging = false</code></pre></div>
+			<p>Next we need to check each frame if the player is clinging to a wall. To test this we will check if they are holding a movement direction and they are on a wall but not the floor. We will do this each frame in the _physics_process function like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	clinging = is_on_wall_only() and input_axis and velocity.y >= 0.0
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()</code></pre></div>
+			<p>Then we need to change the player's terminal velocity based on whether or not they are clinging to a wall. We can do this in the apply_gravity function like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_gravity(delta):
+	# Set Terminal Velocity
+	var current_terminal_velocity
+	if clinging:
+		current_terminal_velocity = player_data.cling_speed
+	else:
+		current_terminal_velocity = player_data.terminal_velocity
+
+	if not is_on_floor():
+		velocity.y += gravity * delta
+		velocity.y = min(velocity.y,current_terminal_velocity)</code></pre></div>
+			<p class="hint alert">Note the change in the min method of terminal_velocity to current_terminal_velocity.</p>
+			<p>Finally, we can edit the update_animations function by playing the cling animation when the clinging variable is true:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+	
+	# Grounded Animations
+	if input_axis:
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")
+		if clinging: sprite.play("cling")</code></pre></div>
+			<p>And that is all! Go ahead and try out your new ability and mess around with some variables, then go ahead and move on to a new module.</p>
+
+			<h3>Compatibility</h3>
+			<p>Wall cling conflicts with 2 other modules:</p>
+			<ol>
+				<li><h5>Dashing</h5></li>
+				<li><h5>Swimming</h5></li>
+			</ol>
+			<p>If you have the module please follow the instructions:</p>
+			
+			<h4>Dashing</h4>
+			<p>Right now, whenever the player attempts to dash while clinging to a wall, they merely dash directly into it! To remedy this we will reverse the player's stored input if they are clinging, as so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
+	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+		velocity.y = 0
+		if input_axis:
+			stored_input = input_axis
+		else:
+			stored_input = -1 if sprite.flip_h else 1
+		if clinging: stored_input = -stored_input
+		dash_time.start()
+		floor_snap_length = 0.0
+	if dash_time.time_left > 0.0:
+		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
+
+			<h4>Swimming</h4>
+			<p>We don't want the player to be able to wall cling while swimming. As such we will add a condition to our clinging check to disable while the player is in water, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	clinging = is_on_wall_only() and input_axis and velocity.y >= 0.0 and not in_water
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()</code></pre></div>
+			<p>In addition we need to remedy the fact we have multiple potential terminal velocities. We can do this with elif (else if) statements:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_gravity(delta):
+	# Set Terminal Velocity
+	var current_terminal_velocity
+	if in_water:
+		current_terminal_velocity = player_data.swim_terminal_velocity
+	elif clinging:
+		current_terminal_velocity = player_data.cling_speed
+	else:
+		current_terminal_velocity = player_data.terminal_velocity
+	
+	# Set Gravity
+	var current_gravity
+	if in_water:
+		current_gravity = player_data.swim_gravity
+	else:
+		current_gravity = player_data.gravity
+	
+	if not is_on_floor():
+		velocity.y += current_gravity * delta
+		velocity.y = min(velocity.y,current_terminal_velocity)</code></pre></div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +171,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','WallCling','movementToggle')
 	}
 </script>
 </body>

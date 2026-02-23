@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Sprinting</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -35,31 +35,126 @@
 
 		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
-
-			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Sprinting</h3>
+			<p>We can add the ability for the player to run when holding a key. Doing so can add more options for the player and frankly is just fun.</p>
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the ability to sprint, we need the new sprites! Go ahead and open up the Sprinting folder in your VGDC Assets folder, find the appropriate file and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called sprint and import the new file as a frame.</p>
+			<img src="movement/images/sprint_sprite_frames.png" class="img-fluid">
+			<p class="hint alert">Note that the animation speed for sprinting is 12 fps! You can change it but you do want it faster than walking.</p>
+			<h4>Adding the Input</h4>
+			<p>Next we must add a new input action for sprinting. Go to your project settings then the input map tab. Create a new action called Sprint and add a key (I will add shift as my sprint key.)</p>
+			<img src="movement/images/sprint_inputs.png" class="img-fluid">
+			<h4>Editing the Player Script</h4>
+			<p>Now we can finally add the functionality to our player script. First we need two variables: one in our player stats for our sprinting speed, and one in our reference variables to store whether or not the player is sprinting. Our variables should look something like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+@export var sprint_speed = 130.0
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+# Reference Variables
+@onready var sprite = $AnimatedSprite2D
+var sprinting = false</code></pre></div>
+			<p>Next, we need to be able to switch between our regular speed and sprint_speed variables based on our input. We can do this by adding a new variable in our apply_acceleration function that replaces the max speed argument of the move_toward method with the proper speed. That should look like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+
+	# Set Speed
+	var current_speed
+	if sprinting:
+		current_speed = sprint_speed
+	else:
+		current_speed = speed
+
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
+			<p class="hint alert">Note that speed was replaced with current_speed in the move_toward method.</p>
+			<p>Finally, we can add the animations to our update_animations function. Inside of our grounded animations we need to check if sprinting is true, and if so, play the sprint animation instead of walk. That should look like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+
+	# Grounded Animations
+	if input_axis:
+		sprite.flip_h = input_axis < 0
+		if sprinting: 
+			sprite.play("sprint")
+		else:
+			sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p>And we are done! Go ahead and test out your new ability, mess around with the speed and once you are happy with it, move on to another module!</p>
+
+			<h3>Compatibility</h3>
+			<p>Sprinting conflicts with 3 other modules:</p>
+			<ol>
+				<li><h5>Crouching and Swimming</h5></li>
+				<li><h5>Dashing</h5></li>
+			</ol>
+			<p>If you have any of these modules please follow the instructions for that module:</p>
+
+			<h4>Crouching and Swimming</h4>
+			<p>Since each of these modules modify the player's max speed, we need to set the order of priority, with scrouching overriding sprinting and swimming overriding both. We can do this using elif (else if) statements like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+	
+	# Set Speed
+	var current_speed
+	if in_water:
+		current_speed = swim_speed
+	elif crouching:
+		current_speed = crouch_speed
+	elif sprinting:
+		current_speed = sprint_speed
+	else:
+		current_speed = speed
+	
+	# Set Acceleration
+	var current_acceleration
+	if in_water:
+		current_acceleration =swim_acceleration
+	else:
+		current_acceleration = acceleration
+	
+	# Deacceleration after Dash
+	if abs(velocity.x) > current_speed: velocity.x = move_toward(velocity.x, current_speed * input_axis, dash_acceleration * delta)
+	
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta)</code></pre></div>
+
+			<h4>Dashing</h4>
+			<p>If you were looking to have sprinting and dashing, you may of noticed the use of the same key. In order to use both you will need to set one of the two to a different key. Additionally, the dash's deacceleration interferes with sprinting. We can fix this by setting the max speed for the player to their current speed like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+	
+	# Set Speed
+	if sprinting:
+		current_speed = sprint_speed
+	else:
+		current_speed = speed
+	
+	# Deacceleration after Dash
+	if abs(velocity.x) > current_speed: velocity.x = move_toward(velocity.x, current_speed * input_axis, dash_acceleration * delta)
+	
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +164,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','Sprint','movementToggle')
 	}
 </script>
 </body>

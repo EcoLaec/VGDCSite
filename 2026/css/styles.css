@@ -207,6 +207,13 @@ h4 {
 	font-size: 14px;
 }
 
+input {
+	vertical-align: middle;
+    padding: 6.5px;
+    border-radius: 5px;
+    border-width: 1px;
+}
+
 .img-fluid {
 	margin-bottom: 20px;
 }

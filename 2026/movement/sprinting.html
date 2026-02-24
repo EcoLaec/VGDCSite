@@ -42,7 +42,7 @@
 			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
 			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called sprint and import the new file as a frame.</p>
 			<img src="movement/images/sprint_sprite_frames.png" class="img-fluid">
-			<p class="hint alert">Note that the animation speed for sprinting is 12 fps! You can change it but you do want it faster than walking.</p>
+			<p class="hint tip">I set my sprinting animation speed to 12 fps, as I thought that looked right. You can change it, but you do want it faster than walking.</p>
 			<h4>Adding the Input</h4>
 			<p>Next we must add a new input action for sprinting. Go to your project settings then the input map tab. Create a new action called Sprint and add a key (I will add shift as my sprint key.)</p>
 			<img src="movement/images/sprint_inputs.png" class="img-fluid">
@@ -109,7 +109,7 @@ var sprinting = false</code></pre></div>
 			<p>If you have any of these modules please follow the instructions for that module:</p>
 
 			<h4>Crouching and Swimming</h4>
-			<p>Since each of these modules modify the player's max speed, we need to set the order of priority, with scrouching overriding sprinting and swimming overriding both. We can do this using elif (else if) statements like so:</p>
+			<p>Since each of these modules modify the player's max speed, we need to set the order of priority, with crouching overriding sprinting and swimming overriding both. We can do this using elif (else if) statements like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
 	sprinting = Input.is_action_pressed("Sprint")

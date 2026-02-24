@@ -37,29 +37,177 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Crouching</h3>
+			<p>Simply put, we can add the ability for the player crouch down, reducing the size of their collision to get into tight spaces.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the ability to crouch, we need the new sprites! Go ahead and open up the Crouching folder in your VGDC Assets folder, find the appropriate files and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. We will create two new animations named crouch_idle and crouch_walk. Go ahead and import the new files as frames.</p>
+			<img src="movement/images/crouch_sprite_frames.png" class="img-fluid">
+			<p class="hint tip">I set my crouch_idle animation speed to 4 and my crouch_walk speed to 8 (80% of the regular speeds). You can go ahead and change it towhat you want, but I do recommend slower than your regular idle/walking.</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
+			<h4>Adding the Input</h4>
+			<p>Next we must add a new input action for crouching. Go to your project settings then the input map tab. Create a new action called Down and add a key (I will use S and the down arrow as my down keys.)</p>
+			<img src="movement/images/down_input.png" class="img-fluid">
 
-			<!-- Codeblock -->
+			<h4>Setting up the Player Scene</h4>
+			<p>Next we will need to add a couple things to our player's scene tree. First, add a new CollisionShape2D node to our player, rename it to CrouchCollision and move it beneath our original CollisionShape2D. This will be the collision we use while crouching. We also want to add a new Area2D node named HeadCheck, as well as another CollisionShape2D as a child of HeadCheck, naming it HeadCollision. This will be used to prevent the player from getting stuck in the ceiling.</p>
+			<img src="movement/images/crouch_scene_tree.png" class="img-fluid">
+			<p>Next let's add the actual shapes to our new CollisionShape2Ds. Select our CrouchCollision node, and in the inspector add a new RectangleShape to it. Edit the shape in the Viewport to the size you want. I made mine 4 pixels shorter than the normal collider. Then select HeadCollision and add another RectangleShape, editing it to take up the remaining space between the CrouchCollision shape and default collision, like so:</p>
+			<img src="movement/images/crouch_collision_shapes.png" class="img-fluid">
+			<p class="hint tip">Going into your player's AnimatedSprite2D and selecting the crouch_idle animation can make sizing the box much easier.</p>
+			<p>Now we need to make sure that our HeadCheck is connecting properly with our script. We can start this by first selecting HeadCheck and in the inspector changing its collision layers to be empty and keeping its masks on world:</p>
+			<img src="movement/images/crouch_collision_masks.png" class="img-fluid">
+			<p>Finally, still in HeadCheck's inspector, go to the signals tab, connecting both the body_entered and body_exited signals to our script by double clicking them (you can keep the default name and settings for both.)</p>
+			<img src="movement/images/head_check_signals.png" class="img-fluid">
+
+			<h4>Editing the Player Script</h4>
+			<p>To get started in the player script we will need to add 6 new variables! First, we will add crouch_speed to our player stats, which I set to 80.0. Next we will need to get access to our default CollisionShape2D, CrouchCollision and HeadCheck in our script. We can get them by starting to drag them from our scene tree, holding control and then dropping them into our script (keeping the default names). Finally, we will add two more reference variables, those being crouching and head_blocked, both started as false:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+@export var crouch_speed = 80.0
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+# Reference Variables
+@onready var sprite = $AnimatedSprite2D
+@onready var head_check: Area2D = $HeadCheck
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var crouch_collision: CollisionShape2D = $CrouchCollision
+var crouching = false
+var head_blocked = false</code></pre></div>
+			<p>Next up let's add a new method into our _physics_process funtion, that being handle_crouching(). No need for any arguments, as this function will only manage starting and ending our crouching state.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	var input_axis = Input.get_axis("Left","Right")
+	handle_crouching()
+	apply_gravity(delta)
+	handle_jump()
+	apply_acceleration(input_axis,delta)
+	apply_friction(input_axis,delta)
+	update_animations(input_axis)
+	move_and_slide()</code></pre></div>
+			<p>Of course we will get an error, so lets quickly make our handle_crouching function. In the new function we want to test if the player is holding the down input and is currently on the ground. If so, we will enable the crouch_collider, disable our default collider and set crouching to true. If the condition isn't met, we want to check if the player's head is blocked, and if not, reverse the changes we made (we check head_blocked so the player can't uncrouch when they would be inside of a wall).</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_crouching():
+	if is_on_floor() and Input.is_action_pressed("Down"):
+		crouching = true
+		crouch_collision.disabled = false
+		collision_shape_2d.disabled = true
+	elif head_blocked == false:
+		crouching = false
+		collision_shape_2d.disabled = false
+		crouch_collision.disabled = true</code></pre></div>
+			<p>Right now, however, we aren't actually updating if the player's head is blocked! To fix this we will edit the functions we added earlier through the HeadCheck's signals. We will simply set head_blocked to true when HeadCheck enters a body, and set head_blocked to false when it exits one, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_head_check_body_entered(_body):
+	head_blocked = true
+
+func _on_head_check_body_exited(_body):
+	head_blocked = false</code></pre></div>
+			<p>On a related note, we also want to prevent the player from jumping if their head is blocked. We do this simply by returning out of the handle_jump function if head_blocked is true:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_jump():
+	# Blocked Jumping
+	if head_blocked == true: return
+	
+	# Jumping
+	if is_on_floor() and Input.is_action_just_pressed("Jump"):
+		velocity.y = jump_velocity</code></pre></div>
+			<p>Now we are ready to actually apply some actual functionality! First lets apply our crouch_speed while crouching. We do this by creating a new current_speed variable in our apply_acceleration function, setting its value based on an if then statement:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	# Set Speed
+	var current_speed
+	if crouching:
+		current_speed = crouch_speed
+	else:
+		current_speed = speed
+		
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, acceleration * delta)</code></pre></div>
+			<p class="hint alert">Note that speed was replaced with current_speed in the move_toward method.</p>
+			<p>Finally, let's make sure our crouching animations play by editing our update_animations function. Specifically we want to add a condition to play our crouch_walk and crouch_idle animations instead of the default ones while crouching, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	if input_axis: sprite.flip_h = input_axis < 0
+	
+	# Grounded Animations
+	if input_axis:
+		if crouching: 
+			sprite.play("crouch_walk")
+		else:
+			sprite.play("walk")
+	else:
+		if crouching:
+			sprite.play("crouch_idle")
+		else:
+			sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p>And we are done! Go ahead and test out your new ability, mess around with the speed and once you are happy with it, move on to another module!</p>
+
+			<h3>Compatibility</h3>
+			<p>Crouching conflicts with 4 other modules:</p>
+			<ol>
+				<li><h5>Hazard Setup</h5></li>
+				<li><h5>Sprinting and Swimming</h5></li>
+				<li><h5>Trigger Setup</h5></li>
+			</ol>
+			<p>If you have any of these modules please follow the instructions for that module:</p>
+
+			<h4>Sprinting and Swimming</h4>
+			<p>Since each of these modules modify the player's max speed, we need to set the order of priority, with crouching overriding sprinting and swimming overriding both. We can do this using elif (else if) statements like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
+	sprinting = Input.is_action_pressed("Sprint")
+	
+	# Set Speed
+	var current_speed
+	if in_water:
+		current_speed = swim_speed
+	elif crouching:
+		current_speed = crouch_speed
+	elif sprinting:
+		current_speed = sprint_speed
+	else:
+		current_speed = speed
+	
+	# Set Acceleration
+	var current_acceleration
+	if in_water:
+		current_acceleration =swim_acceleration
+	else:
+		current_acceleration = acceleration
+	
+	# Deacceleration after Dash
+	if abs(velocity.x) > current_speed: velocity.x = move_toward(velocity.x, current_speed * input_axis, dash_acceleration * delta)
+	
+	if input_axis:
+		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta)</code></pre></div>
+
+			<h4>Swimming Continued</h4>
+			<p>In addition to the previous fix, we want swimming to actually prevent crouching entirely. We can do this by adding a condition to check if the player is in water in our handle_crouching function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_crouching():
+	if is_on_floor() and Input.is_action_pressed("Down") and not in_water:
+		crouching = true
+		crouch_collision.disabled = false
+		collision_shape_2d.disabled = true
+	elif head_blocked == false:
+		crouching = false
+		collision_shape_2d.disabled = false
+		crouch_collision.disabled = true</code></pre></div>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +217,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Movement','Crouching','movementToggle')
 	}
 </script>
 </body>

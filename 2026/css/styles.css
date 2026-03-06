@@ -181,6 +181,11 @@ h4 {
 	background-color: #fff3c4;
 }
 
+.checkpoint {
+	border-color: #e07c00;
+	background-color: #ffe5c4;
+}
+
 .new-tag {
 	font-weight: bold;
 	color: #ffcd00;

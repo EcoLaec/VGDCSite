@@ -37,29 +37,48 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Collectables</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="trigger_setup.html">Trigger Setup</a> module to be completed first!</strong></p>
+			<p>In this module we will be creating pick-ups, objects the player can run into for some benefit. Many other modules will use this functionality, but for now we will simply add gems the player can pick up.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Creating the Pickup Scene</h4>
+			<p>Due to the fact so many different modules will require the player to be able to pick something up, we will be making a parent scene first and foremost with the basic pickup functionality. To get started, create a new scene. For the root node, select an Area2D node and rename it to Pickup. Then, create two new child nodes for the Pickup node, one being an CollisionShape2D and another being an AnimatedSprite2D. The scene should then look like this:</p>
+			<img class="img-fluid" src="gameplay/images/pickup_scene_tree.png" alt="Pickup scene tree">
+			<p class="hint alert">Note that we are not adding a collision shape nor sprite frames to our Pickup scene. This is so that each inherited scene can have it's own unique animations and collision shapes!</p>
+			<p>Next, we need to set the Pickup node's collision layers and masks. In the inspector while you have the Pickup node selected go under the collision section. We will set the masks to be empty and the layer to be our trigger layer, like so:</p>
+			<img class="img-fluid" src="gameplay/images/trigger_collision.png" alt="Pickup scene tree">
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Creating the Pickup Script</h4>
+			<p>Creating the script for pickups is pretty simple. First select the Pickup node and add a new script, having it inherit from our Trigger class. At the top of the script, above the extends Trigger we will make our pickups a new class by adding class_name Pickup. By adding a new class name, we effectively create a new node type that other scripts can inherit from. So later when we create new types of pickups, we don't need to copy any code we already wrote!</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">class_name Pickup
+extends Trigger</code></pre></div>
+			<p>Next we want to override the onEnter function from the Trigger class, specifically in the function body we want to call the queue_free() method, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func onEnter(_player):
+	queue_free()</code></pre></div>
+			<p class="hint tip">Note that we aren't actually using the _player argument right now. Future pickups will use it, but since we aren't here I added an underscore to let Godot know it is on purpose (otherwise it would give us a warning).</p>
+			<p>Make sure to save the Pickup scene!</p>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>Creating the Jade Pickup</h4>
+			<p>Of course, right now we don't have any pickup for the player to interact with. To remedy this we need to create a new inherited scene. In the filesystem right click the pickup scene and select new inherited scene.</p>
+			<img src="gameplay/images/pickup_new_inherited_scene.png" class="img-fluid" alt="New inherited scene from pickup scene.">
+			<p>In the new scene, rename the Pickup node to Jade, then select the AnimatedSprite2D node. In the inspector create a new sprite frames and import the jade sprite from the Pickups folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>In the sprite frames, import the jade sprite as a sprite sheet, set it to autoplay on load, set the play speed to 12 fps and set the first frame's duration to 50 like so:</p>
+			<img src="gameplay/images/jade_sprite_frames.png" class="img-fluid" alt="Jade sprite frames.">
+			<p>Next, we need to add a collision shape to our jade pickup. Select the Collisionshape2D node and in the inspector create a new circle shape. Resize it to fit the sprite.</p>
+			<img src="gameplay/images/jade_collision_shape.png" class="img-fluid" alt="Jade viewport with sprite and collision shape.">
+			<p>And that is the pickup done! you can save the scene and drag and drop it into your world scene as per usual, though you may notice a problem: adding many pickups quickly begins to clutter the world's scene tree. To fix this we can use another function of the Tilemap node.</p>
+			
+			<h4>Creating a Scene Collection</h4>
+			<p>In the world scene, right click the World node and create a new TileMapLayer node as a child node. Name it LevelObjects. In the inspector create a new tileset, then in the tileset tab in the bottom bar press the plus symbol. You will see the option for an atlas (which we already have used) and one for a new scenes collection, select that.</p>
+			<img src="gameplay/images/new_scene_collection.png" class="img-fluid" alt="New scene collection.">
+			<p>A scene collection is a grouping of scenes as tiles, allowing you to place scenes the same way you do with tiles, as well as neatly organizing them as to not clutter up the scene tree. Make sure to name the scene collection (I will name mine Pickups) then you can drag and drop the jade scene into the large box on the right of the bottom bar.</p>
+			<img src="gameplay/images/pickup_tileset.png" class="img-fluid" alt="Pickups tileset.">
+			<p>Go ahead and save the scene, then select the tilemap tab in the bottom bar. You can now place the jade scene in the same way you placed your ground tiles!</p>
+			<p class="hint tip">Note that you can put as many scene collections and scenes into the LevelObjects tilemap. You can add other pickups, enemies and even the player! Go ahead and try out organizing your level scene with scene collections!</p>
+			<p>And that is pickups set up! While the jade doesn't do anything right now, in later modules you can add score to it, or simply have it as a way to guide players through the level. Either way, test it out, then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +88,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Gameplay','Collectables','gameplayToggle')
 	}
 </script>
 </body>

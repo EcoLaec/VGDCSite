@@ -37,29 +37,56 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Trigger Setup</h3>
+			<p>On this page we will create the functionality for the player to interact with non-hazardous objects (what I call triggers). In later modules we will use this for adding things like gems, health pickups and checkpoints.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Creating the Trigger Physics Layer</h4>
+			<p>Before we can create any functionality for hazards, we need to let Godot know we want to track a new physics layer. Navigate to project settings, then find the Layer names -> 2D Physics option. Name Layer 4 Trigger.</p>
+			<img src="gameplay/images/trigger_physics_layers.png" class="img-fluid">
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Setting up the Player</h4>
+			<p>Next, we need to add a way for the player to detect triggers. We can do this by going to our player scene, right-clicking our player node and adding a new Area2D node. Let's name the new node TriggerCollider. Then, right-click the new node and add a CollisionShape2D node.</p>
+			<img src="gameplay/images/trigger_scene_tree.png" class="img-fluid">
+			<p>Right now, however, our collider is still set to default layers and masks. For this specific collider we actually want to set it's mask to trigger and have no layer. This is because we want the actual object to be able to run its own script instead of the player's. We can set the collision layers in the inspector while having the TriggerCollider selected.</p>
+			<img src="gameplay/images/player_trigger_collision.png" class="img-fluid">
+			<p>Next, select the new collision shape, go to the inspector and add a new rectange shape. Let's resize it to fit the player closer.</p>
+			<img src="gameplay/images/trigger_collision_shape.png" class="img-fluid">
+			<p class="hint tip">I generally make the trigger collider shape larger than the player's collider. This is to make collecting and interacting with positive objects easier. This makes the game feel more rewarding and "fair".</p>
+			<p>Of course, just setting up the collision doesn't do anything on its own. Next we want to connect our TriggerCollider's area_entered and body_entered signals to our player script. You can do this by selecting the TriggerCollider in the scene tree, then opening the signals tab in the inspector. Make both signals connect to a new function called _on_trigger_entered.</p>
+			<img src="gameplay/images/trigger_connect_signal.png" class="img-fluid">
+			<p class="hint alert">Note that we want both signals to connect to the same function. You can use the Pick button when connecting a signal to attach it to an existing function.</p>
+			<img src="gameplay/images/trigger_pick_method.png" class="img-fluid">
+			<p>Next, let's repeat the process for the area_exited and body_exited signals, connecting them to a _on_trigger_exited function. After that, your signals tab should look like this:</p>
+			<img src="gameplay/images/trigger_signals.png" class="img-fluid">
+			<p>Finally, lets add some code to those functions we connected the signals to. For each, we want to call a function (onEnter and onExit respectively) of the trigger the player collided with, passing the player itself as an argument. This will allow us to have triggers effect the player.
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">func _on_trigger_entered(trigger):
+	trigger.onEnter(self)
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+func _on_trigger_exited(trigger):
+	trigger.onExit(self)</code></pre></div>
+
+			<h4>Setting up the Trigger Class</h4>
+			<p>Our final piece of this puzzle is creating a new class that stores all the shared functionality of all triggers.</p>
+			<p class="hint add-info">A class is kind of like a category. Any script can be made into a class, and other scripts can inherit from a class. Some example classes would be all of the nodes we have been making so far!</p>
+			<p>To get started, create a new script called trigger. You can create a script in the file system directly by right clicking, hovering over Create New and selecting Script. Have it inherit Area2D.</p>
+			<img src="gameplay/images/trigger_script.png" class="img-fluid">
+			<p>At the top of the script (above extends Area2D), add class_name Trigger. The keyword class_name tells Godot you want this to be a new class, with the name following immediately after. Next, lets make the two functions we called in the player script: onEnter and onExit, adding the player as an argument. For now, just set them to pass.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">class_name Trigger
+extends Area2D
+
+func onEnter(player):
+	pass
+
+func onExit(player):
+	pass</code></pre></div>
+			<p>And we have triggers set up! In order to add some actual functionality, go ahead and try one of these modules next!</p>
+			<ul>
+				<li><a href="gameplay/buttons_and_switches.html">Buttons and Switches</a></li>
+				<li><a href="gameplay/checkpoints.html">Checkpoints</a></li>
+				<li><a href="gameplay/collectables.html">Collectables</a></li>
+			</ul>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +96,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Gameplay','TriggerSetup','gameplayToggle')
 	}
 </script>
 </body>

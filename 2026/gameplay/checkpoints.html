@@ -37,29 +37,35 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Checkpoints</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="trigger_setup.html">Trigger Setup</a> and <a href="hazard_setup.html">Hazard Setup</a> modules to be completed first!</strong></p>
+			<p>Checkpoints are points in a level where the player can effectively save their progress, allowing them to return to the checkpoint if they fail instead of restarting the whole level! Adding checkpoints can allow you to make longer and more challenging levels while also lessening how "unfair" the game feels. On this page we will create a checkpoint that activates when the player touches it, allowing them to respawn and playing a short animation.</p>
+			<h4>Creating the Checkpoint Scene</h4>
+			<p>First things first, we need to create a new scene. Choose an Area2D node as the root node and rename it to Checkpoint. Next, right click the Checkpoint node and add a CollisionShape2D node and an AnimatedSprite2D node as children. The scene tree should now look like this:</p>
+			<img src="gameplay/images/checkpoint_scene_tree.png" class="img-fluid" alt="Scene tree for the checkpoint scene.">
+			<p>Select the checkpoint module. Go to the inspector and under collisions set the physics layers to be empty and the physics layer to our trigger layer, like so:</p>
+			<img src="gameplay/images/trigger_collision.png" class="img-fluid" alt="Physics layers for our checkpoint.">
+			<h4>Creating the Checkpoint Sprite Frames and Collision Shape</h4>
+			<p>Next select the AnimatedSprite2D node. In the inspector create a new sprite frames. Import the Checkpoint sprite from the Checkpoints folder in your VGDC Assets folder. Choose the color of checkpoint you want and import it as a sprite sheet.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Lets's rename the animation to activate. Additionally, lets disable autoplay and looping, and set the animation speed to 12.</p>
+			<img src="gameplay/images/checkpoint_sprite_frames.png" class="img-fluid" alt="Sprite frames for the checkpoint.">
+			<p>Next select the CollisionShape2D node in the scene tree. In the inspector create a new rectangle collision shape. We want the new shape to be slightly larger than the checkpoint itself (you can change the animation frame to the last one in the inspector if you want to see the full size of the flower to set the collision shape.)</p>
+			<img src="gameplay/images/checkpoint_collision_shape.png" class="img-fluid" alt="Viewport view of the checkpoint including it's collision shape.">
+			<h4>Creating the Checkpoint Script</h4>
+			<p>Of course we still don't have any functionality yet. Let's add a new script to the Checkpoint node, having it inherit from our Trigger class.</p>
+			<img src="gameplay/images/checkpoint_create_script.png" class="img-fluid" alt="Creating a new script for our checkpoint.">
+			<p>In the checkpoint script itself we need to first add a new variable: active. This variable will store whether or not the checkpoint has been activated, in order to prevent it from playing it's activate animation each time the player touches it. Let's start it off as false.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">var active = false</code></pre></div>
+			<p>Finally, let's override the onEnter function from the Trigger class, having it set the player's respawn_point, play its activate animation (if not already active) and then setting its active variable to true:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func onEnter(player):
+	player.respawn_point = global_position
+	if not active:
+		$AnimatedSprite2D.play("activate")
+	active = true</code></pre></div>
+			<p>And you are done! Go ahead and add some checkpoints into your world and try them out, then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +75,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Gameplay','Checkpoints','gameplayToggle')
 	}
 </script>
 </body>

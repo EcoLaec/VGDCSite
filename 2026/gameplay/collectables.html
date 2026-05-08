@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Collectables</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -38,26 +38,28 @@
 
 			<!-- Section -->
 			<h3>Collectables</h3>
-			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="trigger_setup.html">Trigger Setup</a> module to be completed first!</strong></p>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="gameplay/trigger_setup.html">Trigger Setup</a> module to be completed first!</strong></p>
 			<p>In this module we will be creating pick-ups, objects the player can run into for some benefit. Many other modules will use this functionality, but for now we will simply add gems the player can pick up.</p>
 
 			<h4>Creating the Pickup Scene</h4>
-			<p>Due to the fact so many different modules will require the player to be able to pick something up, we will be making a parent scene first and foremost with the basic pickup functionality. To get started, create a new scene. For the root node, select an Area2D node and rename it to Pickup. Then, create two new child nodes for the Pickup node, one being an CollisionShape2D and another being an AnimatedSprite2D. The scene should then look like this:</p>
+			<p>Due to the fact so many different modules will require the player to be able to pick something up, we will be making a parent scene first and foremost with the basic pickup functionality. To get started, create a new inherited scene from our Trigger scene. You can do this by right clicking the Trigger scene in your file system and selecting New Inherited Scene:</p>
+			<img class="img-fluid" src="gameplay/images/trigger_new_inherited_scene.png" alt="Creating an inherited scene from the trigger scene.">
+			<p>Let's rename the root node to Pickup. The scene tree should look like this:</p>
 			<img class="img-fluid" src="gameplay/images/pickup_scene_tree.png" alt="Pickup scene tree">
 			<p class="hint alert">Note that we are not adding a collision shape nor sprite frames to our Pickup scene. This is so that each inherited scene can have it's own unique animations and collision shapes!</p>
-			<p>Next, we need to set the Pickup node's collision layers and masks. In the inspector while you have the Pickup node selected go under the collision section. We will set the masks to be empty and the layer to be our trigger layer, like so:</p>
-			<img class="img-fluid" src="gameplay/images/trigger_collision.png" alt="Pickup scene tree">
 
 			<h4>Creating the Pickup Script</h4>
-			<p>Creating the script for pickups is pretty simple. First select the Pickup node and add a new script, having it inherit from our Trigger class. At the top of the script, above the extends Trigger we will make our pickups a new class by adding class_name Pickup. By adding a new class name, we effectively create a new node type that other scripts can inherit from. So later when we create new types of pickups, we don't need to copy any code we already wrote!</p>
+			<p>Creating the script for pickups is pretty simple. First select the Pickup node and disconnect its script. Then create a new one, having it inherit from our Trigger class.</p>
+			<img class="img-fluid" src="gameplay/images/pickup_create_script.png" alt="Creating a new script for the pickups">
+			<p>At the top of the script, above the extends Trigger we will make our pickups a new class by adding class_name Pickup. By adding a new class name, we effectively create a new node type that other scripts can inherit from. So later when we create new types of pickups, we don't need to copy any code we already wrote!</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">class_name Pickup
 extends Trigger</code></pre></div>
-			<p>Next we want to override the onEnter function from the Trigger class, specifically in the function body we want to call the queue_free() method, like so:</p>
+			<p>Next we want to override the on_enter function from the Trigger class, specifically in the function body we want to call the inherited on_enter function, then the queue_free() method, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func onEnter(_player):
+			<pre><code class="language-gdscript">func on_enter(player):
+	super.on_enter(player)
 	queue_free()</code></pre></div>
-			<p class="hint tip">Note that we aren't actually using the _player argument right now. Future pickups will use it, but since we aren't here I added an underscore to let Godot know it is on purpose (otherwise it would give us a warning).</p>
 			<p>Make sure to save the Pickup scene!</p>
 
 			<h4>Creating the Jade Pickup</h4>

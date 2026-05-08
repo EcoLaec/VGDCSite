@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Useful Collectables</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,54 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Useful Collectables</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="gameplay/collectables.html">Collectables</a> module to be completed first!</strong></p>
+			<p>While we may have some basic pickups, many other modules have the ability to add even more! On this page we will explore some such options and make more interesting pickups. Each of the following sections require other modules. If you do not have that module, you can skip any or all of these collectables without issue.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Timer Pickup</h4>
+			<p>This section requires the <a href="hazards/time_limit.html">Time Limit</a> module. Go to your file system and right click the Pickup scene. Choose the option New Inherited Scene. In the new scene rename the root node to TimePickup. The scene tree should now look like so:</p>
+			<img class="img-fluid" src="gameplay/images/time_pickup_scene_tree.png" alt="Scene tree for the time pickup.">
+			<p>Next, in the scene tree select the AnimatedSprite2D node. In the inspector create a new sprite frames and import the timer sprite that can be found in the Advanced Collectables folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img class="img-fluid" src="gameplay/images/time_pickup_sprite_frames.png" alt="Sprite frames for the time pickup.">
+			<p>Finally, select the CollisionShape2D node. In the inspector create a new circle collision shape and resize it to fit the sprite.</p>
+			<img class="img-fluid" src="gameplay/images/time_pickup_collision_shape.png" alt="Collision shape for the time pickup.">
+			<p>Next remove the script from the TimePickup node and then attach a new one. Make sure you set it to inherit from the Pickup script.</p>
+			<img class="img-fluid" src="gameplay/images/extended_pickup_script.png" alt="Creating a new script inheriting from the pickup script.">
+			<p>Now in the new script let's create a new export variable called time_gained and set a default value of 30.0.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">@export var time_gained = 30.0</code></pre></div>
+			<p>Next, let's overwrite the pickup's on_enter function. In it we want to first get the current time left on the LevelTimer, then start the LevelTimer again with the time_gained variable added on, then of course running the pickup's default on_enter function (so we don't need to copy all of it's code.)</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func on_enter(_player):
+	var t = LevelTimer.time_left
+	LevelTimer.start(t + time_gained)
+	super.on_enter(player)</code></pre></div>
+			<p>And that is the Time Pickup done!</p>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>1-Up Pickup</h4>
+			<p>This section requires the <a href="hazards/lives.html">Limited Lives</a> module. Repeat the steps to create the Time Pickup, renaming the root node to LifePickup and using one of the Egg sprite sheets from the Advanced Collectables folder. I set the animation to a speed of 10 and increased the duration of the first frame to 30.</p>
+			<img class="img-fluid" src="gameplay/images/life_pickup_sprite_frames.png" alt="Collision shape and viewport for the life pickup.">
+			<p class="hint alert">Don't forget to set the default animation to autoplay!</p>
+			<p>Next, select the CollisionShape2D node. In the inspector create a new circle collision shape and resize it to fit the sprite.</p>
+			<img class="img-fluid" src="gameplay/images/life_pickup_collision_shape.png" alt="Collision shape and viewport for the life pickup.">
+			<p>Like before, remove the script from the LifePickup and attach new script inheriting from Pickup. We will once again overwrite the on_enter function. In it we will increase the global player_lives variable by 1 before calling the default on_enter.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func on_enter(_player):
+	Global.player_lives += 1
+	super.on_enter(_player)</code></pre></div>
+
+			<h4>Healing Pickup</h4>
+			<p>This section requires the <a href="hazards/health1.html">Health</a> modules. Repeat the steps to create the Time Pickup, renaming the root node to HealthPickup and using meat sprite from the Advanced Collectables folder, until you get to the new script.</p>
+			<img class="img-fluid" src="gameplay/images/health_pickup_collision_shape.png" alt="Collision shape and viewport for the health pickup.">
+			<p>Once in the new script, we will once again overwrite the on_enter function. In it we will check if the player has less than maximum health, and if so restore 1 health to the player and then call the default Pickup's on_enter function.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func on_enter(player):
+	if player.current_health < player.max_health:
+		player.current_health += 1
+		super.on_enter(player)</code></pre></div>
+			<p class="hint alert">Note that the super.on_enter is inside of the if statement block. If it was outside, the player could cause the pickup to disappear without actually healing!</p>
+			<p>And that is all the advanced collectables! Congrats! Go ahead and add some to your level and try it out before moving on to another module!</p>
 		</div>
 	</div>
 	<div class="row">

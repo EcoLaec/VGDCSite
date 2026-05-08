@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Trigger Setup</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -46,7 +46,7 @@
 
 			<h4>Setting up the Player</h4>
 			<p>Next, we need to add a way for the player to detect triggers. We can do this by going to our player scene, right-clicking our player node and adding a new Area2D node. Let's name the new node TriggerCollider. Then, right-click the new node and add a CollisionShape2D node.</p>
-			<img src="gameplay/images/trigger_scene_tree.png" class="img-fluid">
+			<img src="gameplay/images/player_trigger_scene_tree.png" class="img-fluid">
 			<p>Right now, however, our collider is still set to default layers and masks. For this specific collider we actually want to set it's mask to trigger and have no layer. This is because we want the actual object to be able to run its own script instead of the player's. We can set the collision layers in the inspector while having the TriggerCollider selected.</p>
 			<img src="gameplay/images/player_trigger_collision.png" class="img-fluid">
 			<p>Next, select the new collision shape, go to the inspector and add a new rectange shape. Let's resize it to fit the player closer.</p>
@@ -58,32 +58,43 @@
 			<img src="gameplay/images/trigger_pick_method.png" class="img-fluid">
 			<p>Next, let's repeat the process for the area_exited and body_exited signals, connecting them to a _on_trigger_exited function. After that, your signals tab should look like this:</p>
 			<img src="gameplay/images/trigger_signals.png" class="img-fluid">
-			<p>Finally, lets add some code to those functions we connected the signals to. For each, we want to call a function (onEnter and onExit respectively) of the trigger the player collided with, passing the player itself as an argument. This will allow us to have triggers effect the player.
+			<p>Finally, lets add some code to those functions we connected the signals to. For each, we want to call a function (on_enter and on_exit respectively) of the trigger the player collided with, passing the player itself as an argument. This will allow us to have triggers effect the player.
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _on_trigger_entered(trigger):
-	trigger.onEnter(self)
+	trigger.on_enter(self)</code></pre></div>
 
-func _on_trigger_exited(trigger):
-	trigger.onExit(self)</code></pre></div>
+			<h4>Creating the Trigger Scene</h4>
+			<p>Now, we will be using these triggers for many different modules with different functionality. That being said we do have some things that all of our triggers will need. We can reduce our need to repeat code and scenes by creating a base scene that our later modules can use! To get started, create a new scene with an Area2D as the root node. Rename the root node Trigger, then add two child nodes: an AnimatedSprite2D and a CollisionShape2D:</p>
+			<img src="gameplay/images/trigger_scene_tree.png" class="img-fluid">
+			<p>Next, select the root node and in the inspector we want to change its collision layers to be our trigger layer and its masks to be empty:</p>
+			<img src="gameplay/images/trigger_collision.png" class="img-fluid">
 
 			<h4>Setting up the Trigger Class</h4>
 			<p>Our final piece of this puzzle is creating a new class that stores all the shared functionality of all triggers.</p>
-			<p class="hint add-info">A class is kind of like a category. Any script can be made into a class, and other scripts can inherit from a class. Some example classes would be all of the nodes we have been making so far!</p>
-			<p>To get started, create a new script called trigger. You can create a script in the file system directly by right clicking, hovering over Create New and selecting Script. Have it inherit Area2D.</p>
+			<p class="hint add-info">A class is kind of like a category. Any script can be made into a class, and other scripts can inherit from a class.</p>
+			<p>To get started, create a new script for our Trigger node. Have it inherit Area2D.</p>
 			<img src="gameplay/images/trigger_script.png" class="img-fluid">
-			<p>At the top of the script (above extends Area2D), add class_name Trigger. The keyword class_name tells Godot you want this to be a new class, with the name following immediately after. Next, lets make the two functions we called in the player script: onEnter and onExit, adding the player as an argument. For now, just set them to pass.</p>
+			<p>At the top of the script (above extends Area2D), add class_name Trigger. The keyword class_name tells Godot you want this to be a new class, with the name following immediately after. Next, lets make the function we called in the player script: on_enter, adding the player as an argument. For now, just set it to pass.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">class_name Trigger
 extends Area2D
 
-func onEnter(player):
-	pass
+func on_enter(_player):
+	pass</code></pre></div>
+	 		<p class="hint add-info">You may notice the underscore before player in the function we made. When you add an underscore before a function's argument it lets Godot know you aren't planning on using it yet. If we didn't do this Godot would throw a warning letting us know we made a variable but never used it.</p>
+			<p>Finally, we want to be able to reference our CollisionShape2D and AnimatedSprite2D from our scene. You can drag them from the scene tree, hold control and drop them into the script. Let's change the variable names to sprite and collision_shape. Your script should now look like this:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">class_name Trigger
+extends Area2D
 
-func onExit(player):
+@onready var sprite = $AnimatedSprite2D
+@onready var collision_shape = $CollisionShape2D
+
+func on_enter(_player):
 	pass</code></pre></div>
 			<p>And we have triggers set up! In order to add some actual functionality, go ahead and try one of these modules next!</p>
 			<ul>
-				<li><a href="gameplay/buttons_and_switches.html">Buttons and Switches</a></li>
+				<li><a href="gameplay/gates_and_switches.html">Gates and Switches</a></li>
 				<li><a href="gameplay/checkpoints.html">Checkpoints</a></li>
 				<li><a href="gameplay/collectables.html">Collectables</a></li>
 			</ul>

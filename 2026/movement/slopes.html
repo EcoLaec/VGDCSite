@@ -66,20 +66,20 @@
 			<p>At the moment when the player dashes on or over a slope, the will snap to it, following it instead of moving straight. To fix this we can temporarily set the player's snap length to 0 while dashing, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
-	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+	if Input.is_action_just_pressed("Dash") and dash_cooldown_timer.time_left == 0.0:
 		velocity.y = 0
 		if input_axis:
 			stored_input = input_axis
 		else:
 			stored_input = -1 if sprite.flip_h else 1
-		dash_timer.start()
+		dash_timer.start(dash_time)
 		floor_snap_length = 0.0
 	if dash_timer.time_left > 0.0:
 		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
 		<p>Of course, we need to make sure that it is re-enabled after the dash ends! We can do so in the dash timer's timout function:</p>
 		<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _on_dash_timer_timeout():
-	dash_cooldown.start()
+	dash_cooldown_timer.start(dash_cooldown)
 	floor_snap_length = 3.0</code></pre></div>
 		<p class="hint alert">Make sure to set the 3.0 in the function above with whatever you set your snap length to!</p>
 		</div>

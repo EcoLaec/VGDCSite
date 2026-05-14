@@ -60,7 +60,7 @@
 		current_acceleration = acceleration
 
 	if input_axis:
-		velocity.x = move_toward(velocity.x, current_speed * input_axis, current_acceleration * delta</code></pre></div>
+		velocity.x = move_toward(velocity.x, speed * input_axis, current_acceleration * delta)</code></pre></div>
 			<p>Finally, we can easily repeat the same for the apply_friction function:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func apply_friction(input_axis,delta):
@@ -85,7 +85,6 @@
 			<p>A relatively minor fix, but to make sure the proper acceleration and friction is selected you need to chain together if statements using elif (else if), starting in the apply_acceleration function:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func apply_acceleration(input_axis,delta):
-	sprinting = Input.is_action_pressed("Sprint")
 	
 	# Set Speed
 	var current_speed

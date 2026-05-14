@@ -47,8 +47,8 @@
 @export var jump_velocity = -300.0
 @export var gravity = 980.0
 @export var terminal_velocity = 500.0
-@export var wall_jump_horizontal_scale = 1.0
-@export var wall_jump_vertical_scale = 1.0</code></pre></div>
+@export var wall_jump_horizontal_velocity = 100.0
+@export var wall_jump_vertical_velocity = -300.0</code></pre></div>
 			<p>We will apply these scales to our jump_velocity and speed later on. Our next step is to add a new handle_wall_jump function in our _physics_process function, like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _physics_process(delta):
@@ -68,10 +68,15 @@
 	if not is_on_wall_only(): return
 	var wall_normal = get_wall_normal()
 	if Input.is_action_just_pressed("Jump"):
-		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
-		velocity.y = jump_velocity * wall_jump_vertical_scale</code></pre></div>
-			<p>We have two new parts here: <strong>Return</strong> and <strong>Normals</strong>. The return keyword cuts a function short, effectively skipping anything after it when called. Normals are vectors that are perpendicular to a surface. Put more simply, they point away from a surface.</p>
-			<p class="hint tip">Normals can be pretty confusing, so if they are hard to understand, don't worry! There is no test on what a normal is in this course!</p>
+		velocity.x = wall_normal.x * wall_jump_horizontal_velocity
+		velocity.y = wall_jump_vertical_velocity</code></pre></div>
+			<p class="hint add-info">We have two new parts here: <strong>Return</strong> and <strong>Normals</strong>. The return keyword cuts a function short, effectively skipping anything after it when called. Normals are vectors that are perpendicular to a surface. Put more simply, they point away from a surface.</p>
+			<p>The is quite a bit going on here, so let's look at it piece by piece.</p>
+			<ul>
+				<li><em>if not is_on_wall_only(): return</em> This line checks if the player is on a wall but not the floor, skipping the rest of the function otherwise.</li>
+				<li><em>var wall_normal = get_wall_normal()</em> This line simply gets the wall normal, or the direction facing driectly away from the wall the player is touching.</li>
+				<li>The final section of the function simply sets the players speed to go up and away from the wall using our two variables we set up for that.</li>
+			</ul>
 			<p>And we are done! Go ahead and check out the compatibility section to see if you need to make any changes, and then go ahead and move on to another module.</p>
 			<h3>Compatibility</h3>
 			<p>Wall Jump conflicts with 2 other modules:</p>
@@ -106,8 +111,8 @@ var just_wall_jumped = false</code></pre></div>
 	if not is_on_wall_only(): return
 	var wall_normal = get_wall_normal()
 	if Input.is_action_just_pressed("Jump"):
-		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
-		velocity.y = jump_velocity * wall_jump_vertical_scale
+		velocity.x = wall_normal.x * wall_jump_horizontal_velocity
+		velocity.y = wall_jump_vertical_velocity
 		just_wall_jumped = true</code></pre></div>
 			<p>Finally, all we need to do is add a check for the just_wall_jumped variable in our handle_jump function in our air jump checks:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
@@ -141,8 +146,8 @@ var just_wall_jumped = false</code></pre></div>
 	if not is_on_wall_only() or in_water: return
 	var wall_normal = get_wall_normal()
 	if Input.is_action_just_pressed("Jump"):
-		velocity.x = wall_normal.x * speed * wall_jump_horizontal_scale
-		velocity.y = jump_velocity * wall_jump_vertical_scale
+		velocity.x = wall_normal.x * wall_jump_horizontal_velocity
+		velocity.y = wall_jump_vertical_velocity
 		just_wall_jumped = true</code></pre></div>
 
 		</div>

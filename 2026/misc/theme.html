@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Theme</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+
+			<!-- Section -->
+			<h3>Setting up our Theme</h3>
+			<p>In this module we will create a custom Theme, which will allow us to change the font and style of our text and UI elements.</p>
+			
+			<h4>Creating the Theme</h4>
+			<p>Before we create a theme, we will need a font. Go ahead and open up the UI folder in your VGDC Assets folder, select a font file you like and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next, let's create a new theme. Right click a folder in your file system, select new and then Resource.</p>
+			<img src="misc/images/new_resource.png" class="img-fluid" alt="Creating a new resource.">
+			<p class="hint tip">I like to have a resource folder for my resources.</p>
+			<p>In the following popup, select Theme. You can search resources to make finding it easier.</p>
+			<img src="misc/images/creating_new_theme.png" class="img-fluid" alt="Creating a new theme.">
+			<p>Open up your new theme. A new editor will pop up in the bottom panel, but for setting a font all you need to do is drag your font file into the default font property in the inspector (and optionally set the default font size.)</p>
+			<img src="misc/images/setting_theme_font.png" class="img-fluid" alt="Setting a theme's font and font size.">
+			<p>Now to actually see your theme, let's set it as our default theme. In the project settings, navigate to the theme section. In the setting for Custom, find your custom theme and select it. You will need to restart the editor (don't forget to save!), but then you will see it in place!</p>
+			<img src="misc/images/setting_custom_theme.png" class="img-fluid" alt="Setting the default theme to our theme.">
+			<p class="hint add-info">Themes can actually do quite a bit. To have more details about what they can do check out Godot's documentation <a href="https://docs.godotengine.org/en/stable/tutorials/ui/gui_using_theme_editor.html">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>And you're done! Go ahead and try out another module that uses your theme!</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('Misc','Theme','miscToggle')
+	}
+</script>
+</body>
+</html>

@@ -75,9 +75,9 @@ var clinging = false</code></pre></div>
 	# Set Terminal Velocity
 	var current_terminal_velocity
 	if clinging:
-		current_terminal_velocity = player_data.cling_speed
+		current_terminal_velocity = cling_speed
 	else:
-		current_terminal_velocity = player_data.terminal_velocity
+		current_terminal_velocity = terminal_velocity
 
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -116,16 +116,16 @@ var clinging = false</code></pre></div>
 			<p>Right now, whenever the player attempts to dash while clinging to a wall, they merely dash directly into it! To remedy this we will reverse the player's stored input if they are clinging, as so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_dash(input_axis, delta):
-	if Input.is_action_just_pressed("Dash") and dash_cooldown.time_left == 0.0:
+	if Input.is_action_just_pressed("Dash") and dash_cooldown_timer.time_left == 0.0:
 		velocity.y = 0
 		if input_axis:
 			stored_input = input_axis
 		else:
 			stored_input = -1 if sprite.flip_h else 1
 		if clinging: stored_input = -stored_input
-		dash_time.start()
+		dash_timer.start(dash_time)
 		floor_snap_length = 0.0
-	if dash_time.time_left > 0.0:
+	if dash_timer.time_left > 0.0:
 		velocity.x = move_toward(velocity.x, dash_speed * stored_input, dash_acceleration * delta)</code></pre></div>
 
 			<h4>Swimming</h4>
@@ -146,18 +146,18 @@ var clinging = false</code></pre></div>
 	# Set Terminal Velocity
 	var current_terminal_velocity
 	if in_water:
-		current_terminal_velocity = player_data.swim_terminal_velocity
+		current_terminal_velocity = swim_terminal_velocity
 	elif clinging:
-		current_terminal_velocity = player_data.cling_speed
+		current_terminal_velocity = cling_speed
 	else:
-		current_terminal_velocity = player_data.terminal_velocity
+		current_terminal_velocity = terminal_velocity
 	
 	# Set Gravity
 	var current_gravity
 	if in_water:
-		current_gravity = player_data.swim_gravity
+		current_gravity = swim_gravity
 	else:
-		current_gravity = player_data.gravity
+		current_gravity = gravity
 	
 	if not is_on_floor():
 		velocity.y += current_gravity * delta

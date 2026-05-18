@@ -45,12 +45,12 @@
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">var score = 0</code></pre></div>
 			<h4>Adding the Score to the UI</h4>
-			<p>Of course, we still can't see the score anywhere in game. To fix that navigate to your UI scene. Right click the VBoxContainer of our Right node and add a label node as a child. Rename the label to ScoreLabel, and then set it to have a unique identifier by right clicking it and pressing Access as Unique Name.</p>
+			<p>Of course, we still can't see the score anywhere in game. To fix that navigate to your UI scene. Right click the VBoxContainer of our Right node and add a label node as a child. Rename the label to Score, and then set it to have a unique identifier by right clicking it and pressing Access as Unique Name.</p>
 			<img class="img-fluid" src="gameplay/images/score_set_unique_name.png" alt="Setting a unique name.">
-			<p>Next, we need to set the ScoreLabel node to update with the player's score. Open up the UI script, then in the _process function we will add the following line of code:</p>
+			<p>Next, we need to set the Score node to update with the player's score. Open up the UI script, then in the _process function we will add the following line of code:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _process(_delta):
-	%ScoreLabel.text = "Score: " + str(Global.score)</code></pre></div>
+	%Score.text = "Score: " + str(Global.score)</code></pre></div>
 			<p class="hint add-info">Note that we are combining the string "Score:" and the score variable as a string (called casting) with a + sign. You can actually add strings!</p>
 			<p>Unfortunately we still don't have a way to increase our score. We will fix this in the next couple sections as we explore many ways to increase points.</p>
 			<p class="hint warning"><strong>IMPORTANT! Each of the following sections require additional modules and are optional (though I do recommend doing at least one so you can get points!)</strong></p>

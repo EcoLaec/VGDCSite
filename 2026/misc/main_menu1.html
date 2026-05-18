@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Main Menu: Part 1</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+
+			<!-- Section -->
+			<h3>Main Menu (Part 1)</h3>
+			<p>In this module we will be creating a main menu for our game where our players start from.</p>
+			<p class="hint warning">IMPORTANT! This module requires the <a href="misc/theme.html">Theme</a> module to be completed first!</p>
+
+			<h4>Creating the Main Menu Scene</h4>
+			<p>As with many of our modules, we need to start by creating a new scene. More specifically we need to make a scene with a <strong>CanvasLayer</strong> as our root node. Let's name our new node Main Menu. Next we will create a series of children nodes to build our menu:</p>
+			<ol>
+				<li>Create a new ColorRect node as a child node of our Main Menu. Let's name it Background.</li>
+				<li>Create a MarginContainer node, also as a child of the Main Menu.</li>
+				<li>As a child of the MarginContainer, create a VBoxContainer node.</li>
+				<li>Create a new Label node as a child of the VBoxContainer, named Title.</li>
+				<li>Finally, create two button nodes, one named Play and the other Quit, both children of the VBoxContainer.</li>
+			</ol>
+			<p>That is quite a few steps, but our scene tree should now be looking like this:</p>
+			<img src="misc/images/main_menu_scene_tree.png" class="img-fluid" alt="The scene tree for the main menu.">
+			<p>And our viewport will look like this:</p>
+			<img src="misc/images/main_menu_start.png" class="img-fluid" alt="The viewport of our main menu.">
+
+			<h4>Customizing our Menu</h4>
+			<p>Of course, right now there isn't much of a menu going on. To start making things happen let's go from the top to the bottom. First, select the Background node and navigate to the top of the viewport. You'll see a circular icon with a t inside of it (next to the anchor). This will allow us to select a preset for our anchors and offsets. Select full. You will also need to do the same for the MarginContainter node.</p>
+			<img src="misc/images/control_node_full.png" class="img-fluid" alt="Selecting the full preset for the anchors and offsets.">
+			<p>To change the color for our Background, select it and in the inspector change its color property to the color you'd like.</p>
+			<img src="misc/images/menu_background_color.png" class="img-fluid" alt="Changing the color of our Background node.">
+			<p class="hint tip">While for the sake of simplicity this module just has a solid color as a background, you can actually create whatever you want within the bounds of the camera for your menu. For example, in my demo I actually used my tiles I made for the levels in my menu!</p>
+			<p>Next, reselect the MarginContainer. We want to navigate in the inspector to the theme overrides section. Under constants we can set the margins for the container. Let's set the left and right margins to 200 and the top and bottom margins to 75.</p>
+			<img src="misc/images/main_menu_margins.png" class="img-fluid" alt="Setting the margins for our MarginContainer node.">
+			<p>Now select the VBoxContainer. In the inspector change its alignment property to Center.</p>
+			<img src="misc/images/centered_vbox.png" class="img-fluid" alt="Centering the VBoxContainer contents.">
+			<p>Next select the Title node. In the inspector you can change the text to your game title, then change its horizontal alignment to center and under theme overrides and font size, change its font size to 32.</p>
+			<img src="misc/images/title_settings.png" class="img-fluid" alt="Centering and setting our title on the main menu.">
+			<img src="misc/images/title_font_size.png" class="img-fluid" alt="Increasing the font size for our title.">
+			<p>Finally, for the Play and Quit buttons, select them and set their text to Play and Quit, respectively. At this point your menu layout should be complete, looking like so:</p>
+			<img src="misc/images/main_menu_complete.png" class="img-fluid" alt="The finalized layout for our main menu.">
+			<p>In the next part we will add functionality to our menu!</p>
+
+			<div class="text-center">
+				<a href="misc/main_menu2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('Misc','MainMenu1','miscToggle')
+	}
+</script>
+</body>
+</html>

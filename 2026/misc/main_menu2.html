@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Main Menu</title>
+	<title>Main Menu: Part 2</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,38 +37,9 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Making a Main Menu</h3>
-			<p>In this module we will be creating a main menu for our game where our players start from.</p>
+			<h3>Main Menu (Part 2)</h3>
+			<p>In this module we will be adding functionality to our main menu.</p>
 			<p class="hint warning">IMPORTANT! This module requires the <a href="misc/theme.html">Theme</a> module to be completed first!</p>
-
-			<h4>Creating the Main Menu Scene</h4>
-			<p>As with many of our modules, we need to start by creating a new scene. More specifically we need to make a scene with a <strong>CanvasLayer</strong> as our root node. Let's name our new node Main Menu. Next we will create a series of children nodes to build our menu:</p>
-			<ol>
-				<li>Create a new ColorRect node as a child node of our Main Menu. Let's name it Background.</li>
-				<li>Create a MarginContainer node, also as a child of the Main Menu.</li>
-				<li>As a child of the MarginContainer, create a VBoxContainer node.</li>
-				<li>Create a new Label node as a child of the VBoxContainer, named Title.</li>
-				<li>Finally, create two button nodes, one named Play and the other Quit, both children of the VBoxContainer.</li>
-			</ol>
-			<p>That is quite a few steps, but our scene tree should now be looking like this:</p>
-			<img src="misc/images/main_menu_scene_tree.png" class="img-fluid" alt="The scene tree for the main menu.">
-			<p>And our viewport will look like this:</p>
-			<img src="misc/images/main_menu_start.png" class="img-fluid" alt="The viewport of our main menu.">
-
-			<h4>Customizing our Menu</h4>
-			<p>Of course, right now there isn't much of a menu going on. To start making things happen let's go from the top to the bottom. First, select the Background node and navigate to the top of the viewport. You'll see a circular icon with a t inside of it (next to the anchor). This will allow us to select a preset for our anchors and offsets. Select full. You will also need to do the same for the MarginContainter node.</p>
-			<img src="misc/images/control_node_full.png" class="img-fluid" alt="Selecting the full preset for the anchors and offsets.">
-			<p>To change the color for our Background, select it and in the inspector change its color property to the color you'd like.</p>
-			<img src="misc/images/menu_background_color.png" class="img-fluid" alt="Changing the color of our Background node.">
-			<p class="hint tip">While for the sake of simplicity this module just has a solid color as a background, you can actually create whatever you want within the bounds of the camera for your menu. For example, in my demo I actually used my tiles I made for the levels in my menu!</p>
-			<p>Next, reselect the MarginContainer. We want to navigate in the inspector to the theme overrides section. Under constants we can set the margins for the container. Let's set the left and right margins to 200 and the top and bottom margins to 75.</p>
-			<img src="misc/images/main_menu_margins.png" class="img-fluid" alt="Setting the margins for our MarginContainer node.">
-			<p>Now select the VBoxContainer. In the inspector change its alignment property to Center.</p>
-			<img src="misc/images/centered_vbox.png" class="img-fluid" alt="Centering the VBoxContainer contents.">
-			<p>Next select the Title node. In the inspector you can change the text to your game title, then change its horizontal alignment to center and under theme overrides and font size, change its font size to 32.</p>
-			<img src="misc/images/title_settings.png" class="img-fluid" alt="Centering and setting our title on the main menu.">
-			<img src="misc/images/title_font_size.png" class="img-fluid" alt="Increasing the font size for our title.">
-			<p>Finally, for the Play and Quit buttons, select them and set their text to Play and Quit, respectively.</p>
 
 			<h4>Setting up the Script</h4>
 			<p>This has been a lot so far, but in order for our main menu to actually do anything, we need to add a script. Go ahead and attach a new script named main_menu to the Main Menu node. Within it we will need a new export variable called next_scene.</p>
@@ -90,9 +61,13 @@ func _on_play_pressed():
 
 func _on_quit_pressed():
 	get_tree().quit()</code></pre></div>
+
+			<h4>Setting the Default Scene and Next Scene</h4>
 			<p>Of course, right now the game doesn't start with our menu! To fix this go to your project settings and in the run section change the Main Scene to our main menu scene.</p>
 			<img src="misc/images/change_starting_scene.png" class="img-fluid" alt="Setting our main menu to be our starting scene.">
-			<p>And we are done! Go ahead and test out your menu, mess around with it's looks, then move on to another module!</p>
+			<p>If you test the menu now, you may notice that it won't bring you to the next level. This is because we still need to assign it! Select your Main Menu node and in the inspector you'll see the next scene variable we made. Go ahead and drag your first level into the empty slot.</p>
+			<img src="misc/images/menu_assign_next_scene.png" class="img-fluid" alt="Setting our menu's next scene to our first level in the inspector.">
+			<p>And we are done! Go ahead and test out your menu, mess around with its looks, then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -102,7 +77,7 @@ func _on_quit_pressed():
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('Misc','MainMenu','miscToggle')
+		expandAndHighlight('Misc','MainMenu2','miscToggle')
 	}
 </script>
 </body>

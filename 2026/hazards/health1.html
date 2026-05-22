@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Health: Part 1</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,28 +37,88 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Health (Part 1)</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="hazards/hazard_setup.html">Hazard Setup</a> and <a href="misc/ui.html">UI</a> modules to be completed first!</strong></p>
+			<p>A commonplace in many games, sometimes you want the player to be able to make mistakes without being reset completely. We can achieve this by giving the player character health, a visual of how many mistakes they can make before they get reset. In this page we will add health to our player and have it show up on th UI.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Editing the Player Script</h4>
+			<p>First things first, we need to set our player script to have a class name so that we can access it from our ui script later. At the very top of the player script (above the extends CharacterBody2D) we will add class_name Player.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">class_name Player
+extends CharacterBody2D</code></pre></div>
+			<p>Continuing on in the player script we will need to add two new variables: max_health and health. Let's set max_health to be an export variable in player stats and have a default value of 3. The health variable will be in reference variables and have a default value of max_health (as we want the player to start at max health.)</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Player Stats
+@export var speed = 100.0
+@export var acceleration = 800.0
+@export var friction = 1200.0
+@export var jump_velocity = -300.0
+@export var gravity = 980.0
+@export var terminal_velocity = 500.0
+@export var max_health = 3</code></pre></div>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript"># Reference Variables
+@onready var sprite = $AnimatedSprite2D
+var respawn_point = Vector2.ZERO
+var health = max_health</code></pre></div>
+			<p>To actually use these variables we will need to add a new function called take_damage. In it we want to first reduce the player's current health by 1, then if the player's health is 0, run our respawn function and reset our health.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func take_damage():
+	health -= 1
+	if health <= 0:
+		respawn()
+		health = max_health</code></pre></div>
+			<p>Additionally, we need to set the _on_hazard_collided function to call the take_damage function instead of the respawn function.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_hazard_collided(_hazard):
+	call_deferred("take_damage")</code></pre></div>
 
+			<h4>Adding Health to the UI</h4>
+			<p>Let's import the health sprites. You need both the full and empty heart sprites from the Health folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next navigate to your UI scene. Right click the VBoxContainer node under the Left node and create a new HBoxContainer node. Rename the new node Health. We want to access the Health node as a unique name, which we can do by right clicking it and selecting "access as unique name".</p>
+			<img src="hazards/images/health_ui_scene_tree.png" class="img-fluid" alt="Scene tree for the health in the UI scene.">
+			<p>Next open up the UI script. We will want three new export variables: player, which will be the data type Player, as well as full_heart_sprite and empty_heart_sprite, which will be Texture2Ds.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var player : Player
+@export var full_heart_sprite : Texture2D
+@export var empty_heart_sprite : Texture2D</code></pre></div>
+			<p>Next, go to your world scene and select the UI node. In the inspector you should see the new variables. Drag the correct sprites from the file system into the inspector to assign them, as well as the player from the scene tree into the inspector.</p>
+			<img src="hazards/images/health_ui_inspector.png" class="img-fluid" alt="Inspector with sprites for health and player node assigned.">
+			<p>Back in the UI script, add the _ready function to the script if you don't have it already. Here we will initialize the health node with TextureRect nodes to represent the player's health. We do this by creating a number of new TextureRect nodes equal to the player's maximum health and assigning them to the Health node as children. The script for this is decently complex but we will walk trhough it.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	for i in player.max_health:
+		var heart = TextureRect.new()
+		heart.texture = full_heart_sprite
+		heart.custom_minimum_size = Vector2(68,64)
+		%Health.add_child(heart)</code></pre></div>
+			<ol>
+				<li><strong>for i in Global.player.max_health</strong> this is a <strong>For Loop</strong>, a basic loop that repeats the code block in itself a number of times. In this case it repeats a number of times equal to the player's max_health variable.</li>
+				<li><strong>var heart = TextureRect.new()</strong> this code creates a new TextureRect node inside code. In order to have it actually be useful, we will need to set it to be a child of another node however.</li>
+				<li><strong>heart.texture = full_health_sprite</strong> this line sets the created TextureRect node's texture to the full_health_sprite we assigned the UI node.</li>
+				<li><strong>heart.custom_minimum_size = Vector2(68,64)</strong> this line makes sure that the new TextureRect node's size cannot go below 68 pixels by 64 pixels. If this is to big or small for you, you can change the value here.</li>
+				<li><strong>%Health.add_child(heart)</strong> finally, this line assigns the new TextureRect node to be a child of the Health node, allowing it to be seen and accessed.</li>
+			</ol>
+			<p>While the health now appears in the UI and in game, it still doesn't update when the player takes damage. To fix this go into the UI script's _process function. In it we will want to loop through each of the Health node's children and set their texture to be full or empty based on the player's current health. An example on how to do this looks like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _process(_delta):
+	var hearts = %Health.get_children()
+	for i in hearts.size():
+		if i < player.health:
+			hearts[i].texture = full_heart_sprite
+		else:
+			hearts[i].texture = empty_heart_sprite</code></pre></div>
+			<p>Once again this code is a bit on the complex side, so let's go line by line again.</p>
+			<ol>
+				<li><strong>var hearts = %Health.get_children()</strong> this line creates a local variable that is a list of the Health node's children (in order.) This is to make accessing them easier.</li>
+				<li><strong>for i in hearts.size():</strong> this is another for loop, running the code below once for each child of the Health node.</li>
+				<li><strong>if i < player.health:</strong> this if statement checks if the current <strong>Index</strong>, or spot in the list, is less than the player's current health. The index increases by 1 each time the for loop loops, and in this case represents one of the children of the Health node.</li>
+				<li><strong>hearts[i].texture = full_health_sprite</strong> this line of code (and the following nearly identical line) sets the texture of the Health node's child with the current index to the full_health_sprite we assigned earlier.</li>
+			</ol>
+			<p>And that should now mean the player's health is functional and showing up in the UI! Go ahead and test it out. Though there are still two major issues that we will sort out in the next part.</p>
 			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+				<a href="hazards/health2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
 			</div>
 		</div>
 	</div>
@@ -69,7 +129,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','Health1','hazardToggle')
 	}
 </script>
 </body>

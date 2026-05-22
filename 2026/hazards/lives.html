@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Limited Lives</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,39 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Limited Lives</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="hazards/hazard_setup.html">Hazard Setup</a>, <a href="misc/global_script.html">Global Script</a> and <a href="misc/ui.html">UI</a> modules to be completed first!</strong></p>
+			<p>On this page we will help turn up the heat on our players by limiting the number of chances they get!</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Scripting Player Lives</h4>
+			<p>We need to track player lives, but we don't want the lives to be reset each time a player completes a stage. In order to work around this we will store the player's lives in our global script. We can do this quite simply by adding a new variable to the global script with some default number of starting lives.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">var player_lives = 5</code></pre></div>
+			<p>Next, we need to update the number of lives the player has each time they die, and if they run out, reset the stage. We can do this by navigating to our player script and editing our respawn function like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func respawn():
+	Global.player_lives -= 1
+	if Global.player_lives <= 0:
+		get_tree().reload_current_scene()
+		Global.player_lives = 5
+	else:
+		position = respawn_point</code></pre></div>
+			<p>And now they player has limited attempts! Of course, right now we cannot see how many lives we have left (nor when we reset.)</p>
+			<h4>Adding Lives to the UI</h4>
+			<p>To remedy the lack of information, we can add an element to our UI that shows our current lives. Before we can do that, we need to decide where we want to element to go. I want mine in the top left corner, and I want both a sprite of an egg and a number showing the number of lives left.</p>
+			<p class="hint tip">The placement of the elements are arbitrary, you can just as easily set it in any corner, top, bottom or even center if you wanted.</p>
+			<p>Go to your UI scene, then select the VBoxContainer node under the Left node. Create a new a new HBoxContainer node. Next, select the new HBoxContainer and add two children nodes: a TextureRect node and a Label node. Rename the label to Lives, then the scene tree should look like this:</p>
+			<img src="hazards/images/ui_lives_scene_tree.png" class="img-fluid" alt="UI scene tree after adding lives elements.">
+			<p>Next we want to access the Lives label as a unique name allowing it to be accessed anywhere in the tree, even if you end up changing it's parents or location. You can do the same by right clicking the Lives node and selecting Access as Unique Name.</p>
+			<img src="hazards/images/access_as_unique_name.png" class="img-fluid" alt="Setting a unique name.">
+			<p>Next, let's attach a texture to our TextureRect node. Go ahead and open up the Limited Lives folder in your VGDC Assets folder, select the egg sprite you like and drag it into your file system. After that, select the TextureRect node and drag your egg sprite into the texture property in the inspector (if the egg looks slim in game, you can change the expand mode property to fit width.)</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="hazards/images/lives_texture_rect_inspector.png" class="img-fluid" alt="Setting up the lives TextureRect.">
+			<p>Finally, we can update the LivesLabel node with the player's lives. Open up your UI script and add the following line of code to it's _process function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _process(_delta):
+	%Lives.text = "x" + str(Global.player_lives)</code></pre></div>
+			<p>And that's all! You should see a new element on the UI that shows the player's current lives. Once you made sure it works, go ahead and move onto a new module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +79,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','Lives','hazardToggle')
 	}
 </script>
 </body>

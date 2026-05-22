@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Time Limit</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,46 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Time Limit</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="hazards/hazard_setup.html">Hazard Setup</a> and <a href="misc/ui.html">UI</a> modules to be completed first!</strong></p>
+			<p>On this page we will make the game a more stressful by adding a time limit!</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Creating the Timer</h4>
+			<p>In order to have a timer we need, well, a timer. First go to your world scene, select the root node and add a new timer node as a child. Let's name it LevelTimer.</p>
+			<img src="hazards/images/level_timer_scene_tree.png" class="img-fluid" alt="The new LevelTimer in the world scene tree.">
+			<p>In its inspector, check one-shot so that it is active, and keep all the other settings as default.</p>
+			<img src="hazards/images/level_timer_inspector.png" class="img-fluid" alt="The inspector settings of the LevelTimer with one shot checked.">
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Editing the World Script</h4>
+			<p>Now let's set up the ability to access our level timer in the world script (you can add a script to your world scene if you don't already have one). First, let's add a new export variable called level_time_seconds, which will be the amount of time (in seconds) that the timer runs for. I'll set my default to 300, or 5 minutes:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">@export var level_time_seconds = 300</code></pre></div>
+			<p>Next, let's call the world script's _ready function, and in it we can start the LevelTimer using the level_time_seconds using the following code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	$LevelTimer.start(level_time_seconds)</code></pre></div>
+			<p>Finally we want to have the player respawn when the time runs out. We can do this by first selecting the LevelTimer node and in the inspector go to the signals tab and connect the timeout signal to the world script.</p>
+			<img src="hazards/images/level_timer_signals.png" class="img-fluid" alt="The signals for the LevelTimer node.">
+			<p>To finish up, go to the new _on_level_timer_timeout function in the world script. We want to first call the player's respawn function, then restart the timer like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_level_timer_timeout():
+	$Player.respawn()
+	$LevelTimer.start(level_time_seconds)</code></pre></div>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>Adding the UI Element</h4>
+			<p>Now, while we have all the functionality working, we still cannot see how much time we have left. In order to fix this lets go to our UI scene. Select the VBoxContainer under the Center node, then create a new Label node as a child of the VBoxContainer. Let's name this new label Time.</p>
+			<img src="hazards/images/time_ui_scene_tree.png" class="img-fluid" alt="Adding time label to UI tree.">
+			<p>Select the Time node, right click it and select Access as Unique Name. We do this to be able to connect it in our script even if we later decide to move it in the scene tree. Next open your UI script and In the script's _process function add the following line of code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _process(_delta):
+	%Time.text = str(int(level_timer.time_left / 60)).pad_zeros(2) + ":" + str(int(level_timer.time_left) % 60).pad_zeros(2)</code></pre></div>
+			<p class="hint add-info">The line we added simply turns the time left on our LevelTimer into minutes and seconds, so we can display it in an easy to understand way. If we just put in the time left we would have so many decimal places!</p>
+			<p>You will see some errors. This is because we haven't set up the level_timer variable in our UI script! We can fix this by adding an export variable in the UI script called level_timer and with the Timer datatype, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var level_timer : Timer</code></pre></div>
+			<p>To actually connect the two, go back to your world scene and select your UI node. Drag the LevelTimer from the scene tree into the Level Timer variable in the inspector.</p>
+			<img src="hazards/images/level_timer_in_ui_inspector.png" class="img-fluid" alt="The LevelTimer node placed in the UI node's inspector.">
+			<p>And You are done! Go ahead and set your level(s) time limits and try it out! Once you are done go ahead and try another module.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +86,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','TimeLimit','hazardToggle')
 	}
 </script>
 </body>

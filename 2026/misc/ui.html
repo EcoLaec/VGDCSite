@@ -56,6 +56,15 @@
 			<p>Of course, right now we have nothing to show in our UI! We can quickly add a test node by selecting one of our VBoxContainer nodes, then adding a new label node to the VBoxContainer. Next, in the inspector, change your label's text to some value.</p>
 			<img src="misc/images/label_text.png" class="img-fluid" alt="Setting label text">
 			<p>You should see your text appear in the viewport. Finally, make sure to save your UI scene and add it to your world scene to see it in game.</p>
+			<p>Our last step is to simply create a new script for our UI scene. For now we will simply have a call for the _process and _ready functions (with pass so they don't do anything yet), but we will be using them plenty in other modules!</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">extends CanvasLayer
+
+func _ready():
+	pass
+
+func _process(_delta):
+	pass</code></pre></div>
 			<p>And you're done! Go ahead and test out some more UI elements or go on to another module!</p>
 		</div>
 	</div>

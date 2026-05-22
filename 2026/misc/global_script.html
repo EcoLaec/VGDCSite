@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Global Script</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,16 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h3>Creating the Global Script</h3>
+			<p>On this page we will create a script that persists between levels and resets.</p>
+			<h4>Creating the Script</h4>
+			<p>Making a global script is very similar to any other, though one key part is that we do not need it to be attached to any node. To create a script not attached to a node, we can right click in our file system, select new, then script.</p>
+			<img src="misc/images/new_script.png" class="img-fluid" alt="Creating a new script in the file system.">
+			<p>Go ahead and name the new script global, then save it. For now we can remove all the code within it other than extends Node. In order to make the script load, however, we need to go to project settings. Select the Globals tab, then press the file icon next to the path bar. Find your global script, select it, then press Add. You will see the script appear in the section below.</p>
+			<img src="misc/images/autoload_script.png" class="img-fluid" alt="Creating a new script in the file system.">
+			<p>And that is the global script added. In order to test it, you can run your game, then (while the game is running) look at the scene tree and select remote. You should see your script appear above your world node like so:</p>
+			<img src="misc/images/remote_scene_tree.png" class="img-fluid" alt="The Global script appearing in the remote scene tree.">
+			<p>And that is it! The global script doesn't do anything on it's own, but is extremely useful for many other modules. You can go ahead and try one of those next!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +56,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Misc','GlobalScript','miscToggle')
 	}
 </script>
 </body>

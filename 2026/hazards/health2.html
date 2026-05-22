@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Health: Part 2</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,56 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Health (Part 2)</h3>
+			<p>Continuing from where we left off, I mentioned there was two issues with the health that had to still be solved. Those issues are 1) the ability for the player to not take damage if they stay within the collider of a single hazard and 2) the ability for the player to effectively go through some hazards we may not want them to (like the void collider or lava.) On this page we will fix both of those issues by adding the ability to <strong>Force a Respawn</strong> and <strong>Invincibility Frames</strong>.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Adding Invincibility Frames</h4>
+			<p>Invincibility frames is a term used in game development for describing a time after the player takes damage where they cannot take damage again. We will use this to both make it so the player can't get hit in rapid succession as well as removing the ability for the player to safely sit within a hazard. To start, go to the player scene. Right click the player node and create a new Timer node. Let's name it InvincibilityTimer. In the inspector set it's wait_time to 1 second and set it's one_shot property to true.</p>
+			<img src="hazards/images/invincibility_timer_inspector.png" class="img-fluid" alt="Inspector for the Invincibility Timer.">
+			<p>Next open the player script. Select the InvincibilityTimer node and drag it into the reference variables section, start holding control and drop it in to get it as a reference variable.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript"># Reference Variables
+@onready var sprite = $AnimatedSprite2D
+@onready var invincibility_timer = $InvincibilityTimer
+var respawn_point = Vector2.ZERO
+var health = max_health</code></pre></div>
+			<p>Next up we need to modify our take_damage function. Specifically, we will want to set the function to only run if the invincibility timer has no time left, and start the timer when the player does take damage, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func take_damage():
+	if invincibility_timer.time_left == 0.0:
+		health -= 1
+		invincibility_timer.start()
+		if health <= 0:
+			respawn()
+			health = max_health</code></pre></div>
+			<p>Finally, we want to check if the player is still touching a hazard when the invincibility timer runs out. We can do this by connecting the invincibility timer's timeout signal to our player script. Select the InvincibilityTimer node and in the signals tab in the inspector select the timeout signal.</p>
+			<img src="hazards/images/invincibility_timer_signals.png" class="img-fluid" alt="Signals for the Invincibility Timer.">
+			<p>In the new function, we want to disable and re-enable the collision shape for our HazardCollider. We do this to effectively reset it, alowing it to immediately send the signal for colliding with a hazard. We can do this like so:
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_invincibility_timer_timeout():
+	$HazardCollider/CollisionShape2D.disabled = true
+	$HazardCollider/CollisionShape2D.disabled = false</code></pre></div>
+			<p>There is problem one solved, but also it has made problem two even worse! Fortunately we have a solution.</p>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>Forcing Respawns</h4>
+			<p>Many games have bottomless pits and lava that returns the player to solid ground, regardless of health. To start setting it up for our game, let's assign a new <strong>Group</strong> to our VoidCollider node in the world scene. Groups are effectively tags that we can check for objects to categorize them. Select the VoidCollider, then in the inspector select the the group tab. Press the plus symbol to create a new group. Let's name our group to be called ForceRespawn and set it to be global.</p>
+			<img src="hazards/images/force_respawn_group.png" class="img-fluid" alt="Creating the new ForceRespawn group.">
+			<p class="hint add-info">You can add this group to any hazard to force the player to reset if they collide with it. I would recommend adding it to the LavaTiles node if you have it.</p>
+			<p>Next, we need to actually use this group in our take_damage function in our player script. First add a new argument to the function called force_respawn with a required bool data type. Next, in the if statement where we check if the invincibility_timer has time left <em>or</em> force_respawn is true (we do to make sure it ignores invincibility so the player cannot slip through.) Finally, at the bottom of the function add if force_respawn: position = respawn_point.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func take_damage(force_respawn : bool):
+	if invincibility_timer.time_left == 0.0 or force_respawn:
+		health -= 1
+		invincibility_timer.start()
+		if health <= 0:
+			respawn()
+			health = max_health
+		if force_respawn: position = respawn_point</code></pre></div>
+			<p>Of course, we still need to make sure we are passing our new argument to our damage function. We can do this in our _on_hazard_collided function by adding a check for if the body or area are in the ForceRespawn group in our call_deferred method like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_hazard_collided(_hazard):
+	call_deferred("take_damage",_hazard.is_in_group("ForceRespawn"))</code></pre></div>
+			<p>And that is health complete! Go ahead and test it out and then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +96,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','Health2','hazardToggle')
 	}
 </script>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Intermediate Enemies</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,85 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h3>Intermediate Enemies</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires both <a href="hazards/enemies1.html">Simple Enemy</a> modules to be completed first!</strong></p>
+			<p>In this module we build off of our basic enemy to create some more enemies with more complicated behaviors: the anklyo, ptero and para!</p>
+			<p class="hint tip">Note that each of these enemies can be added individually. If you don't want one, just skip it!</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Creating the Ptero</h4>
+			<p>The ptero will be a simple flying enemy. To create it, we will repeat the same steps we used for the trike in the <a href="hazards/enemies2.html">Simple Enemy (Part 2)</a> module, starting by creating a new inherited scene from our enemy scene.</p>
+			<img src="hazards/images/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>Next, rename the Enemy node to Ptero and select the AnimatedSprite2D and create a new sprite frames in the inspector. Then let's import the Ptero move and death spritesheets. You can find them in the Intermediate Enemies folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="hazards/images/ptero_sprite_frames.png" class="img-fluid" alt="Ptero sprite frames and animation.">
+			<p>Next, select the CollisionShape2D node and create a new rectangle shape in the inspector. Let's resize it to fit the sprite.</p>
+			<img src="hazards/images/ptero_collision_shape.png" class="img-fluid" alt="The collision shape for the Ptero enemy.">
+			<p>Finally, to make our Ptero fly we actually don't need to make any changes in our enemy script! Instead, select the Ptero node and go to the inspector. Let's set its speed tp 50.0 and its gravity to 0.0.</p>
+			<img src="hazards/images/ptero_inspector.png" class="img-fluid" alt="Ptero export variables in the inspector, with its speed set to 50.0 and its gravity set to 0.0.">
+			<p>And that is the Ptero! Go ahead and save the scene and add some flying enemies to your level.</p>
+			
+			<h4>Creating the Para</h4>
+			<p>Next we will make the Para, an enemy that will turn around when it reaches the edge of a platform instead of falling. To get started, open the enemy scene, right click the Enemy node and create a new RayCast2D node as a child. A raycast is a line that is drawn to check for collision, and is very useful for checking for things. Name the new node GroundCheck, then the Enemy scene tree should look something like this:</p>
+			<img src="hazards/images/groundcheck_scene_tree.png" class="img-fluid" alt="Advanced enemy scene tree with GroundCheck RayCast2D.">
+			<p>Now select the GroundCheck node. In the inspector we want to set the raycast to be disabled by default, and the target position to be 0.0 in the x axis and 16.0 in the y axis, like so:</p>
+			<img src="hazards/images/groundcheck_inspector.png" class="img-fluid" alt="The inspector settings for the GroundCheck node.">
+			<p class="hint alert">Note that we did not change where the GroundCheck node is in the viewport. Since enemies may be different sizes and shapes, we will manually set it up for each as we make them.</p>
+			<p>Now let's go to the enemy script. We want to be able to access the GroundCheck node from inside of the script. We can do this by dragging the GroundCheck node from the scene tree, holding control, then dropping it into our script alongside our other variables:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">@export var speed = 25.0
+@export var gravity = 980.0
+@onready var sprite = $AnimatedSprite2D
+@onready var collision_shape = $CollisionShape2D
+@onready var ground_check = $GroundCheck
+var direction = Vector2.RIGHT
+var is_moving = true</code></pre></div>
+			<p>Next, we want the enemy to switch directions when the GroundCheck doesn't detect the ground. We can do this by adding a line in our handle_direction function that checks if the GroundCheck is not colliding and is enabled, calling the change_direction function if true:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_direction():
+	if not ground_check.is_colliding() and ground_check.enabled: change_direction()
+	if is_on_wall(): change_direction()</code></pre></div>
+			<p>However there is still a problem. When the enemy changes direction, it's GroundCheck would stay on the same side! In order to remedy this, let's add a line in the change_direction function that flips the horizontal position of the GroundCheck:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func change_direction():
+	direction = -direction
+	sprite.flip_h = not sprite.flip_h
+	ground_check.position.x = -ground_check.position.x</code></pre></div>
+			<p>Finally we can finally make the Para itself! In the filesystem right click the enemy scene and create a new inherited scene. Change the name of the root node to Para, then repeat the same process we did for the Ptero and Trike to add the Para's sprites, animations and collision shape (you can find the sprites in the Intermediate Enemies folder of your VGDC Assets folder.) Then select the GroundCheck node and shift it to be just in front of the Para's feet like so:</p>
+			<img src="hazards/images/para_viewport.png" class="img-fluid" alt="The collision shape and GroundCheck position for the Para enemy.">
+			<p>To finish it off, all we need to do is select the Para's GroundCheck node and enable it in the inspector. You will see the arrow in the viewport turn blue.</p>
+			<img src="hazards/images/para_groundcheck_inspector.png" class="img-fluid" alt="The GroundCheck node inspector for the Para.">
+			<p>And that's the Para! Go ahead and save the scene and add it to your level.</p>
+			
+			<h4>Creating the Anklyo</h4>
+			<p>Our final enemy is the Anklyo, a slow moving enemy that doesn't die, instead being temporarily stunned when jumped on. To get started, open up the enemy script. In the variables, add a new @export variable called invincible and set it to false</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var speed = 25.0
+@export var gravity = 980.0
+@export var invincible = false
+@onready var sprite = $AnimatedSprite2D
+@onready var collision_shape = $CollisionShape2D
+@onready var ground_check = $GroundCheck
+var direction = Vector2.RIGHT
+var is_moving = true</code></pre></div>
+			<p>Next, in the die function, we will need to make some edits. First, we only want the enemy to disable collision if it is not invincible, and two, after the death animation finishes we want the enemy to reset it's walk animation and movement if it's invincible. We can achieve this with the following code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	is_moving = false
+	if not invincible: call_deferred("disable_collision")
+	sprite.stop()
+	sprite.play("death")
+	await sprite.animation_finished
+	if invincible:
+		is_moving = true
+		sprite.play("move")
+	else:
+		queue_free()</code></pre></div>
+			<p>Finally, follow the same steps we used for the previous enemies to create a new inherited enemy scene, change the root node name to Anklyo, add the sprites, animations and collision shape. I will also enable the GroundCheck node and move it in front of the Anklyo's feet, but this is optional.</p>
+			<img src="hazards/images/anklyo_viewport.png" class="img-fluid" alt="The collision shape and GroundCheck for the Anklyo enemy.">
+			<p>Don't forget to enable the invicible variable in the inspector for the Anklyo's root node!</p>
+			<img src="hazards/images/anklyo_inspector.png" class="img-fluid" alt="The inspector for the Anklyo enemy with invincible enabled.">
+			<p class="hint tip">Note that if you want a longer delay for the Anklyo's stun, you can always increase the frame duration of frame 3 of it's death animation.</p>
+			<p>And that's all the enemies done! Test them out, try out some different speeds and options, then go ahead and move onto another module.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +125,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','MoreEnemies','hazardToggle')
 	}
 </script>
 </body>

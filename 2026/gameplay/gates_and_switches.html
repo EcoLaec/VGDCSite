@@ -90,11 +90,15 @@ var active = false</code></pre></div>
 			<pre><code class="language-gdscript">@export var lever : Lever
 @onready var sprite = $AnimatedSprite2D
 @onready var collision_shape = $CollisionShape2D</code></pre></div>
-			<p>Next, we want to create a function to open the gate and disable the collision when it recieves the activate signal from its lever. We can use a function like this to achieve it:</p>
+			<p>Next, we want to create two functions. One to open the gate and one disable the collision. We can use these functions to achieve it:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func open():
 	sprite.play()
+	call_deferred("disable_collision")
+
+func disable_collision():
 	collision_shape.disabled = true</code></pre></div>
+			<p class="hint add-info">The reason why we are seperating the two functions is because disabling a collision shape part way through a physics tick can cause a lot of strange errors. The called deferred method allows us to wait until the end of the current physics tick to disable the collision.</p>
 			<p>Finally, let's connect the lever's activate signal to the gate. Let's call the ready function of our gate, and in it connect the lever's activate signal to our open function, like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _ready():

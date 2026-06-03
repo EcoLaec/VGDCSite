@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Simple Enemy: Part 2</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,40 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Simple Enemy (Part 2)</h3>
+			<p>In this module we will create a new enemy, the trike, inheriting from our enemy scene, as well as give the player the ability to jump on them!</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Creating a New Inherited Scene</h4>
+			<p>An <strong>Inherited Scene</strong> is a scene that inherits all of the nodes and properties of a different scene. To create one, find your enemy scene in your file system, right click it and select New Inherited Scene.</p>
+			<img src="hazards/images/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>You will see a copy of the enemy scene appear, except all the inherited nodes will be yellow. Rename the root node to Trike, then save the new scene as trike as well.</p>
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
+			<h4>Adding Visuals</h4>
+			<p>To get started with our new Trike enemy, let's get our sprites for it first. You can find them in the Simple Enemy folder in your VGDC Assets folder. There should be two: Trike Move and Trike Death.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Next lets add the trike's animations. Select the AnimatedSprite2D node, go to the inspector and create a new spriteframes. Select it and in the go to the Spriteframes tab in the bottom bar. Add a new animation named death, adding frames from the Trike Death sprite. Set the death animation speed to 12 and disable it from looping. Next, create another animation called move, adding the frames from the Trike Move sprite. Set the move animation speed to 8, make sure it's on loop mode and set it to autoplay on load (toggle the button of a tag shape with a capital A in it.)</p>
+			<img src="hazards/images/trike_sprite_frames.png" class="img-fluid" alt="The sprite frames for our Trike enemy.">
+			<p>Of course our new enemy still needs a collision shape. Select the CollisionShape2D node and add a new rectangle shape in the inspector. Edit the bounds of the shape until you are happy with it.</p>
+			<img src="hazards/images/trike_collision_shape.png" class="img-fluid" alt="The collision shape for our Trike enemy.">
+			<p>Once you have done that, go ahead and save the trike scene and add one to your level. When you run the game, you should see it move, fall off any ledges, and flip directions when it collides with a wall.</p>
 
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Allowing the Player to Jump on Enemies</h4>
+			<p>You may notice, however, that the player has no way to stop the Trike! They just get hurt instead! To fix this we need to go to our player scene. Right click the player node and add a new Area2D node as a child. Name the Area2D EnemyCollider, then as a child of the new node, create a CollisionShape2D node.</p>
+			<img src="hazards/images/enemycollider_scene_tree.png" class="img-fluid" alt="Our player scene tree including the EnemyCollider.">
+			<p>Next, select the EnemyCollider node and in inspector under the collision section, disable all of the collider's layers and set it's masks to the hazard layer.</p>
+			<img src="hazards/images/enemycollider_collision.png" class="img-fluid" alt="The EnemyCollider collision layers and masks.">
+			<p>Now, let's select the CollisionShape2D under the EnemyCollider node. In the inspector create a new rectangle shape and edit its shape to be near the feet of the player.</p>
+			<img src="hazards/images/enemycollider_collision_shape.png" class="img-fluid" alt="The collision shape.">
+			<p class="hint alert">Note how I extend the EnemyCollider beyond the player by quite some pixels. This is to minimize the chances of the player's HazardCollider hitting the enemy when the player is falling at high speeds.</p>
+			<p>Of course, the player still doesn't have any functionality when they do jump on an enemy. To add some, select the EnemyCollider node, then in the inspector go to the node tab and under signals connect the body_entered signal to our player script. Let's name the function _on_enemy_collided.</p>
+			<img src="hazards/images/enemycollider_signals.png" class="img-fluid" alt="The EnemyCollider signals.">
+			<p>Finally, in the player script, go to our new _on_enemy_collided function. We need to check if the hazard (in this case body) is an Enemy and if the player is currently falling, and if so, make the player bounce upwards and call the enemy's die function. That code will look like this:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript">func _on_enemy_collided(body):
+	if body is Enemy and velocity.y > 0.0:
+		velocity.y = jump_velocitys
+		body.die()</code></pre></div>
+			<p>And you're done! Add some more enemies to your level and jump off of them! Once you are done go ahead and move onto another module.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +80,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','Enemies2','hazardToggle')
 	}
 </script>
 </body>

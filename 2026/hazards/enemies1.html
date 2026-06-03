@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Simple Enemy: Part 1</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,28 +37,91 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Simple Enemy (Part 1)</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="hazards/hazard_setup.html">Hazard Setup</a> module to be completed first!</strong></p>
+			<p>In this module we will set up our Enemy scene from which all our enemies will inherit from!</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Designing our Enemy</h4>
+			<p>Before we start making anything, it is useful to consider what we want our enemy to do. For this example, we will be making an enemy that walks left and right, changing direction when it hits a wall. We want the enemy to fall when it is not on a platform. Finally we want the enemy to freeze and play a death animation when the player jumps on it.</p>
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
+			<h4>Creating the Enemy Scene</h4>
+			<p>To get started with our Enemy, let's create a new blank scene. For the root node we want to select CharacterBody2D (just like our player). Let's name the root node Enemy. Next add two children nodes to the Enemy node: an AnimatedSprite2D and a CollisionShape2D.</p>
+			<img src="hazards/images/enemy_scene_tree.png" class="img-fluid" alt="The scene tree for the enemy">
+			<p>Next, we need to set the Enemy node's collision. Select the Enemy node and in the inspector and find the collision category. Since we want the enemies to damage the player, let's set the layer to hazard, and since we want the enemy to be able to collide with the level, set its masks to world.</p>
+			<img src="hazards/images/enemy_collision.png" class="img-fluid" alt="Setting the enemy node's collision layers and masks">
+			<p>We won't be adding any sprite frames or collision shapes yet though, as those will be unique to each enemy.</p>
 
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Creating the Enemy Script</h4>
+			<p>Of course to add any functionality we will need a script for our enemies. On the Enemy node, let's attach a new script named enemy. To get started we want to make our Enemy be a new class. To do so at the very top of the script (above extends CharacterBody2D) add the following line:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">class_name Enemy
+extends CharacterBody2D</code></pre></div>
+			<p>This line will allow us to both extend from our enemy script itself to make new enemy varieties later on. Next, let's add the variables we will need for our enemy:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@export var speed = 25.0
+@export var gravity = 980.0
+@onready var sprite = $AnimatedSprite2D
+@onready var collision_shape = $CollisionShape2D
+var direction = Vector2.RIGHT
+var is_moving = true</code></pre></div>
+			<p>Now there is quite a bit going on here, so lets go through what each variable does.</p>
+			<ol>
+				<li><strong>speed:</strong> the variable we will use to set how fast the enemy moves.</li>
+				<li><strong>gravity:</strong> the speed in which the enemy falls.</li>
+				<li><strong>sprite:</strong> a fast access to our AnimatedSprite2D.</li>
+				<li><strong>shape:</strong> a fast access to our CollisionShape2D.</li>
+				<li><strong>direction:</strong> the direction the enemy is currently moving.</li>
+				<li><strong>is_moving:</strong> a way to disable movement (useful for when the enemy dies.)</li>
+			</ol>
+			<p>Next lets create the enemy's _physics_process function. We will want to have our code broken up into other functions similar to our player, specifically we will want a handle_gravity and handle_movement function, both of which will have our delta variable passed into them. Additionally, we will want to set the enemy's velocity to zero if its is_moving is false, call the move_and_slide function, and finally call another new function called handle_direction:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	handle_gravity(delta)
+	handle_movement(delta)
+	if not is_moving: velocity = Vector2.ZERO
+	move_and_slide()
+	handle_direction())</code></pre></div>
+			<p>Just like the player, we will have plenty of errors due to calling non-existant functions. Let's fix them one by one, starting with handle_gravity. In it we will simply accelerate the enemy downwards if they aren't on the ground:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_gravity(delta):
+	if not is_on_floor(): velocity.y += gravity * delta</code></pre></div>
+			<p>Next, let's make the handle_movement function. In which we will simply set the enemy's horizontal velocity to the enemy's direction multiplied by its speed.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_movement(delta):
+	velocity.x = direction.x * speed</code></pre></div>
+			<p>Let's continue by creating our handle_direction function, in which we will call another new function (change_direction) when the enemy is on a wall:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func handle_direction():
+	if is_on_wall(): change_direction()</code></pre></div>
+			<p>Now let's get rid of the final error by creating the change_direction function. We need to it to do two things: change our enemy's direction variable and flip it's sprite.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func change_direction():
+	direction = -direction
+	sprite.flip_h = not sprite.flip_h</code></pre></div>
+			<p>Finally we need to add two functions for when enemy is defeated. The first one will be called die and the second one disable_collision:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func die():
+	is_moving = false
+	call_deferred("disable_collision")
+	sprite.play("death")
+	await sprite.animation_finished
+	queue_free()
 
+func disable_collision():
+	collision_shape.disabled = true</code></pre></div>
+			<p>Once again there are some pieces that may be confusing, so lets go through the lines.</p>
+			<ol>
+				<li>The first line simply sets the enemy to stop moving.</li>
+				<li>Line two uses the call_deferred method, which calls another function (in this case the disable_collision function) once the current physics loop has ended. this is important as disabling a collision shape inside of a physics loop can cause lots of issues.</li>
+				<li>Line three plays the sprite's death animation.</li>
+				<li>Line four waits for the sprite to finish it's animation before any more of the function continues.</li>
+				<li>Line five calls the queue_free function, which deletes the enemy once the current physics loop is finished (for the same reasons for the call_deferred method above.)</li>
+				<li>The single line in the disable_collision function simply disables the enemy's collision shape so the player cannot hurt themselves on it.</li>
+			</ol>
+			<p class="hint add-info">It may at first seem odd having so many functions that are just a single line, but we are doing this for two reasons. First is readability. It is far easier to understand what is happening when code is broken up into seperate named functions. The second reason is for the sake of future, more complex enemies who may need to overwrite portions of our code. Breaking code into functions allows us to replace only specific parts instead of needing to replace everything.</p>
+			<p>Go ahead and save the scene, then that is the enemy done! In the next part we will create an inherited scene to make an actually functioning enemy and give the player the ability to jump on it!</p>
 			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+				<a href="hazards/enemies2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
 			</div>
 		</div>
 	</div>
@@ -69,7 +132,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','Enemies1','hazardToggle')
 	}
 </script>
 </body>

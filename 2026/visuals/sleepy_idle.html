@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Sleepy Idle</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,93 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h3>Sleepy Idle</h3>
+			<p>In many games, if a player doesn't do anything for long enough, their character will do alternate idle animations, such as yawning or even taking a nap. We can add such an animation to make the game feel more lively.</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Getting the New Assets</h4>
+			<p>Before we can start adding the new animation, we need the new sprites! Go ahead and open up the Sleepy Idle folder in your VGDC Assets folder, find the appropriate tired and sleeping files and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add two new animations to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. Create a new animation called tired and import the tired spritesheet as its frames, then repeat for the sleeping animation.</p>
+			<img src="visuals/images/sleeping_sprite_frames.png" class="img-fluid" alt="The sleeping animation for the player in the sprite frames.">
+			<p class="hint tip">Note that the animation speed for sleeping is 2 fps! I also set the tired animation speed to 3 so that the player gradually slows down as they get more sleepy.</p>
+			
+			<h4>Adding the Idle Timer</h4>
+			<p>Next we need to create a timer to keep track of how long the player has been idle. Navigate to the player scene tree and add a new node to our player node. Find the timer node, add it, and then rename it (I will name mine IdleTimer).</p>
+			<img src="visuals/images/idle_timer_scene_tree.png" class="img-fluid" alt="The player's scene tree with the IdleTimer node.">
+			<p>With the IdleTimer node selected, we can set the wait time to 30 (though you can set it shorter for testing) and one shot to true like so:</p>
+			<img src="visuals/images/idle_timer_inspector.png" class="img-fluid" alt="The IdleTimer node's inspector with the time set to 30.0 and one shot enabled.">
+			<p>Finally, also in the inspector go to the Signals tab and connect the IdleTimer's timeout signal to the player script.</p>
+			<img src="visuals/images/idle_timer_signals.png" class="img-fluid" alt="The signals for the IdleTimer node.">
+			
+			<h4>Editing the Player Script</h4>
+			<p>Now we can finally add the functionality to our player script. First we need two variables: sleepiness (to keep track of which idle animation we should use) and a reference to our IdleTimer node. The former will be set to 0 by default:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<pre><code class="language-gdscript"># Reference Variables
+@onready var sprite = $AnimatedSprite2D
+@onready var idle_timer = $IdleTimer
+var sleepiness = 0</code></pre></div>
+			<p>Next, we want to add functionality to our _on_idle_timer_timeout function. Specifically, we want to increase our sleepiness variable each time it times out, to a maximum of 2. We can do this like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_idle_timer_timeout():
+	if sleepiness < 2: sleepiness += 1</code></pre></div>
+			<p>Finally, in the update_animations function, we will start the IdleTimer if the player is idle (aka not moving), stopping the timer and resetting the sleepiness variable to 0 if they do move.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Tired/Sleeping
+	if velocity == Vector2.ZERO:
+		if idle_timer.is_stopped(): idle_timer.start()
+	else:
+		idle_timer.stop()
+		sleepiness = 0
+	
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+	
+	# Grounded Animations
+	if input_axis:
+		sprite.play("walk")
+	else:
+		sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p>Though we still need to properly choose which idle animation to use! We can do this using a <strong>Match</strong> statement. A match statement is effectively a shortened version of a long chain of if/then statements, with a variable we put in (this case sleepiness) being compared to a bunch of values, with the first match having its code run and the rest skipped. Let's add it in where our sprite.play("idle") line is:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func update_animations(input_axis):
+	# Tired/Sleeping
+	if velocity == Vector2.ZERO:
+		if idle_timer.is_stopped(): idle_timer.start()
+	else:
+		idle_timer.stop()
+		sleepiness = 0
+	
+	# Update Sprite Direction
+	if input_axis: sprite.flip_h = input_axis < 0
+	
+	# Grounded Animations
+	if input_axis:
+		sprite.play("walk")
+	else:
+		match sleepiness:
+			1:
+				sprite.play("tired")
+			2:
+				sprite.play("sleeping")
+			_:
+				sprite.play("idle")
+	
+	# Aerial Animations
+	if not is_on_floor():
+		if velocity.y <= 0:
+			sprite.play("jump")
+		else:
+			sprite.play("fall")</code></pre></div>
+			<p class="hint add-info">The _: in the match statement is a default option, meaning it is always chosen if the previous values are false.</p>
+			<p>And we are done! Go ahead and test out the new animations, then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +133,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Visual','SleepyIdle','visualToggle')
 	}
 </script>
 </body>

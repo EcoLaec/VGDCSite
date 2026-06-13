@@ -80,7 +80,7 @@ var is_moving = true</code></pre></div>
 	handle_movement(delta)
 	if not is_moving: velocity = Vector2.ZERO
 	move_and_slide()
-	handle_direction())</code></pre></div>
+	handle_direction()</code></pre></div>
 			<p>Just like the player, we will have plenty of errors due to calling non-existant functions. Let's fix them one by one, starting with handle_gravity. In it we will simply accelerate the enemy downwards if they aren't on the ground:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_gravity(delta):

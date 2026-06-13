@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Aquatic Enemies</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,22 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h3>Aquatic Enemies</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires both <a href="hazards/enemies1.html">Simple Enemy</a> modules and <a href="movement/swimming1.html">Swimming (Part 1)</a> to be completed first!</strong></p>
+			<p>In this module we build off of our basic enemy to create some more enemies with more complicated behaviors: the anklyo, ptero and para!</p>
+			<p class="hint tip">Note that each of these enemies can be added individually. If you don't want one, just skip it!</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>Creating the Ptero</h4>
+			<p>The ptero will be a simple flying enemy. To create it, we will repeat the same steps we used for the trike in the <a href="hazards/enemies2.html">Simple Enemy (Part 2)</a> module, starting by creating a new inherited scene from our enemy scene.</p>
+			<img src="hazards/images/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>Next, rename the Enemy node to Ptero and select the AnimatedSprite2D and create a new sprite frames in the inspector. Then let's import the Ptero move and death spritesheets. You can find them in the Intermediate Enemies folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="hazards/images/ptero_sprite_frames.png" class="img-fluid" alt="Ptero sprite frames and animation.">
+			<p>Next, select the CollisionShape2D node and create a new rectangle shape in the inspector. Let's resize it to fit the sprite.</p>
+			<img src="hazards/images/ptero_collision_shape.png" class="img-fluid" alt="The collision shape for the Ptero enemy.">
+			<p>Finally, to make our Ptero fly we actually don't need to make any changes in our enemy script! Instead, select the Ptero node and go to the inspector. Let's set its speed tp 50.0 and its gravity to 0.0.</p>
+			<img src="hazards/images/ptero_inspector.png" class="img-fluid" alt="Ptero export variables in the inspector, with its speed set to 50.0 and its gravity set to 0.0.">
+			<p>And that is the Ptero! Go ahead and save the scene and add some flying enemies to your level.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +62,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Hazard','AquaticEnemies','hazardToggle')
 	}
 </script>
 </body>

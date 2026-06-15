@@ -70,8 +70,8 @@
 			<img class="img-fluid" src="gameplay/images/inspector_change_score.png" alt="changing the points value for a pickup in the inspector.">
 			
 			<h4>Enemy Points</h4>
-			<p class="hint alert">This section requires the <a href="enemies1.html">Simple Enemy</a> modules. If you do not have pickups in your game you can safely ignore this section.</p>
-			<p>Navigate to your Enemy script. At the top add a new export variable called points. Set the default to 100.</p>
+			<p class="hint alert">This section requires both of the <a href="hazards/enemies1.html">Simple Enemy</a> modules. If you do not have enemies in your game you can safely ignore this section.</p>
+			<p>Navigate to your Enemy script. At the top add a new export variable called points. Let's set the default to 100.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">@export var points = 100</code></pre></div>
 			<p>Next, go to the die function. Directly above the queue_free method add the following line of code:</p>
@@ -83,7 +83,7 @@
 	await sprite.animation_finished
 	Global.score += points
 	queue_free()</code></pre></div>
-			<p class="hint">Note that if you have completed the <a href="enemies3.html">Advanced Enemies</a> module, you still put the line of code above the queue_free method, just inside of the if then statement like so:</p>
+			<p class="hint alert">Note that if you have completed the <a href="hazards/intermediate_enemies.html">Intermediate Enemies</a> module, you still put the line of code above the queue_free method, just inside of the if then statement like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func die():
 	is_moving = false
@@ -95,24 +95,14 @@
 		is_moving = true
 		sprite.play("move")
 	else:
-		Global.score_queue += points
+		Global.score += points
 		queue_free()</code></pre></div>
 			<p>You can change the point values each enemy type grants on defeat by selecting their root node in their specific scenes and changing points in the inspector.</p>
-			<img class="img-fluid" src="images/gameplay/change_enemy_points.png" alt="changing the points value for an enemy in the inspector.">
-			
-			<h4>Time Left Points</h4>
-			<p class="hint alert">This section requires the <a href="time_limit.html">Time Limit</a> and <a href="multiple_levels.html">Multiple Levels</a> modules. If you do not have limited time and multiple levels in your game you can safely ignore this section.</p>
-			<p>Navigate to your world script. Inside of the level_complete function add the following line of code to the top of the function:</p>
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">func complete_level():
-	Global.score += int(LevelTimer.time_left) * 5
-	if not next_level is PackedScene: return
-	get_tree().change_scene_to_packed(next_level)</code></pre></div>
-			<p>This code snippet adds 5 points per second left on the level timer. You can change it by replacing the 5 with how many points you want each second to be worth.</p>
-			<p class="hint">Note the int() surrounding the Leveltimer.time_left. This is call casting. By doing this we turn the time_left into an integer, or whole number, so that we always end up with a multiple of 5 and no decimals.</p>
+			<img class="img-fluid" src="gameplay/images/change_enemy_points.png" alt="changing the points value for an enemy in the inspector.">
 			
 			<h4>Checkpoint... Points</h4>
-			<p>This section requires the <a href="gameplay/checkpoints.html">Checkpoints</a> module. Navigate to your checkpoint script. Inside of the _on_enter function and within the if not active statement (as we want the points to be applied only once) add the following line of code:</p>
+			<p class="hint alert">This section requires the <a href="gameplay/checkpoints.html">Checkpoints</a> module. If you do not have checkpoints in your game you can safely ignore this section.</p>
+			<p>Navigate to your checkpoint script. Inside of the _on_enter function and within the if not active statement (as we want the points to be applied only once) add the following line of code:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _on_area_entered(area):
 	player.respawn_point = global_position
@@ -121,7 +111,7 @@
 		Global.score += 1500
 		super.on_enter(player)
 	active = true</code></pre></div>
-	<p class="hint tip">Note you can change the 1500 points to whatever number you want, and even could set it up as an export variable if you want to have more flexibility. For my usage, however, a hard-coded value like this works just fine.</p>
+			<p class="hint tip">Note you can change the 1500 points to whatever number you want, and even could set it up as an export variable if you want to have more flexibility. For my usage, however, a hard-coded value like this works just fine.</p>
 
 			<p>And that is score implemented! You can use the methods used in this module to add score bonuses to just about any action in the game you want! Go ahead and try some out then move on to another module.</p>
 		</div>

@@ -50,7 +50,7 @@
 			<img src="hazards/images/ptero_sprite_frames.png" class="img-fluid" alt="Ptero sprite frames and animation.">
 			<p>Next, select the CollisionShape2D node and create a new rectangle shape in the inspector. Let's resize it to fit the sprite.</p>
 			<img src="hazards/images/ptero_collision_shape.png" class="img-fluid" alt="The collision shape for the Ptero enemy.">
-			<p>Finally, to make our Ptero fly we actually don't need to make any changes in our enemy script! Instead, select the Ptero node and go to the inspector. Let's set its speed tp 50.0 and its gravity to 0.0.</p>
+			<p>Finally, to make our Ptero fly we actually don't need to make any changes in our enemy script! Instead, select the Ptero node and go to the inspector. Let's set its speed to 50.0 and its gravity to 0.0.</p>
 			<img src="hazards/images/ptero_inspector.png" class="img-fluid" alt="Ptero export variables in the inspector, with its speed set to 50.0 and its gravity set to 0.0.">
 			<p>And that is the Ptero! Go ahead and save the scene and add some flying enemies to your level.</p>
 			
@@ -73,12 +73,12 @@ var is_moving = true</code></pre></div>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_direction():
 	if not ground_check.is_colliding() and ground_check.enabled: change_direction()
-	if is_on_wall(): change_direction()</code></pre></div>
+	if is_on_wall(): change_direction()
+	sprite.flip_h = false if direction.x == 1.0 else true</code></pre></div>
 			<p>However there is still a problem. When the enemy changes direction, it's GroundCheck would stay on the same side! In order to remedy this, let's add a line in the change_direction function that flips the horizontal position of the GroundCheck:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func change_direction():
 	direction = -direction
-	sprite.flip_h = not sprite.flip_h
 	ground_check.position.x = -ground_check.position.x</code></pre></div>
 			<p>Finally we can finally make the Para itself! In the filesystem right click the enemy scene and create a new inherited scene. Change the name of the root node to Para, then repeat the same process we did for the Ptero and Trike to add the Para's sprites, animations and collision shape (you can find the sprites in the Intermediate Enemies folder of your VGDC Assets folder.) Then select the GroundCheck node and shift it to be just in front of the Para's feet like so:</p>
 			<img src="hazards/images/para_viewport.png" class="img-fluid" alt="The collision shape and GroundCheck position for the Para enemy.">

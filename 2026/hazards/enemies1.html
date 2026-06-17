@@ -89,15 +89,15 @@ var is_moving = true</code></pre></div>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_movement(delta):
 	velocity.x = direction.x * speed</code></pre></div>
-			<p>Let's continue by creating our handle_direction function, in which we will call another new function (change_direction) when the enemy is on a wall:</p>
+			<p>Let's continue by creating our handle_direction function, in which we will call another new function (change_direction) when the enemy is on a wall, as well as making sure our enemy is facing the right direction:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func handle_direction():
-	if is_on_wall(): change_direction()</code></pre></div>
+	if is_on_wall(): change_direction()
+	sprite.flip_h = false if direction.x == 1.0 else true</code></pre></div>
 			<p>Now let's get rid of the final error by creating the change_direction function. We need to it to do two things: change our enemy's direction variable and flip it's sprite.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func change_direction():
-	direction = -direction
-	sprite.flip_h = not sprite.flip_h</code></pre></div>
+	direction = -direction</code></pre></div>
 			<p>Finally we need to add two functions for when enemy is defeated. The first one will be called die and the second one disable_collision:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func die():

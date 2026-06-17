@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Advanced Enemies (Part 1)</title>
+	<base href="../">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+	<!-- Syntax highlighting for GDScript. -->
+	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
+	<script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12" id="topbar">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-4 bg-dark">
+			<nav class="navbar" id="sidebar">
+			</nav>
+		</div>
+
+		<!-- Content -->
+		<div class="col-lg-9 col-md-8 content">
+
+			<!-- Section -->
+			<h3>Advanced Enemies (Part 1)</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires both <a href="hazards/enemies1.html">Simple Enemy</a> modules to be completed first!</strong></p>
+			<p>Up to this point our enemies have had pretty simplistic behaviors, mostly just walking back and forth. In this module, however, we will create two new enemies with far more complex behaviors: The Neura, a flying enemy that tracks the player around obstacles, and the Dilo, a small enemy that wanders about and spits acid.</p>
+
+			<h4>Creating the Neura Scene</h4>
+			<p>Let's start with the Neura. To create it, we will repeat the same steps we used for the trike in the <a href="hazards/enemies2.html">Simple Enemy (Part 2)</a> module, starting by creating a new inherited scene from our enemy scene.</p>
+			<img src="hazards/images/new_inherited_enemy_scene.png" class="img-fluid" alt="Creating a new inherited scene from the enemy scene.">
+			<p>Next, rename the Enemy node to Neura and select the AnimatedSprite2D and create a new sprite frames in the inspector. Then let's import the Neura move and death spritesheets. You can find them in the Advanced Enemies folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<img src="hazards/images/neura_sprite_frames.png" class="img-fluid" alt="Neura sprite frames and animation.">
+			<p>Next, select the CollisionShape2D node and create a new rectangle shape in the inspector. Let's resize it to fit the sprite.</p>
+			<img src="hazards/images/neura_collision_shape.png" class="img-fluid" alt="The collision shape for the Neura enemy.">
+			<p>Finally, to make our Neura fly select the Neura node and go to the inspector. Let's set its speed to 75.0 and its gravity to 0.0.</p>
+			<img src="hazards/images/neura_inspector.png" class="img-fluid" alt="Neura export variables in the inspector, with its speed set to 75.0 and its gravity set to 0.0.">
+			<p>At this point the Neura is just a faster version of the Ptero from the <a href="hazards/intermediate_enemies.html">Intermediate Enemies</a> module. To make actually be able to track the player we are going to use Godot's built in navigation. To do so we will add three new nodes. First a NavigationAgent2D node and a new Area2D node, which I will name Vision. Finally, create a CollisionShape2D node as a child of the Vision node.</p>
+			<img src="hazards/images/neura_scene_tree.png" class="img-fluid" alt="The scene tree for the Neura enemy.">
+			<p>Next, select the new NavigationAgent2D node. In the inspector we want to change both the Path Desired Distance and Target Desired Distance to 5.0. These variables dictate how close the agent needs to be to their "path" to consider reaching it.</p>
+			<img src="hazards/images/neura_nav_agent_inspector.png" class="img-fluid" alt="The inspector for the Neura's NavigationAgent2D node.">
+			<p class="hint add-info">I won't be going in depth into Godot's navigation system here, but if you're interested in learning more you can check out Godot's official documentation <a href="https://docs.godotengine.org/en/stable/tutorials/navigation/navigation_introduction_2d.html" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now to handle the Vision node. Select it and navigate to the inspector. We want to set it's layers to be blank and its masks to be just our player layer.</p>
+			<img src="hazards/images/vision_collision_layers.png" class="img-fluid" alt="The collision layers for the Vision node.">
+			<p>Finally, select the CollisionShape2D node under the Vision node. Create a new CircleShape2D in the inspector and size it to make the area in which the Neura will "see" the player. I made mine decently large:</p>
+			<img src="hazards/images/neura_vision.png" class="img-fluid" alt="The collision shape for the Neura's vision.">
+
+			<h4>Making the Neura Script</h4>
+			<p>The scene may be done, but now we need to actually use the new nodes. Go ahead and disconnect the default Enemy script from the Neura node, then attach a new one. Let's name the new script neura and make it inherit from the Enemy class.</p>
+			<img src="hazards/images/neura_new_script.png" class="img-fluid" alt="Creating the new Neura script inheriting from Enemy.">
+			<p>To start, we will want two new variables: target, which will be used to track the player, and a reference to our NavigationAgent2D node.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">extends Enemy
+
+@onready var navigation_agent = $NavigationAgent2D
+var target : Node2D</code></pre></div>
+			<p>Next, we are actually going to override our _physics_process function. We want to do this because the Neura doesn't move like any other enemy. There is a lot happening here, but I added comments to try and make things more digestable:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _physics_process(delta):
+	# Stop moving if dying or has no target
+	if not is_moving or not target:
+		velocity = Vector2.ZERO
+		return
+	
+	# Target the player's location
+	navigation_agent.target_position = target.global_position
+	
+	# Change direction based on movement
+	if velocity.x != 0.0: sprite.flip_h = velocity.x < 0.0
+	
+	# Stop moving if the player has been reached
+	if navigation_agent.is_navigation_finished():
+		return
+	
+	# Calculate path and velocity required to reach the path
+	var next_path_pos: Vector2 = navigation_agent.get_next_path_position()
+	var new_velocity: Vector2 = global_position.direction_to(next_path_pos) * speed
+	
+	# Setting the velocity and moving
+	if not is_moving: velocity = Vector2.ZERO
+	velocity = new_velocity
+	move_and_slide()</code></pre></div>
+			<p>Finally we need to actually set the player as the target. We can do this by selecting the Vision node and navigating to the inspector under the signals tab. We want to connect the body_entered signal to a function called _on_player_spotted and the body_exited signal to _on_player_lost.</p>
+			<img src="hazards/images/vision_signals.png" class="img-fluid" alt="The signals for the Vision node.">
+			<p>Back in the script we want to have the target variable set to the player when they are spotted, and removed when they are lost, like so:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_player_spotted(body):
+	target = body
+
+func _on_player_lost(_body):
+	target = null</code></pre></div>
+
+			<h4>Setting up the World Scene</h4>
+			<p>There is one final problem, however. In order for our enemy to be able to navigate we need to set up a navigation region in our world scene! Go ahead and open up the world scene and create a new NavigationRegion2D node. Then, drag your GroundTiles to be a child of the new node (this will allow the navigation system to treat the level tiles as an obstacle).</p>
+			<img src="hazards/images/nav_region_scene_tree.png" class="img-fluid" alt="The world scene tree with the NavigationRegion2D node.">
+			<p>Next, select the NavigationRegion2D node and in the inspector create a new navigation polygon.</p>
+			<img src="hazards/images/nav_region_inspector.png" class="img-fluid" alt="The inspector for the NavigationRegion2D node.">
+			<p>Finally, with the navigation polygon selected in the inspector, you can click in the viewport to draw a region. Make sure to have the entire level (or at least the section you want the Neura to navigate) covered. You can finish the region by clicking your first point again to close the shape. After a brief delay, you should see a mesh of triangles appear to show the navigation region. If you don't, you can press the BakeNavigationPolygon button at the top of the viewport.</p>
+			<img src="hazards/images/nav_region_viewport.png" class="img-fluid" alt="The level with the navigation polygon.">
+			<p>And that is the Neura done! Go ahead and add it to your level, check if it works, then move on to the Dilo!</p>
+			<div class="text-center">
+				<a href="hazards/advanced_enemies2.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12" id="bottombar">
+		</div>
+	</div>
+</div>
+<script>
+	function triggerExpand() {
+		expandAndHighlight('Hazard','AdvancedEnemies1','hazardToggle')
+	}
+</script>
+</body>
+</html>

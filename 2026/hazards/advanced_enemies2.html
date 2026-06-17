@@ -61,7 +61,7 @@
 			<h4>Making the Dilo Script</h4>
 			<p>Just like the Neura, we will be making a new script for the Dilo. Go ahead and disconnect the default Enemy script from the Dilo node, then attach a new one. Let's name the new script dilo and make it inherit from the Enemy class.</p>
 			<img src="hazards/images/dilo_new_script.png" class="img-fluid" alt="Creating the new Dilo script inheriting from Enemy.">
-			<p>To start, we will want five new variables: an export variable called bullet, which will point to our future acid bullet scene, rng, a new RandomNumberGenerator which will will use to randomize the Dilo's actions, a variable to check if the Dilo recently spit acid, target, which will be used to track the player, and a reference to our StateTimer node.</p>
+			<p>To start, we will want five new variables: an export variable called bullet, which will point to our future acid bullet scene, rng, a new RandomNumberGenerator which will will use to randomize the Dilo's actions, a variable to check if the Dilo recently spit acid, target, which will be used to track the player, a current_speed variable and a reference to our StateTimer node.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">extends Enemy
 
@@ -69,7 +69,9 @@
 var rng = RandomNumberGenerator.new()
 var just_spit = false
 var target : Node2D
+var current_speed = speed
 @onready var state_timer = $StateTimer</code></pre></div>
+			<p class="hint alert">Note that if you have completed the <a href="hazards/aquatic_enemies.html">Aquatic Enemies</a> module, you do not need the current_speed variable.</p>
 			<p>Next, we will want to prep our rng variable in the _ready function, randomizing it when the game starts:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func _ready():

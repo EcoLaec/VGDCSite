@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Player Sounds</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,38 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Player Sounds</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="visuals/juice_setup.html">Juice Setup</a> module to be completed first!</strong></p>
+			<p>Sounds are one of the most important parts for game feel. Adding them can make actions feel more responsive, and as such adding sounds to our player's most important actions (jumping, falling and dashing) will go a long way in making the game feel nice.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Jumping Sounds</h4>
+			<p>First things first go to your player scene. Right click the player node and create a new AudioStreamPlayer node as a child. Rename it to JumpSound.</p>
+			<img src="audio/images/jump_sound_scene_tree.png" class="img-fluid" alt="The player scene tree with the JumpSound node.">
+			<p>Next we need to import our jump sound from the Player Sounds folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now select your JumpSound node. In the inspector you can drag the jump sound file from our file system to the stream property.</p>
+			<img src="audio/images/jump_sound_inspector.png" class="img-fluid" alt="Inspector for the JumpSound node with the audio stream selected.">
+			<p>To actually play the sound, however, we will need to go into our player script. We will add the following line of code to our jump_effects function:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">func jump_effects():
+	$JumpSound.play()</code></pre></div>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h4>Landing Sounds</h4>
+			<p>To add sounds when the player lands repeat the same process as jumping sounds, creating a new AudioStreamPlayer node and naming it LandSound. Import the sound and drop it into the LandSound's stream property. Though once you are ready to move to the script add the following to the land_effects function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func land_effects():
+	$LandSound.volume_db = (stored_velocity.y * 0.1) - 45.0
+	$LandSound.play()</code></pre></div>
+			<p class="hint add-info">Note that the line setting the LandSound's volume_db is causing the volume to scale with the player's vertical velocity. Without this, falling one tile would be just as loud as falling one hundred, which would not make much sense and would get very annoying.</p>
+
+			<h4>Dashing Sounds</h4>
+			<p class="hint alert">This section requires the <a href="movement/dash.html">Dashing</a> module. If you do not have dashing in your game you can safely ignore this section.</p>
+			<p>Just as before, for dashing we repeat the same process as jumping sounds, creating a new AudioStreamPlayer node and naming it DashSound. Import the sound and drop it into the DashSound's stream property, then play it in the dash_effects function:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func dash_effects():
+	$DashSound.play()</code></pre></div>
+
+			<p>And that is it! Go ahead and try out the new sounds for your player then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +78,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Audio','PlayerSounds','audioToggle')
 	}
 </script>
 </body>

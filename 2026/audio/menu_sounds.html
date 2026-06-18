@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Menu Sounds</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,29 +37,28 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h3>Menu Sounds</h3>
+			<p class="hint warning"><strong>IMPORTANT! This module requires the <a href="misc/main_menu.html">Main Menu</a> module to be completed first!</strong></p>
+			<p>A nice touch to UI elements is adding some sounds to the button presses. To get started, go to your main menu scene, right click the Main Menu node and create a new AudioStreamPlayer node as a child. Rename it to ButtonPress.</p>
+			<img src="audio/images/menu_sound_scene_tree.png" class="img-fluid" alt="The main menu scene tree with the ButtonPress node.">
+			<p>Next we need to import our menu sound from the Menu Sounds folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now select your ButtonPress node. In the inspector you can drag the menu sound file from our file system to the stream property.</p>
+			<img src="audio/images/menu_sound_inspector.png" class="img-fluid" alt="Inspector for the ButtonPress node with the audio stream selected.">
+			<p>To actually play the sound, however, we will need to go into our main menu script itself. We will add the following line of code to each of our button functions like so:</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">func _on_play_pressed():
+	$ButtonPress.play()
+	await $ButtonPress.finished
+	get_tree().change_scene_to_packed(next_scene)
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+func _on_quit_pressed():
+	$ButtonPress.play()
+	await $ButtonPress.finished
+	get_tree().quit()</code></pre></div>
+			<p>This code will play the sound and then wait for it to finish before moving on to the next scene as to not cut off the sound.</p>
+			<p class="hint alert">Note that if you have completed the <a href="gameplay/character_select1.html">Character Select</a> modules you can repeat the same steps as above it's menu, puting the code at the top of each pressed function.</p>
+			<p>And you're done! Go ahead and check out the sounds and then move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -69,7 +68,7 @@
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Audio','MenuSounds','audioToggle')
 	}
 </script>
 </body>

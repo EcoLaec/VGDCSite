@@ -55,7 +55,38 @@
 
 			<!-- Codeblock -->
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
+			<pre><code class="language-gdscript">func respawn():
+	$HurtSound.play()
+	sprite.play("death")
+	get_tree().paused = true
+	await sprite.animation_finished
+	get_tree().paused = false
+	position = respawn_point
+
+@onready var invincibility_timer = $InvincibilityTimer
+@onready var animation_player = $AnimationPlayer
+
+func take_damage(force_respawn : bool):
+	if invincibility_timer.time_left == 0.0 or force_respawn:
+		health -= 1
+		if health <= 0 or force_respawn:
+			sprite.play("death")
+		else:
+			sprite.play("hurt")
+		get_tree().paused = true
+		await sprite.animation_finished
+		get_tree().paused = false
+		invincibility_timer.start()
+		animation_player.play("flicker")
+		if health <= 0:
+			respawn()
+			health = max_health
+		if force_respawn: position = respawn_point
+
+func _on_invincibility_timer_timeout():
+	animation_player.play("RESET")
+	$HazardCollider/CollisionShape2D.disabled = true
+	$HazardCollider/CollisionShape2D.disabled = </code></pre></div>
 
 			<div class="text-center">
 				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>

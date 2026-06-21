@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Level Transition</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,45 +37,53 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Level Transition</h3>
+			<p class="hint warning">IMPORTANT! This module requires the <a href="gameplay/multiple_levels.html">Multiple Levels</a> module to be completed first!</p>
+			<p>Right now changing levels is quite abrupt, with just an instant switch between each. We can make a simple animation to fade in and out of black to make that transition quite a bit smoother.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
+			<h4>Setting Up the World Scene</h4>
+			<p>To get started go to your world scene. In it create a new CanvasLayer node. Let's name it LevelTransition. Next, create two more nodes as children of the LevelTransition node: a ColorRect node and an AnimationPlayer node.</p>
+			<img src="visuals/images/level_transition_scene_tree.png" class="img-fluid" alt="The world scene tree with the LevelTransition node and its children nodes.">
+			<p>Right now our ColorRect is just a small square, but we will want it to cover the full screen. We can do this select the ColorRect node and at the top of the viewport select its anchors, which will be an circle icon with a + symbol in it. Select Full Rect.</p>
+			<img src="visuals/images/full_rect_anchors.png" class="img-fluid" alt="Selecting the full rect anchors option for our ColorRect node.">
+			<p>Next for the color. While still having the ColorRect node selected, go to the inspector and select the Color property. A menu will pop up for you to select a color. I will have mine set to #181425.</p>
+			<img src="visuals/images/color_rect_full.png" class="img-fluid" alt="Selecting the color for our ColorRect node.">
 
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
+			<h4>Setting Up the Animations</h4>
+			<p>Right now, however, our ColorRect would only block our view of the game! To get started fixing this issue we will need to set up some animations using our AnimationPlayer node. An animation player is a special node that allows us to set smooth transitions between different things called <strong>Key Frames</strong>. Each key frame is a preset value we set for any given property (such as position, color, etc.). To get started with them let's select the our AnimationPlayer node. You will see a new editor pop up in the bottom bar.</p>
+			<img src="visuals/images/animation_editor.png" class="img-fluid" alt="The editor for the AnimationPlayer node.">
+			<p>Don't worry, we will go step by step. To start, press the Animation button and create a new animation. Let's name it fade in.</p>
+			<img src="visuals/images/new_animation.png" class="img-fluid" alt="Creating a new animation.">
+			<p>Next make sure you have your fade in  animation selecting in the drop down next to the Animation button. Next, on the right side of the animation editor we can set the animation length and if it loops. Let's set it to be 0.5 seconds long.</p>
+			<img src="visuals/images/set_animation_length.png" class="img-fluid" alt="Setting the duration for the fade in animation.">
+			<p>Now it's time to set up our keyframes! Select your ColorRect node while your animation editor is open (you may need to press the animation tab in the bottom bar). You will notice a bunch of small key icons next to properties in the inspector. These buttons are how we set key frames. Go ahead and press the key icon next to the color property, leaving the following pop up as default to make a reset track.</p>
+			<img src="visuals/images/select_color_rect_key_frame_full.png" class="img-fluid" alt="The color property for the ColorRect node.">
+			<p>You will see a square pop up in the animation editor. This is your first key frame! You can select it to change its values and time in the animation. To add our next one move let's right click in an empty space on our animation track and select duplicate keys. Select the new key and in the value property, open the color selector and drag the alpha bar to the left, making the color completely transparent.</p>
+			<img src="visuals/images/color_rect_transparent.png" class="img-fluid" alt="A completely transparent color in the color selector.">
+			<p>Next, still in the key frame inspector, set the time to be 0.5 (exactly at the end of the animation).</p>
+			<img src="visuals/images/fade_key_frame_inspector.png" class="img-fluid" alt="The inspector for the fade in animation's second key frame.">
+			<p>At this point the fade in animation is complete, and should look like so:</p>
+			<img src="visuals/images/fade_in_animation.png" class="img-fluid" alt="The complete fade in animation.">
+			<p>Next for the fade out animation you can press the animation button again and press duplicate, renaming the animation fade out. All you need to do is swap the colors of the two key frames and you should end up with this:</p>
+			<img src="visuals/images/fade_out_animation.png" class="img-fluid" alt="The complete fade out animation.">
 
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Connecting the Scripts</h4>
+			<p>Finally we need to actually let the game know when to play the animations! We can start by opening our world script. In it we want to first add a reference variable to our AnimationPlayer.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@onready var animation_player = $LevelTransition/AnimationPlayer</code></pre></div>
+			<p>Next, in the _ready function we want to play our fade in animation.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _ready():
+	animation_player.play("fade in")
+	Global.level_complete.connect(complete_level)</code></pre></div>
+			<p>And finally, when we complete a level we want to play the fade out animation, wait for it to complete, and then switch levels.</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func complete_level():
-	level_transition.transition_level()
-	await level_transition.transition_complete
-	get_tree().change_scene_to_packed(next_level)
-
-extends CanvasLayer
-
-@onready var animation_player = $AnimationPlayer
-signal transition_complete
-
-func _ready():
-	animation_player.play("fade in")
-
-func transition_level():
 	animation_player.play("fade out")
 	await animation_player.animation_finished
-	transition_complete.emit()</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+	if not next_level is PackedScene: return
+	get_tree().change_scene_to_packed(next_level)</code></pre></div>
+			<p>And you're done! Go ahead and make sure everything is working, mess aruond with the animations, and move on to another module!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -85,7 +93,7 @@ func transition_level():
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Visual','LevelTransition','visualToggle')
 	}
 </script>
 </body>

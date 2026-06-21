@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>VGD Course 2025</title>
+	<title>Hurt Effects</title>
 	<base href="../">
 	<link rel="shortcut icon" type="image/png" href="favicon.png">
 	<div id="head-placeholder"></div>
@@ -37,36 +37,75 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
+			<h3>Hurt Effects</h3>
+			<p class="hint warning">IMPORTANT! This module requires the <a href="hazards/hazard_setup.html">Hazard Setup</a> module to be completed first!</p>
+			<p>At this point dying in the game can be a bit jarring, with an instant teleport with no delay or visual way of showing what happened. In this module we will explore adding some more visual feedback to respawning and taking damage.</p>
 
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
-			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
-
-			<!-- Codeblock -->
+			<h4>Death Effects</h4>
+			<p>Before we can start adding the death animation, we need the new sprites! Go ahead and open up the Hurt Effects folder in your VGDC Assets folder, find the appropriate files and drag it into your file system.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we need to add a new animation to our player's sprite frames. Navigate to your player scene's AnimatedSprite2D then it's sprite frame. We will create a new animation named death, using the corresponding death spritesheet.</p>
+			<img src="visuals/images/player_death_sprite_frames.png" class="img-fluid" alt="The player's death animation.">
+			<p class="hint alert">Note that the death animation is set to not loop. If you don't do this it will break later!</p>
+			<p>Next, while we have the AnimatedSprite2D selected we will want to go in the inspector and under the process section set the mode property to Always.</p>
+			<img src="visuals/images/change_process_to_always.png" class="img-fluid" alt="Changing a node's process mode to always in the inspector.">
+			<p>Setting this property dictates how a node will interact with Godot's built-in pausing. In this case we want the death animation to play even when we freeze the rest of the game, and the Always process mode allows that. Though of course right now nothing is freezing, or even playing! To fix that go to your player's script and in the respawn function add the following code:</p>
+			<p class="hint warning">The following code is redundant if you have Health in your game. If you do, skip this code and move on to the next section instead!</p>
 			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
 			<pre><code class="language-gdscript">func respawn():
-	$HurtSound.play()
 	sprite.play("death")
 	get_tree().paused = true
 	await sprite.animation_finished
 	get_tree().paused = false
-	position = respawn_point
+	position = respawn_point</code></pre></div>
+			<p>This code plays the death animation, pauses the rest of the game, then waits for the animation to end before un-pausing and respawning the player. Go ahead and test it out!</p>
 
-@onready var invincibility_timer = $InvincibilityTimer
-@onready var animation_player = $AnimationPlayer
-
-func take_damage(force_respawn : bool):
+			<h4>Damage Effects</h4>
+			<p class="hint alert">This section requires both of the <a href="hazards/health1.html">Health</a> modules. If you do not have health in your game you can safely ignore this section.</p>
+			<p>Of course, a death animation is a bit much if you have health in your game. To add effects to that, however, things get a bit more complex. To get started go to your player scene's AnimatedSprite2D then it's sprite frame. We will create a new animation named hurt, using the corresponding hurt spritesheet.</p>
+			<img src="visuals/images/player_hurt_sprite_frames.png" class="img-fluid" alt="The player's hurt animation.">
+			<p class="hint alert">Note that just like the death animation, the hurt animation is set to not loop!</p>
+			<p>Next, to use our new animation, let's return to our player script and in the take_damage function add the following code:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func take_damage(force_respawn : bool):
+	if invincibility_timer.time_left == 0.0 or force_respawn:
+		health -= 1
+		if health <= 0 or force_respawn:
+			sprite.play("death")
+		else:
+			sprite.play("hurt")
+		get_tree().paused = true
+		await sprite.animation_finished
+		get_tree().paused = false
+		if health <= 0:
+			respawn()
+			health = max_health
+		if force_respawn: position = respawn_point</code></pre></div>
+			<p>This code makes it that the proper animation plays, then the game pauses until the animation finishes, then continues on as normal. Though there is one final component of our damage system that could use some visual flair: the invincibility frames. To remedy this we want to create a new node that is child to our Player node. Specifically we will make an AnimationPlayer node.</p>
+			<img src="visuals/images/player_hurt_scene_tree.png" class="img-fluid" alt="The player's scene tree including its animation player.">
+			<p>An animation player is a special node that allows us to set smooth transitions between different things called <strong>Key Frames</strong>. Each key frame is a preset value we set for any given property (such as position, color, etc.). To get started with them let's select the new AnimationPlayer node. You will see a new editor pop up in the bottom bar.</p>
+			<img src="visuals/images/animation_editor.png" class="img-fluid" alt="The editor for the AnimationPlayer node.">
+			<p>There is a lot going on here, but we will take it one step at a time. To start, press the Animation button and create a new animation. Let's name it flicker.</p>
+			<img src="visuals/images/new_animation.png" class="img-fluid" alt="Creating a new animation.">
+			<p>Next make sure you have your flicker animation selecting in the drop down next to the Animation button. Next, on the right side of the animation editor we can set the animation length and if it loops. Let's set it to be 0.25 seconds long and loop.</p>
+			<img src="visuals/images/set_animation_length_and_loop.png" class="img-fluid" alt="Setting the duration and looping for the flicker animation.">
+			<p>Now it's time to set up our keyframes! Select your AnimatedSprite2D node while your animation editor is open (you may need to press the animation tab in the bottom bar). You will notice a bunch of small key icons next to properties in the inspector. These buttons are how we set key frames. Navigate to the visibility section and press the key icon next to the modulate property, leaving the following pop up as default to make a reset track.</p>
+			<img src="visuals/images/select_modulate_key_frame.png" class="img-fluid" alt="The modulate property for the player's AnimatedSprite2D node.">
+			<p class="hint add-info">The modulate property is a way to change the color and transparency of a node without needing to change its sprite.</p>
+			<p>You will see a white square pop up in the animation editor. This is your first key frame! You can select it to change its values and time in the animation. To add our next one move let's right click in an empty space on our animation track and select duplicate keys. Select the new key and in the value property, open the color selector and drag the alpha bar to the left, making the color completely transparent.</p>
+			<img src="visuals/images/set_color_transparent.png" class="img-fluid" alt="A completely transparent color in the color selector.">
+			<p>Next, still in the key frame inspector, set the time to be 0.125 (exactly half way through our animation).</p>
+			<img src="visuals/images/flicker_key_frame_inspector.png" class="img-fluid" alt="The inspector for the flicker animation's second key frame.">
+			<p>Finally, to finish off our flicker animation we want to set its transition mode to be nearest. We can change it just under the animation duration from the blue wavy line (cubic) to the boxy line (nearest).</p>
+			<img src="visuals/images/set_transition_to_nearest.png" class="img-fluid" alt="Setting the transition mode for the flicker aniamtion to nearest.">
+			<p>At this point the flicker animation is complete, and should look like so:</p>
+			<img src="visuals/images/flicker_animation.png" class="img-fluid" alt="The complete flicker animation.">
+			<p>Now to actually use it! Back in the player script we will want to create a reference variable to our AnimationPlayer node.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">@onready var animation_player = $AnimationPlayer</code></pre></div>
+			<p>Next, go back to our take_damage function, adding a line to start our flicker animation after the scene is un-paused.</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func take_damage(force_respawn : bool):
 	if invincibility_timer.time_left == 0.0 or force_respawn:
 		health -= 1
 		if health <= 0 or force_respawn:
@@ -81,16 +120,26 @@ func take_damage(force_respawn : bool):
 		if health <= 0:
 			respawn()
 			health = max_health
-		if force_respawn: position = respawn_point
-
-func _on_invincibility_timer_timeout():
+		if force_respawn: position = respawn_point</code></pre></div>
+			<p>And finally, to stop the flickering, let's reset our animations when the invincibility timer timeouts:</p>
+			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
+			<pre><code class="language-gdscript">func _on_invincibility_timer_timeout():
 	animation_player.play("RESET")
 	$HazardCollider/CollisionShape2D.disabled = true
-	$HazardCollider/CollisionShape2D.disabled = </code></pre></div>
+	$HazardCollider/CollisionShape2D.disabled = false</code></pre></div>
+			<p>And you're done! Go ahead and check out the new effects, then move onto another module!</p>
 
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
+			<h3>Compatibility</h3>
+			<p>Hurt Effects conflicts with 1 other module:</p>
+			<ol>
+				<li><h5>Hazard Sounds</h5></li>
+			</ol>
+			<p>If you have any of these modules please follow the instructions for that module:</p>
+
+			<h4>Hazard Sounds</h4>
+			<p>Right now, the player's hurt sounds get paused when the rest of the scene is paused. To fix this select the HurtSound node and in the inspector set its process mode to Always.</p>
+			<img src="visuals/images/change_process_to_always.png" class="img-fluid" alt="Changing a node's process mode to always in the inspector.">
+			<p>And that's all you need to do!</p>
 		</div>
 	</div>
 	<div class="row">
@@ -100,7 +149,7 @@ func _on_invincibility_timer_timeout():
 </div>
 <script>
 	function triggerExpand() {
-		expandAndHighlight('home',null,null)
+		expandAndHighlight('Visual','HurtEffects','visualToggle')
 	}
 </script>
 </body>

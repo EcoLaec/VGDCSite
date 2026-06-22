@@ -14,6 +14,10 @@ body {
 	color: #FFFFFF;
 }
 
+.img-fluid {
+	border-radius: 5px;
+}
+
 .img-logo {
 	height: 100%;
 	width: auto;
@@ -94,6 +98,7 @@ h1 {
 .nav-link, .btn{
 	color: #FFFFFF;
 	transition: none;
+	padding: 0.5rem 0rem;
 }
 
 .nav-link:hover, .sidebar .btn:hover {
@@ -149,13 +154,69 @@ h4 {
 }
 
 .hint {
-	background-color: #e8e8e9;
 	padding: 10px;
+	margin-bottom: 1rem;
+	border-style: solid;
+	border-width: 5px 0px 0px 0px;
+	border-radius: 5px;
+}
+
+.warning {
+	background-color: #FFDAD4;
+	border-color: #d23f26;
+}
+
+.add-info {
+	background-color: #DFFFCC;
+	border-color: #80bc00;
+}
+
+.tip {
+	background-color: #d4f3ff;
+	border-color: #008fbe;
+}
+
+.alert {
+	border-color: #ffcd00;
+	background-color: #fff3c4;
+}
+
+.checkpoint {
+	border-color: #e07c00;
+	background-color: #ffe5c4;
+}
+
+.new-tag {
+	font-weight: bold;
+	color: #ffcd00;
+}
+
+.content a {
+	text-decoration: underline;
+}
+
+.content a:link {
+	color: #008fbe;
+}
+
+.content a:visited {
+	color: #008fbe;
+}
+
+.content a:hover {
+	color: #80bc00;
 }
 
 .linkbox {
 	margin-left: 5px;
 	font-size: 14px;
+}
+
+input {
+	vertical-align: middle;
+    padding: 6.5px;
+    border-radius: 5px;
+    border-width: 1px;
 }
 
 .img-fluid {
@@ -169,10 +230,12 @@ h5 {
 
 .content .btn {
 	background-color: #80bc00;
+	color: white !important;
 	font-size: 20px;
 	font-weight: bold;
 	padding: 5px;
-	border-radius: 0px;
+	border-radius: 5px;
+	text-decoration: none;
 }
 
 .content .btn:hover {
@@ -203,6 +266,7 @@ h5 {
 pre, code, code.hljs {
     background: var(--code-background);
     color: var(--default-font-color);
+    border-radius: 5px;
 }
 
 code.hljs .hljs-function,

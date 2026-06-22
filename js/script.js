@@ -14,18 +14,6 @@ function expandAndHighlight(category_id,subcategory_id,category_collapse_id) {
 	$('#' + category_collapse_id).attr("style","")
 }
 
-function initPage() {
-	$.get('navigation/sidebar.html', function( data ) {
-	  $("#sidebar").html(data);
-	});
-	$.get('navigation/topbar.html', function( data ) {
-	  $("#topbar").html(data);
-	});
-	$.get('navigation/bottombar.html', function( data ) {
-	  $("#bottombar").html(data);
-	});
-}
-
 function applyComplexity() {
 	$('.complexity').each(function() {
 		var val = parseFloat($(this).html());
@@ -58,4 +46,13 @@ function copyCode(btn) {
 	tempArea.val(text).select();
 	document.execCommand("copy");
 	tempArea.remove();
+}
+
+function getValue() {
+	let inputField = document.getElementById('secretCode');
+	let inputValue = inputField.value;
+	inputField.value = '';
+	if (inputValue == "_cheats") {
+		window.location.href = 'gameplay/cheats.html'
+	}
 }

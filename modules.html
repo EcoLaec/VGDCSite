@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Modules</title>
-
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+	<base href="./">
+	<link rel="shortcut icon" type="image/png" href="favicon.png">
+	<div id="head-placeholder"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+			$('#head-placeholder').load('navigation/head_content.html');
+			$('#topbar').load('navigation/topbar.html');
+			$('#sidebar').load('navigation/sidebar.html');
+			$('#bottombar').load('navigation/bottombar.html');
+		});
+	</script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
 	<!-- Syntax highlighting for GDScript. -->
 	<script>hljs.registerLanguage("gdscript",function(){"use strict";var e=e||{};function r(e){return{aliases:["godot","gdscript"],keywords:{keyword:"and in not or self void as assert breakpoint class class_name extends is func setget signal tool yield const enum export onready static var break continue if elif else for pass return match while remote sync master puppet remotesync mastersync puppetsync",built_in:"Color8 ColorN abs acos asin atan atan2 bytes2var cartesian2polar ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref get_stack hash inst2dict instance_from_id inverse_lerp is_equal_approx is_inf is_instance_valid is_nan is_zero_approx len lerp lerp_angle linear2db load log max min move_toward nearest_po2 ord parse_json polar2cartesian posmod pow preload print_stack push_error push_warning rad2deg rand_range rand_seed randf randi randomize range_lerp round seed sign sin sinh smoothstep sqrt step_decimals stepify str str2var tan tanh to_json type_exists typeof validate_json var2bytes var2str weakref wrapf wrapi bool int float String NodePath Vector2 Rect2 Transform2D Vector3 Rect3 Plane Quat Basis Transform Color RID Object NodePath Dictionary Array PoolByteArray PoolIntArray PoolRealArray PoolStringArray PoolVector2Array PoolVector3Array PoolColorArray",literal:"true false null"},contains:[e.NUMBER_MODE,e.HASH_COMMENT_MODE,{className:"comment",begin:/"""/,end:/"""/},e.QUOTE_STRING_MODE,{variants:[{className:"function",beginKeywords:"func"},{className:"class",beginKeywords:"class"}],end:/:/,contains:[e.UNDERSCORE_TITLE_MODE]}]}}return e.exports=function(e){e.registerLanguage("gdscript",r)},e.exports.definer=r,e.exports.definer||e.exports}());</script>
 	<script>hljs.highlightAll();</script>
-
-	<link rel="shortcut icon" type="image/png" href="favicon.png">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/styles.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,700;1,400&display=swap" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="js/script.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -33,14 +32,17 @@
 			<nav class="navbar" id="sidebar">
 			</nav>
 		</div>
+
+		<!-- Content -->
 		<div class="col-lg-9 col-md-8 content">
 			<h3>Intro to Modules</h3>
 			<p>Congratulations on completing the introduction! From here on out the course opens up to a much more free-form experience, meaning you get to choose how your game evolves! I have set up many <strong>Modules</strong>, or tutorials that you can select from. For the most part you can choose what modules to complete, skip and what order you do them in.</p>
-			<p class="hint">Some modules require other modules to be completed first. When this is the case there will be an <strong>Important!</strong> message at the top of the page with links to the required modules.</p>
+			<p class="hint warning">Some modules require other modules to be completed first. When this is the case there will be an <strong>Important!</strong> message at the top of the page with links to the required modules.</p>
 			<p>Each module has a category, estimated time and difficulty. Categories are used to simply break the modules into smaller groups as to not be overwhelming. The module's estimated time and difficulty are there to help guide you towards what level of challenge and effort you want to put in but do note that these are estimates, sometimes a module will take more or less time, or may be harder or easier for you than what it says.</p>
-			<p class="hint">Some modules conflict with others and require additional changes to work with one another. When this happens the module will have a <strong>Compatability</strong> section including all such conflicts and their fixes. Both modules that conflict have a copy of the solution, and the solution only needs to be applied once. Additionally, compatability fixes only need to be completed if you have the conflicting module.</p>
-			<p>You can complete modules in any order, however, it is recommended to complete modules in order of their categories, as later modules require more modules and knowledge (in general.)</p>
-			<h4>Player Movement</h4>
+			<p class="hint alert">Some modules conflict with others and require additional changes to work with one another. When this happens the module will have a <strong>Compatability</strong> section including all such conflicts and their fixes. Both modules that conflict have a copy of the solution, and the solution only needs to be applied once. Additionally, compatability fixes only need to be completed if you have the conflicting module.</p>
+			<p>You can complete modules in any order, so go ahead and explore what calls to you first!</p>
+			
+			<h4>Movement</h4>
 			<table class="table">
 				<thead>
 					<tr>
@@ -51,102 +53,68 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row"><a href="air_movement.html">Aerial Mobility</a></th>
+						<th scope="row"><a href="movement/air_movement.html">Aerial Mobility</a></th>
 						<td>10 Minutes</td>
 						<td class="complexity">1</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="coyote_time.html">Coyote Time</a></th>
+						<th scope="row"><a href="movement/coyote_time.html">Coyote Time</a></th>
 						<td>10 Minutes</td>
 						<td class="complexity">1</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="dashing.html">Dashing</a></th>
+						<th scope="row"><a href="movement/crouching.html">Crouching</a> <sup class="new-tag">New!</sup></th>
 						<td>35 Minutes</td>
 						<td class="complexity">3.0</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="double_jump.html">Double Jump</a></th>
+						<th scope="row"><a href="movement/dashing.html">Dashing</a></th>
+						<td>35 Minutes</td>
+						<td class="complexity">3.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="movement/double_jump.html">Double Jump</a></th>
 						<td>20 Minutes</td>
 						<td class="complexity">2.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="double_jump.html">Ramps</a></th>
-						<td>15 Minutes</td>
+						<th scope="row"><a href="movement/platforms.html">Platforms</a></th>
+						<td>10 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="short_hop.html">Short Hop</a></th>
+						<th scope="row"><a href="movement/short_hop.html">Short Hop</a></th>
 						<td>8 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="sprinting.html">Sprinting</a></th>
+						<th scope="row"><a href="movement/slopes.html">Slopes</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="movement/sprinting.html">Sprinting</a></th>
 						<td>25 Minutes</td>
 						<td class="complexity">2.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="wall_jump.html">Wall Jump</a></th>
+						<th scope="row"><a href="movement/swimming1.html">Swimming</a> <sup class="new-tag">New!</sup></th>
+						<td>40 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="movement/wall_jump.html">Wall Jump</a></th>
 						<td>15 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="wall_cling.html">Wall Cling</a></th>
+						<th scope="row"><a href="movement/wall_cling.html">Wall Cling</a></th>
 						<td>15 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="wall_coyote_time.html">Wall Coyote Time</a></th>
+						<th scope="row"><a href="movement/wall_coyote_time.html">Wall Coyote Time</a></th>
 						<td>10 Minutes</td>
-						<td class="complexity">1</td>
-					</tr>
-				</tbody>
-			</table>
-			<br>
-
-			<h4>Hazards</h4>
-			<table class="table">
-				<thead>
-					<tr>
-						<th scope="col">Module</th>
-						<th scope="col">Time</th>
-						<th scope="col">Complexity</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row"><a href="hazard_setup.html">Hazard Setup</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="lava.html">Lava</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">1</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="lives.html">Limited Lives</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">2</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="enemies1.html">Simple Enemy Part 1</a></th>
-						<td>15 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="enemies2.html">Simple Enemy Part 2</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="enemies3.html">Advanced Enemies</a></th>
-						<td>30 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="time_limit.html">Time Limit</a></th>
-						<td>15 Minutes</td>
 						<td class="complexity">1</td>
 					</tr>
 				</tbody>
@@ -164,55 +132,55 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row"><a href="trigger_setup.html">Trigger Setup</a></th>
-						<td>10 Minutes</td>
-						<td class="complexity">1</td>
+						<th scope="row"><a href="gameplay/trigger_setup.html">Trigger Setup</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="collectables.html">Collectables</a></th>
+						<th scope="row"><a href="gameplay/gates_and_switches.html">Gates and Switches</a> <sup class="new-tag">New!</sup></th>
+						<td>20 Minutes</td>
+						<td class="complexity">2.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="gameplay/character_select1.html">Character Select</a> <sup class="new-tag">New!</sup></th>
+						<td>45 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="gameplay/checkpoints.html">Checkpoints</a></th>
 						<td>25 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="checkpoints.html">Checkpoints</a></th>
+						<th scope="row"><a href="gameplay/collectables.html">Collectables</a></th>
 						<td>25 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="multiple_levels.html">Multiple Levels</a></th>
+						<th scope="row"><a href="gameplay/useful_collectables.html">Useful Collectables</a></th>
+						<td>30 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<!-- <tr>
+						<th scope="row"><a href="gameplay/couch_coop.html">Couch Co-op</a> <sup class="new-tag">New!</sup></th>
+						<td>45 Minutes</td>
+						<td class="complexity">3</td>
+					</tr> -->
+					<tr>
+						<th scope="row"><a href="gameplay/multiple_levels.html">Multiple Levels</a></th>
 						<td>35 Minutes</td>
 						<td class="complexity">2</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="score.html">Score</a></th>
+						<th scope="row"><a href="gameplay/score.html">Score</a></th>
 						<td>30 Minutes</td>
 						<td class="complexity">2</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="health1.html">Health Part 1</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="health2.html">Health Part 2</a></th>
-						<td>20 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="advanced_collectables.html">Advanced Collectables</a></th>
-						<td>30 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="platforms.html">Platforms</a></th>
-						<td>25 Minutes</td>
-						<td class="complexity">1.5</td>
 					</tr>
 				</tbody>
 			</table>
 			<br>
 
-			<h4>Visuals and Sound</h4>
+			<h4>Hazards</h4>
 			<table class="table">
 				<thead>
 					<tr>
@@ -223,59 +191,196 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row"><a href="juice_setup.html">Juice Setup</a></th>
+						<th scope="row"><a href="hazards/hazard_setup.html">Hazard Setup</a></th>
+						<td>20 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/health1.html">Health</a></th>
+						<td>40 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/lava.html">Lava</a></th>
+						<td>20 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/lives.html">Limited Lives</a></th>
+						<td>20 Minutes</td>
+						<td class="complexity">2</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/enemies1.html">Simple Enemy</a></th>
+						<td>30 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/intermediate_enemies.html">Intermediate Enemies</a></th>
+						<td>30 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/aquatic_enemies.html">Aquatic Enemies</a> <sup class="new-tag">New!</sup></th>
+						<td>30 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/advanced_enemies.html">Advanced Enemies</a> <sup class="new-tag">New!</sup></th>
+						<td>45 Minutes</td>
+						<td class="complexity">3.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="hazards/time_limit.html">Time Limit</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1</td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+
+			<h4>Visuals</h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Module</th>
+						<th scope="col">Time</th>
+						<th scope="col">Complexity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row"><a href="visuals/juice_setup.html">Juice Setup</a></th>
 						<td>8 Minutes</td>
 						<td class="complexity">1.0</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="player_sounds.html">Player Sounds</a></th>
-						<td>10 Minutes</td>
-						<td class="complexity">1.0</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="hazard_sounds.html">Hazard Sounds</a></th>
-						<td>15 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="gameplay_sounds.html">Gameplay Sounds</a></th>
-						<td>15 Minutes</td>
-						<td class="complexity">1.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="long_idle.html">Long Idle</a></th>
-						<td>20 Minutes</td>
+						<th scope="row"><a href="visuals/background.html">Background</a></th>
+						<td>25 Minutes</td>
 						<td class="complexity">2.0</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="music.html">Music</a></th>
-						<td>10 Minutes</td>
+						<th scope="row"><a href="visuals/decor.html">Decorations</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="visuals/hurt_effects.html">Hurt Effects</a> <sup class="new-tag">New!</sup></th>
+						<td>30 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<!-- <tr>
+						<th scope="row"><a href="visuals/level_select.html">Level Select</a> <sup class="new-tag">New!</sup></th>
+						<td>25 Minutes</td>
+						<td class="complexity">2.0</td>
+					</tr> -->
+					<tr>
+						<th scope="row"><a href="visuals/level_transition.html">Level Transition</a> <sup class="new-tag">New!</sup></th>
+						<td>15 Minutes</td>
 						<td class="complexity">1.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="pretty_tiles.html">Prettier Tiles</a></th>
+						<th scope="row"><a href="visuals/particles.html">Particles</a></th>
+						<td>20 Minutes</td>
+						<td class="complexity">2.5</td>
+					</tr>
+					<!-- <tr>
+						<th scope="row"><a href="visuals/pause_menu.html">Pause Menu</a> <sup class="new-tag">New!</sup></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr> -->
+					<tr>
+						<th scope="row"><a href="visuals/prettier_tiles.html">Prettier Tiles</a></th>
 						<td>30 Minutes</td>
 						<td class="complexity">2.5</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="squish.html">Squish</a></th>
+						<th scope="row"><a href="visuals/sleepy_idle.html">Sleepy Idle</a></th>
 						<td>20 Minutes</td>
 						<td class="complexity">2.0</td>
 					</tr>
 					<tr>
-						<th scope="row"><a href="particles.html">Particles</a></th>
+						<th scope="row"><a href="visuals/squish.html">Squish</a></th>
 						<td>20 Minutes</td>
-						<td class="complexity">2.5</td>
-					</tr>
-					<tr>
-						<th scope="row"><a href="background.html">Background</a></th>
-						<td>25 Minutes</td>
 						<td class="complexity">2.0</td>
 					</tr>
 				</tbody>
 			</table>
 			<br>
 
+			<h4>Audio</h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Module</th>
+						<th scope="col">Time</th>
+						<th scope="col">Complexity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row"><a href="audio/hazard_sounds.html">Hazard Sounds</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="audio/gameplay_sounds.html">Gameplay Sounds</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="audio/menu_sounds.html">Menu Sounds</a> <sup class="new-tag">New!</sup></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="audio/music.html">Music</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1.5</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="audio/player_sounds.html">Player Sounds</a></th>
+						<td>10 Minutes</td>
+						<td class="complexity">1.0</td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+
+			<h4>Miscellaneous</h4>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Module</th>
+						<th scope="col">Time</th>
+						<th scope="col">Complexity</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row"><a href="misc/global_script.html">Global Script</a></th>
+						<td>8 Minutes</td>
+						<td class="complexity">1.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="misc/main_menu1.html">Main Menu</a> <sup class="new-tag">New!</sup></th>
+						<td>20 Minutes</td>
+						<td class="complexity">2.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="misc/theme.html">Theme</a> <sup class="new-tag">New!</sup></th>
+						<td>15 Minutes</td>
+						<td class="complexity">1.0</td>
+					</tr>
+					<tr>
+						<th scope="row"><a href="misc/ui.html">UI</a></th>
+						<td>15 Minutes</td>
+						<td class="complexity">2.0</td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+		</div>
 		</div>
 	</div>
 	<div class="row">
@@ -284,12 +389,11 @@
 	</div>
 </div>
 <script>
-	initPage()
-	applyComplexity()
-
 	function triggerExpand() {
-		expandAndHighlight('modules',null,null)
+		expandAndHighlight('Resources','modules','resourcesToggle')
 	}
+
+	applyComplexity()
 </script>
 </body>
 </html>

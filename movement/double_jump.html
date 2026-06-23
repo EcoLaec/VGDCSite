@@ -172,7 +172,7 @@ if Input.is_action_just_released("Jump") and velocity.y < current_jump_velocity 
 	if Input.is_action_just_pressed("Jump"):
 		# Air Jumps
 		if not is_on_floor() and not in_water:
-			if air_jumps_made < player_data.air_jumps:
+			if air_jumps_made < air_jumps:
 				air_jumps_made += 1
 			else:
 				return

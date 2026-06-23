@@ -37,29 +37,28 @@
 		<div class="col-lg-9 col-md-8 content">
 
 			<!-- Section -->
-			<h3>Title</h3>
-			<p>explanation.</p>
-
-			<h4>Sub-title</h4>
-			<p>explanation.</p>
-
-			<!-- Hints -->
-			<p class="hint warning">IMPORTANT! This module requires the <a href="section/module.html">Module</a> module to be completed first!</p>
-
-			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="#" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
-
-			<p class="hint tip">explanation.</p>
+			<h3>Background</h3>
+			<p>There is something strange going on in our game. Our player is jumping around in a colorless void! Adding some background color and objects can make a game instantly more pleasant to look at. On this page we will add some such elements.</p>
 			
-			<!-- Images -->
-			<img src="section/images/wahoo.png" class="img-fluid" alt="description.">
+			<h4>Creating the Background</h4>
+			<p>To get started go to your world scene. Create a new Node2D as a child node and name it Background. Next, as a child of Background, create a new Parallax2D node with a Sprite2D as a child of that. Name the Parallax2D node Farthest. Then, repeat the process of creating a Parallax2D node and Sprite2D node three more times, naming them Far, Medium and Near. Your world scene will then look something like this:</p>
+			<img src="visuals/images/background_scene_tree.png" class="img-fluid" alt="The world scene tree with the background nodes.">
+			<p class="hint alert">Note the order of the nodes. Nodes closer to the top of the scene appear behind nodes further below, so we want our background at the top of the scene!</p>
+			<p>Next, select the Farthest node. In the inspector you will see several properties. For us scroll scale and repeat size are the most important. Scroll scale is how fast the sprite will move relative to our player in both the x and y axis, with the closer it is to 1.0, the slower it moves. For Farthest I am going to set its y scroll scale to 1.0 and its x scroll scale to 0.1 (You will need to press the small chain icon to make the x and y values not match each other). As for repeat size, it lets godot know how big our sprite is and when it shouild repeat it to make the background continuous. For the sprites I have provided, set the x repeat size to 1152.0.</p>
+			<img src="visuals/images/farthest_parallax_inspector.png" class="img-fluid" alt="The inspector for the Farthest node.">
+			<p>Now go ahead and repeat those steps for Far, Medium and Near. The repeat size and y scroll scale is the same for each, but the x scroll scale gets higher as you get closer, with Far being 0.3, Medium being 0.5 and Near being 0.7.</p>
+			<img src="visuals/images/far_parallax_inspector.png" class="img-fluid" alt="The inspector for the Far node.">
+			<img src="visuals/images/medium_parallax_inspector.png" class="img-fluid" alt="The inspector for the Medium node.">
+			<img src="visuals/images/near_parallax_inspector.png" class="img-fluid" alt="The inspector for the Near node.">
+			<p>Next we need to get the sprites for our background! To get started we need to import the background sprites of your choice from the Background folder in your VGDC Assets folder.</p>
+			<p class="hint add-info">If you are not taking this course in person, you can download the assets <a href="https://drive.google.com/drive/folders/1p7nq1mwo_H3OeOks60P1RyR8Yosre2sC?usp=sharing" target="_blank">Here<i class="linkbox bi bi-box-arrow-up-right"></i></a></p>
+			<p>Now we can add the sprites to the corresponding Sprite2D nodes, matching the names with the names of the Parallax2D nodes. Once you got them in place you will see something like this in your viewport.</p>
+			<img src="visuals/images/background_viewport.png" class="img-fluid" alt="The background in the viewport.">
+			<p class="hint alert">Note that you will likely see your level in front of the background! I just had mine hidden for this picture.</p>
+			<p>Though we still have one final issue. If you run the game, the background is shifted to the wrong place! To fix this we need to make sure our background sprite's top left corner lines up with the location 0,0 in the world scene. Go ahead and select the Background node and in the inspector set its position to be 576.0 on the x axis and 324.0 on the y axis.</p>
+			<img src="visuals/images/background_inspector.png" class="img-fluid" alt="The Background node's inspector.">
+			<p>And you're done! Go ahead and save the scene, check out your background and move onto a new module!</p>
 
-			<!-- Codeblock -->
-			<div><button class="copy-code-btn btn" onclick="copyCode(this);"><i class="bi bi-clipboard"></i></button>
-			<pre><code class="language-gdscript">code</code></pre></div>
-
-			<div class="text-center">
-				<a href="section/module.html" class="btn col-lg-4 col-md-6 col-12">Next</a>
-			</div>
 		</div>
 	</div>
 	<div class="row">
